@@ -28,7 +28,7 @@
 | R006 | M4 | B3.2 black-box baseline | TCN / GRU / MLP direct predictor | MUST | TODO |
 | R007 | M4 | B3.3 baseline fairness audit | matched inputs / budget / horizons | MUST | TODO |
 | R008 | M4 | B3.4 baseline rollout report | physics-only vs black-box | MUST | TODO |
-| R009 | M5 | B3.5 base hybrid training | T1 + F1 + S1 + M1a + V1 + U0 | MUST | TODO |
+| R009 | M5 | B3.5 base hybrid training | E1 + T1 + F1 + S1 + M1a + V1 + U0 | MUST | TODO |
 | R010 | M5 | B3.6 base seen-config evaluation | base hybrid on seen vehicle/config | MUST | TODO |
 | R011 | M5 | B3.7 base held-out road evaluation | base hybrid on held-out road μ | MUST | TODO |
 | R012 | M5 | B3.8 base held-out vehicle evaluation | base hybrid on held-out vehicle/config | MUST | TODO |
@@ -43,9 +43,10 @@
 | R019-R021 | M6 | Fz residual ablation | F0 / F1 / F2 | MUST | TODO |
 | R022-R023 | M6 | steering ablation | S0 / S1 | MUST | TODO |
 | R024-R027 | M6 | MuHead ablation | M0-fixed / M1a / M1b / M2-oracle | MUST | TODO |
+| R027a-R027c | M6 | shared encoder ablation | E1 / E2 / E3 | MUST | TODO |
 | R028-R031 | M6 | vehicle residual ablation | V0 / V1 / V1-large / V2-small | MUST | TODO |
 | R032-R033 | M6 | uncertainty ablation | U0 / U1 K=3 ensemble | MUST | TODO |
 | R034-R036 | M7 | cross-vehicle/config generalization | final single model vs baselines | MUST | TODO |
-| R037 | M8 | final single model freeze | selected T/F/S/M/V/U configuration | MUST | TODO |
+| R037 | M8 | final single model freeze | selected E/T/F/S/M/V/U configuration | MUST | TODO |
 | R038-R045 | M9 | target fine-tune data efficiency | FT0-FT6 × FTD0-FTD5 | MUST | TODO |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |
