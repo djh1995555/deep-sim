@@ -88,7 +88,7 @@ Stage B 需要完成三件事：
 Base = T1 + F1 + S1 + M1a + V1 + U0
 ```
 
-配置编号的含义见第 4 章；组件内部设计见 `MODULE_DESIGN.md`；具体实验块见 B3、B4、B5。
+Stage B base 不启用 `VehicleParamAdapter`。该组件只在 Stage C 的目标车 / 目标时间段 fine-tune 中启用，用于单车适配；配置编号的含义见第 4 章；组件内部设计见 `MODULE_DESIGN.md`；具体实验块见 B3、B4、B5。
 
 ### 3.3 Stage C：目标车 / 目标时间段 Fine-Tune 阶段
 
@@ -140,7 +140,7 @@ V1: small bounded VehicleResidualNN on Δx_dot before integration
 U0: single-model heteroscedastic uncertainty
 ```
 
-该 base 是 B3、B4、B5、B6 的共同参考点。B4 中所有组件级 ablation 都以该 base 为基线，每次只替换一个维度。
+该 base 是 B3、B4、B5 的共同参考点。B4 中所有组件级 ablation 都以该 base 为基线，每次只替换 T/F/S/M/V/U 中的一个维度。`VehicleParamAdapter` 不属于 Stage B base，也不参与 B4 ablation；它只在 B6 fine-tune 中作为 FT1/FT6 的目标车适配模块启用。
 
 ### 4.3 Stage B Ablation Families
 
@@ -382,7 +382,8 @@ held-out road 或 held-out vehicle/config 不明显退化
 - **统一协议**：
   - 使用 DS1 V1 Research Dataset 的同一 train/val/test split；
   - 每个配置从头训练到 validation loss 最低状态；
-  - 每次只替换 base 中的一项，其余模块保持 `T1 + F1 + S1 + M1a + V1 + U0`；
+  - 每次只替换 base 中 T/F/S/M/V/U 的一项，其余模块保持 `T1 + F1 + S1 + M1a + V1 + U0`；
+  - `VehicleParamAdapter` 在 B4 中始终关闭，避免多车训练中的 episode-level 适配能力干扰组件归因。
   - 报告 rollout、物理约束、residual magnitude、smoothness、held-out road μ 和 held-out vehicle/config 指标。
   - “优于 / 明显改善 / 不退化”必须在同一 test split、同一训练预算、同一 rollout horizon 下判断；关键对照至少补 3 seeds，预算不足时先 1 seed 筛选。
   - 若主指标改善但物理约束、residual magnitude、held-out 泛化显著变差，则不能作为第一版保留组件。
@@ -419,7 +420,7 @@ held-out road 或 held-out vehicle/config 不明显退化
   - 训练数据必须包含 braking、turning、combined brake+steer、Split-μ。
 - **指标**：
   - `Fz_i` RMSE，如果有 `Fz_true_i`；
-  - `ΣFz_i - m_eff*g` error；
+  - `ΣFz_i - Fz_budget_physics` error，平地准静态 sanity 可另报 `ΣFz_i - m_eff*g`；
   - `Fz_i < 0` rate；
   - 制动前轴载荷转移方向准确率；
   - 转弯外侧载荷转移方向准确率；
@@ -589,7 +590,7 @@ held-out road 或 held-out vehicle/config 不明显退化
   - uncertainty 在 held-out config 上有合理上升，且与误差有正相关；
   - seen config 与 held-out config 的性能 gap 必须量化。
 - **失败解释**：
-  - 如果 seen config 表现好但 held-out config 明显失败，说明多车 base 泛化不足，需扩大 DS1 vehicle/config 覆盖或调整 `VehicleParamAdapter`。
+  - 如果 seen config 表现好但 held-out config 明显失败，说明多车 base 泛化不足，需扩大 DS1 vehicle/config 覆盖或调整 base physics / residual 容量。
   - 如果 B6 能用少量 target data 修复该退化，说明 adaptation pipeline 有价值，但不能把它计为 B5 base generalization 成功。
 
 ### B6：Target Vehicle / Target Time-Window Fine-Tune
@@ -876,12 +877,12 @@ MoE vs single-expert tire residual gap
   - 先做 Fz accuracy budget，再做 tire residual；记录模块归因指标。
 - **MuHead 在线性区不可辨识**
   - 使用 slip-dependent confidence；增加 μ oracle 和 fixed μ 对照。
-- **VehicleParamAdapter 与 VehicleResidualNN 抢解释权**
-  - adapter 输出慢变量；`VehicleResidualNN` 小容量 bounded；做 FT1-FT6。
+- **Stage C 中 VehicleParamAdapter 与 VehicleResidualNN 抢解释权**
+  - Stage B 不启用 `VehicleParamAdapter`；Stage C 中 adapter 只输出慢变量，`VehicleResidualNN` 保持小容量 bounded；通过 FT1-FT6 判断适配收益和过拟合风险。
 - **只给 mass/I/cg nominal prior 不足**
   - 在 held-out vehicle/config 上观察 FT0-FT6 和数据效率；如果小模块 FT 均无效，再考虑增加可获得的 nominal prior。
 - **单项 ablation 不可归因**
-  - 固定 `Base = T1 + F1 + S1 + M1a + V1 + U0`，每次只替换一个模块；共享同一个 base tire model、训练数据和模型容量，并从头训练各配置。
+  - 固定 `Base = T1 + F1 + S1 + M1a + V1 + U0`，每次只替换 T/F/S/M/V/U 中的一个模块；共享同一个 base tire model、训练数据和模型容量，并从头训练各配置。
 - **black-box baseline 不公平**
   - 保证输入信息一致；报告参数量、训练预算和 rollout horizon。
 - **sim-to-real gap 未验证**

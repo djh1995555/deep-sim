@@ -1,7 +1,7 @@
 # MODULE_DESIGN
 
 **日期**：2026-05-20  
-**状态**：current v2  
+**状态**：current v3
 **作用**：定义 student model 和各组件的详细设计方案。
 
 本文档是 student 组件设计的权威来源，覆盖模块职责、输入输出、插入位置、约束、diagnostics、默认网络结构、bounded 参数化、超参初值、训练 schedule 和 ablation 落地方式。`EXPERIMENT_PLAN.md` 只引用 `T/F/S/M/V/U/FT` 等实验配置编号，不重复定义具体组件结构。
@@ -16,6 +16,7 @@
 所有 residual head 使用 bounded output
 越靠后的 residual 容量越小
 所有 teacher-only 字段只用于 loss / diagnostics
+所有 model input 必须来自 observable、fixed_vehicle_context、nominal_physics_prior 或 student-side computed diagnostics
 所有 ablation 配置从头训练
 B6 fine-tune 从同一个 final single model checkpoint 初始化
 ```
@@ -74,69 +75,11 @@ encoder 在 FT1-FT5 默认冻结
 FT6 才允许整体 fine-tune
 ```
 
-## 3. VehicleParamAdapter
-
-实验引用：`FT1` 和 `FT6`。这里定义目标车/目标时间段慢变量 adapter 的接口、默认结构和参数化方式。
-
-默认结构：
-
-```text
-input: z_shared + nominal_physics_prior
-adapter_mlp: MLP([128 + prior_dim, 128, 64])
-heads:
-  Δmass_scale: 1
-  ΔIx_scale / ΔIy_scale / ΔIz_scale: 3
-  Δcg_x / Δcg_z: 2
-  optional z_vehicle: 16
-activation: SiLU
-```
-
-bounded 参数化：
-
-```text
-mass_eff = mass_nominal * exp(clip(Δmass_scale, -b_m, b_m))
-I_eff = I_nominal * exp(clip(ΔI_scale, -b_I, b_I))
-cg_eff = cg_nominal + b_cg * tanh(raw_cg)
-```
-
-初始 bound 建议：
-
-```text
-b_m: log(1.3)
-b_I: log(1.5)
-b_cg_x: 0.2-0.5 m
-b_cg_z: 0.1-0.3 m
-```
-
-训练：
-
-```text
-base training: trainable
-FT1: only VehicleParamAdapter trainable
-regularization: parameter delta magnitude + temporal smoothness
-```
-
-与 `VehicleResidualNN` 的边界：
-
-```text
-VehicleParamAdapter:
-  episode/window-level slow variables
-  modifies mass_eff / inertia_eff / cg_eff / optional z_vehicle
-  explains persistent target-vehicle/time-window shifts
-
-VehicleResidualNN:
-  timestep-level small fast residual
-  modifies selected x_dot channels after physics aggregation
-  explains remaining high-frequency or unmodeled dynamics
-```
-
-实现判据：如果 FT1 已经使 `VehicleResidualNN` magnitude 明显下降，说明慢变量 adapter 捕获了主要目标车差异；如果 FT1 无效但 V1/FT6 有效，说明当前 adapter 输出空间不足。
-
-## 4. Steering Module
+## 3. Steering Module
 
 实验引用：`S0/S1`、`FT5`。这里定义 steering module 的接口、默认结构和约束。
 
-### 4.1 S0: First-Order Steering Lag
+### 3.1 S0: First-Order Steering Lag
 
 形式：
 
@@ -152,7 +95,7 @@ tau_steer: learnable scalar or small table by vehicle type
 delta_eff clamp: physical steering limit
 ```
 
-### 4.2 S1: S0 + steerResidualNN
+### 3.2 S1: S0 + steerResidualNN
 
 默认结构：
 
@@ -174,11 +117,19 @@ bound_delta: 1-3 deg in radians
 
 ```text
 base: trainable
-FT5: only steerResidualNN / SteeringHead trainable
+FT5: only steerResidualNN fine-tune adapter trainable
 regularization: Δdelta magnitude + temporal smoothness
 ```
 
-## 5. FzResidualNN
+FT5 fine-tune adapter：
+
+```text
+freeze S0 tau_steer, shared encoder, and main steerResidualNN body
+train small residual adapter or head affine/bias on Δdelta_eff output
+keep bound_delta unchanged unless explicitly running FT6
+```
+
+## 4. FzResidualNN
 
 实验引用：`F0/F1/F2`、`FT3`。这里定义 `FzResidualNN` 的接口、默认结构、投影和 teacher auxiliary loss。
 
@@ -207,8 +158,11 @@ bound_Fz_i: 0.05-0.10 * mass_eff * g per wheel
 ```text
 Fz_raw_i = Fz_physics_i + ΔFz_i
 Fz_i = softplus(Fz_raw_i) or clamp_min(Fz_raw_i, eps)
-L_sumFz = |ΣFz_i - m_eff * g| or bounded dynamic range penalty
+L_sumFz_static = |ΣFz_i - m_eff * g| only for flat quasi-static sanity cases
+L_Fz_budget = |ΣFz_i - Fz_budget_physics| for dynamic training
 ```
+
+`Fz_budget_physics` 必须来自 student-side physics，可包含 grade / bank projection、aero vertical force、body vertical acceleration proxy、rough-road contact event mask 等可观测或模型内部可计算项。不得用 teacher-only `Fz_true_i` 构造 base `F1` 的输入或约束目标。
 
 teacher auxiliary loss：
 
@@ -222,14 +176,22 @@ simulation only
 
 ```text
 base F1: trainable via rollout + constraint loss
-FT3: only FzResidualNN adapter trainable
+FT3: only FzResidualNN fine-tune adapter trainable
 ```
 
-## 6. MuHead
+FT3 fine-tune adapter：
+
+```text
+freeze shared encoder and main FzResidualNN body
+train output-layer affine/bias or small bottleneck adapter
+keep Fz positivity projection and Fz budget constraint active
+```
+
+## 5. MuHead
 
 实验引用：`M0-fixed/M1a/M1b/M2-oracle`、`FT2`。这里定义 `MuHead` 的输出设计和参数化方式。
 
-### 6.1 M1a: μ_mean / μ_logvar
+### 5.1 M1a: μ_mean / μ_logvar
 
 默认结构：
 
@@ -260,7 +222,7 @@ activation: SiLU
 μ_max: 1.3-1.5
 ```
 
-### 6.2 M1b: μ_scale / confidence
+### 5.2 M1b: μ_scale / confidence
 
 默认结构：
 
@@ -284,7 +246,37 @@ confidence 用于 loss weighting / calibration diagnostic
 small-slip 区 confidence 应降低
 ```
 
-### 6.3 M2-oracle
+训练信号：
+
+```text
+base M1a/M1b:
+  train via rollout loss, tire force consistency, friction usage consistency, and optional simulation-only μ auxiliary loss
+
+simulation-only auxiliary:
+  L_mu_teacher = masked NLL or SmoothL1 against μ_true_i
+  only for M1a/M1b diagnostics or training on simulated data
+  never used as student input
+
+real-data / deployment setting:
+  no μ_true_i
+  use rollout NLL, friction ellipse consistency, transition response, and calibration diagnostics
+
+small-slip handling:
+  downweight absolute μ supervision when slip excitation is insufficient
+  confidence/logvar must reflect weak observability instead of forcing overconfident μ
+```
+
+FT2 fine-tune adapter：
+
+```text
+freeze shared encoder and main MuHead body
+train μ calibration parameters only:
+  M1a: affine/bias on raw_mu and temperature/offset on raw_logvar
+  M1b: affine/bias on Δμ_scale and confidence calibration temperature
+do not train TireResidualNN or VehicleResidualNN in FT2
+```
+
+### 5.3 M2-oracle
 
 只在仿真实验中使用：
 
@@ -294,11 +286,11 @@ small-slip 区 confidence 应降低
 
 禁止作为可部署模型或 student input。
 
-## 7. TireResidualNN
+## 6. TireResidualNN
 
 实验引用：`T0/T1/T1-no-proj/T2`、`FT4`。这里定义 tire residual 的 force-level 与 parameter-level 两条实现路线。
 
-### 7.1 T1: Force-Level Residual
+### 6.1 T1: Force-Level Residual
 
 默认结构：
 
@@ -340,7 +332,7 @@ skip projection
 keep violation metrics
 ```
 
-### 7.2 T2: Parameter-Level Residual
+### 6.2 T2: Parameter-Level Residual
 
 默认结构：
 
@@ -368,7 +360,15 @@ C_kappa_eff = C_kappa_nominal * exp(clip(ΔC_kappa))
 可能在 large slip / low-μ 中弱于 T1
 ```
 
-## 8. VehicleResidualNN
+FT4 fine-tune adapter：
+
+```text
+freeze shared encoder, tire physics, MuHead, and main TireResidualNN body
+train output-layer affine/bias or small bottleneck adapter inside TireResidualNN
+keep friction ellipse projection active for T1 unless the config is explicitly T1-no-proj
+```
+
+## 7. VehicleResidualNN
 
 实验引用：`V0/V1/V1-large/V2-small`、`FT6`。这里定义 final vehicle residual 的位置、容量和输出通道。
 
@@ -380,12 +380,21 @@ input:
   x_dot_physics
   aggregated force/moment diagnostics
   Fz_i, Fx_i, Fy_i
-  friction_usage_i
+  friction_usage_est_i
 mlp: MLP([input_dim, 64, 32])
 head: Δx_dot selected channels
 activation: SiLU
 output: bound_xdot * tanh(raw)
 ```
+
+`friction_usage_est_i` 与 `DATA_DESIGN.md` 的 student-side derived feature 命名保持一致，必须由 student 当前计算图中的 `Fx_i/Fy_i/Fz_i/μ_i` 计算：
+
+```text
+friction_usage_est_i =
+  sqrt(Fx_i^2 + Fy_i^2) / max(μ_i * Fz_i, eps)
+```
+
+teacher-only 的 `friction_usage_i` 只能用于 diagnostics、auxiliary loss 或 plotting，禁止进入 `VehicleResidualNN` 输入。
 
 建议第一版输出通道：
 
@@ -435,12 +444,209 @@ VehicleResidualNN 的 residual magnitude 应随 FT1 adapter 生效而下降
 FT6 同时开放 VehicleParamAdapter 和 VehicleResidualNN，用作上界但也监控两者抢解释权
 ```
 
-## 9. Module Dependency Graph
+## 8. Uncertainty Wrapper
+
+实验引用：`U0/U1`。这里定义 base 中的单模型不确定性和 ensemble 对照。
+
+### 8.1 U0: Single-Model Heteroscedastic Uncertainty
+
+U0 是 base 默认 uncertainty wrapper，不改变 physics rollout 的均值路径，只为预测目标输出 aleatoric uncertainty。
+
+默认结构：
+
+```text
+input:
+  z_shared
+  selected model diagnostics
+  residual magnitudes
+  friction_usage_est_i
+head:
+  logvar for supervised state channels or state increments
+activation: SiLU
+logvar = clamp(raw_logvar, logvar_min, logvar_max)
+```
+
+默认输出：
+
+```text
+prediction mean: from hybrid dynamics rollout
+prediction logvar: from U0 head
+```
+
+训练 loss：
+
+```text
+L_nll = 0.5 * exp(-logvar) * (target - mean)^2 + 0.5 * logvar
+L_unc_calib = optional calibration / coverage penalty
+```
+
+约束：
+
+```text
+U0 不接收 teacher-only 字段
+U0 不改变 physics force / state mean
+rollout mean 使用 hybrid dynamics 输出
+uncertainty 只用于 NLL、coverage、calibration、OOD diagnostics 和风险评估
+```
+
+### 8.2 U1: K=3 Deep Ensemble
+
+U1 是 B4.5 的 uncertainty 对照，不是第一版默认部署结构。
+
+训练协议：
+
+```text
+train K=3 independent copies of the selected single-model architecture
+use different random seeds and optional bootstrap train splits
+each member keeps the same T/F/S/M/V/U0 structure
+record per-member checkpoint, seed, split, and validation metric
+```
+
+推理合成：
+
+```text
+member_mean_k = prediction mean from ensemble member k
+mean_ensemble = mean_k(member_mean_k)
+aleatoric_var = mean_k(exp(logvar_k))
+epistemic_var = var_k(member_mean_k)
+total_var = aleatoric_var + epistemic_var
+```
+
+成功判据与 `EXPERIMENT_PLAN.md` B4.5 保持一致：U1 必须改善 calibration / coverage / OOD detection 等 uncertainty 指标；如果只改善 RMSE，不作为 uncertainty 贡献。
+
+## 9. VehicleParamAdapter
+
+实验引用：`FT1` 和 `FT6`。这里定义目标车/目标时间段慢变量 adapter 的接口、默认结构和参数化方式。
+
+`VehicleParamAdapter` 不属于 Stage B base model，也不参与 B4 组件级 ablation。Stage B 多车多工况训练时，student physics 直接使用 `nominal_physics_prior` 中的 `mass_nominal / inertia_nominal / cg_nominal`，不启用 adapter。这样可以让 base 表示真正的通用动力学能力，避免 adapter 在多车训练中按 episode 吸收车辆差异，削弱 T/F/S/M/V/U ablation 的可解释性。
+
+`VehicleParamAdapter` 只在 Stage C fine-tune 阶段启用：
+
+```text
+FT1:
+  freeze base model
+  enable VehicleParamAdapter
+  train only VehicleParamAdapter on target vehicle/time-window data
+
+FT6:
+  enable VehicleParamAdapter
+  full model fine-tune as upper bound
+```
+
+实现上，`VehicleParamAdapter` 从 final single model checkpoint 旁路接入，初始化为 identity/no-op：
+
+```text
+Δmass_scale = 0
+ΔI_scale = 0
+Δcg_x = 0
+Δcg_z = 0
+optional z_vehicle = 0
+```
+
+默认结构：
+
+```text
+input: pooled z_shared over target window/history + nominal_physics_prior
+adapter_mlp: MLP([128 + prior_dim, 128, 64])
+heads:
+  Δmass_scale: 1
+  ΔIx_scale / ΔIy_scale / ΔIz_scale: 3
+  Δcg_x / Δcg_z: 2
+  optional z_vehicle: 16
+activation: SiLU
+```
+
+慢变量约束：
+
+```text
+pooled z_shared = mean/attention pooling over history window, not per-step instantaneous latent
+mass_eff / inertia_eff / cg_eff 在一个 rollout window 内保持常值
+跨 window 更新时使用 low-pass smoothing 或 temporal smoothness penalty
+禁止让 VehicleParamAdapter 按 timestep 输出快速变化量
+```
+
+bounded 参数化：
+
+```text
+mass_eff = mass_nominal * exp(clip(Δmass_scale, -b_m, b_m))
+I_eff = I_nominal * exp(clip(ΔI_scale, -b_I, b_I))
+cg_eff = cg_nominal + b_cg * tanh(raw_cg)
+```
+
+初始 bound 建议：
+
+```text
+b_m: log(1.3)
+b_I: log(1.5)
+b_cg_x: 0.2-0.5 m
+b_cg_z: 0.1-0.3 m
+```
+
+训练：
+
+```text
+base training: disabled / identity / no-op
+B4 ablation: disabled in all configs
+FT1: only VehicleParamAdapter trainable from final single model checkpoint
+FT6: VehicleParamAdapter trainable together with full model
+regularization: parameter delta magnitude + temporal smoothness / low-pass update
+```
+
+与 `VehicleResidualNN` 的边界：
+
+```text
+VehicleParamAdapter:
+  episode/window-level slow variables
+  modifies mass_eff / inertia_eff / cg_eff / optional z_vehicle
+  explains persistent target-vehicle/time-window shifts
+
+VehicleResidualNN:
+  timestep-level small fast residual
+  modifies selected x_dot channels after physics aggregation
+  explains remaining high-frequency or unmodeled dynamics
+```
+
+实现判据：如果 FT1 已经使 `VehicleResidualNN` magnitude 明显下降，说明慢变量 adapter 捕获了主要目标车差异；如果 FT1 无效但 V1/FT6 有效，说明当前 adapter 输出空间不足。
+
+## 10. Fine-Tune Adapter Granularity
+
+FT1-FT5 都从同一个 final single model checkpoint 初始化。除指定模块的 fine-tune adapter 外，shared encoder、physics backbone 和其他 residual modules 默认冻结。
+
+```text
+FT1:
+  enable and train VehicleParamAdapter
+  mass_eff / inertia_eff / cg_eff 保持 window-level slow variables
+
+FT2:
+  train MuHead calibration adapter only
+  do not train TireResidualNN / VehicleResidualNN
+
+FT3:
+  train FzResidualNN adapter only
+  keep Fz projection and budget constraints active
+
+FT4:
+  train TireResidualNN adapter only
+  keep tire physics and MuHead fixed
+
+FT5:
+  train steerResidualNN / SteeringHead adapter only
+  keep S0 steering physics fixed
+
+FT6:
+  full model fine-tune
+  used as upper bound and overfitting-risk reference
+```
+
+所有 FT1-FT5 必须记录 adapter 参数漂移、residual magnitude drift、held-out target window 性能和物理约束变化。
+
+## 11. Module Dependency Graph
 
 第一版假设模块依赖是单向的：
 
 ```text
-VehicleParamAdapter
+Stage B base graph:
+  nominal_physics_prior
   -> mass_eff / inertia_eff / cg_eff
   -> Fz physics
   -> FzResidualNN
@@ -448,6 +654,12 @@ VehicleParamAdapter
   -> TirePhysics + TireResidualNN
   -> vehicle physics aggregation
   -> VehicleResidualNN
+  -> UncertaintyWrapper
+
+Stage C FT1/FT6 add-on:
+  VehicleParamAdapter
+  -> mass_eff / inertia_eff / cg_eff
+  -> same downstream physics graph
 ```
 
 关键假设：
@@ -456,12 +668,13 @@ VehicleParamAdapter
 FzResidualNN 不直接依赖 MuHead 输出
 MuHead 可以依赖 Fz_i、student-side slip estimates、wheel dynamics 和 observable history
 TireResidualNN 可以依赖 MuHead 输出的 μ_i / uncertainty
-VehicleResidualNN 只看聚合后的 physics diagnostics，不向前反馈
+VehicleResidualNN 只看聚合后的 student-side physics diagnostics，不向前反馈
+UncertaintyWrapper 只包裹最终预测分布，不改变 dynamics mean
 ```
 
 如果实现中引入 Fz/Mu/Tire 的双向依赖，需要增加交互消融，不能只依赖 B4.7 的单向执行顺序。
 
-## 10. Training Schedule
+## 12. Training Schedule
 
 推荐顺序：
 
@@ -471,7 +684,7 @@ Stage 0:
   no neural residual
 
 Stage 1:
-  VehicleParamAdapter + FzResidualNN warm-up
+  FzResidualNN warm-up
   short rollout horizon
 
 Stage 2:
@@ -483,11 +696,13 @@ Stage 3:
   add residual magnitude penalty
 
 Stage 4:
+  enable U0 heteroscedastic uncertainty after deterministic rollout is stable
   low-LR end-to-end training
   increase rollout horizon
 
 Stage 5:
   B6 target fine-tune
+  enable VehicleParamAdapter only for FT1 and FT6
   FT1-FT6 × FTD0-FTD5
 ```
 
@@ -501,7 +716,7 @@ Stage 5:
 λ_teacher: 0.1-1.0 for simulation-only auxiliary losses
 ```
 
-## 11. Ablation Implementation Notes
+## 13. Ablation Implementation Notes
 
 每个 ablation 配置必须明确记录：
 
@@ -523,6 +738,7 @@ all configs train from scratch
 same train/val/test split
 same training budget
 same early stopping rule
+VehicleParamAdapter disabled in all B4 configs
 ```
 
 B6 fine-tune：
@@ -536,7 +752,7 @@ FT6 opens full model
 FTD1-FTD5 data subsets nested when possible
 ```
 
-## 12. Open Design Decisions
+## 14. Open Design Decisions
 
 仍需在实现前确认：
 
