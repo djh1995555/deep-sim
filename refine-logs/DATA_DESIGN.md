@@ -132,7 +132,7 @@ fixed_vehicle_context:
   换车时由车辆设计/配置给出的固定结构参数
 
 nominal_physics_prior:
-  车企或标定资料可给出的名义质量、惯量、质心先验
+  车企或标定资料可给出的名义质量、惯量、质心和转向执行器先验
 ```
 
 本节只定义 `fixed_vehicle_context` 和 `nominal_physics_prior`。它们允许作为 student input，但不代表运行时真实值；载荷、轮胎状态、悬架状态、执行器状态等时间变化因素由 observable history、adapter 和 residual modules 适配。
@@ -188,6 +188,7 @@ nominal_physics_prior:
   Iz_nominal: ...
   cg_x_nominal: ...
   cg_z_nominal: ...
+  tau_steer_nominal: ...
 ```
 
 字段解释：
@@ -200,6 +201,7 @@ nominal_physics_prior:
 | `Iz_nominal` | 绕车体 z 轴的名义转动惯量 | 作为 physics backbone 初始先验 |
 | `cg_x_nominal` | 名义质心纵向位置 | 坐标原点和正方向必须在 metadata 中固定 |
 | `cg_z_nominal` | 名义质心高度 | 载荷/乘员/货物造成的真实变化不直接暴露给 student |
+| `tau_steer_nominal` | 名义转向执行器一阶时间常数 | 作为 `S0` steering lag 的 nominal 输入；真实执行器 delay、柔度、间隙、温度/老化漂移不直接暴露给 student |
 
 不放入 `fixed_vehicle_context` 的量：
 
@@ -209,6 +211,7 @@ nominal_physics_prior:
 轮胎刚度和磨损状态
 悬架刚度 / 阻尼真实值
 执行器真实 delay / bias
+真实 steering time constant / backlash / hysteresis
 传感器真实 noise / bias
 road μ map
 ```

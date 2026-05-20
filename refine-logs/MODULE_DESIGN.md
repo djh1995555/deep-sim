@@ -264,9 +264,11 @@ dot(delta_eff) = (delta_cmd - delta_eff) / tau_steer
 默认：
 
 ```text
-tau_steer: learnable scalar or small table by vehicle type
+tau_steer = tau_steer_nominal from nominal_physics_prior
 delta_eff clamp: physical steering limit
 ```
+
+`tau_steer_nominal` 是 student-visible nominal prior，不是真实执行器时间常数。真实 steering delay、柔度、间隙、滞回和饱和误差由 `S1` 的 bounded steerResidualNN、FT5 adapter 或 FT6 full fine-tune 适配。
 
 ### 3.2 S1: S0 + steerResidualNN
 
@@ -297,7 +299,7 @@ regularization: Δdelta magnitude + temporal smoothness
 FT5 fine-tune adapter：
 
 ```text
-freeze S0 tau_steer, shared encoder, and main steerResidualNN body
+freeze S0 tau_steer_nominal input, shared encoder, and main steerResidualNN body
 train small residual adapter or head affine/bias on Δdelta_eff output
 keep bound_delta unchanged unless explicitly running FT6
 ```
@@ -691,7 +693,7 @@ total_var = aleatoric_var + epistemic_var
 
 实验引用：`FT1` 和 `FT6`。这里定义目标车/目标时间段慢变量 adapter 的接口、默认结构和参数化方式。
 
-`VehicleParamAdapter` 不属于 Stage B base model，也不参与 B4 组件级 ablation。Stage B 多车多工况训练时，student physics 直接使用 `nominal_physics_prior` 中的 `mass_nominal / inertia_nominal / cg_nominal`，不启用 adapter。这样可以让 base 表示真正的通用动力学能力，避免 adapter 在多车训练中按 episode 吸收车辆差异，削弱 E/T/F/S/M/V/U ablation 的可解释性。
+`VehicleParamAdapter` 不属于 Stage B base model，也不参与 B4 组件级 ablation。Stage B 多车多工况训练时，student physics 直接使用 `nominal_physics_prior` 中的 `mass_nominal / inertia_nominal / cg_nominal / tau_steer_nominal`，不启用 adapter。这样可以让 base 表示真正的通用动力学能力，避免 adapter 在多车训练中按 episode 吸收车辆差异，削弱 E/T/F/S/M/V/U ablation 的可解释性。
 
 `VehicleParamAdapter` 只在 Stage C fine-tune 阶段启用：
 

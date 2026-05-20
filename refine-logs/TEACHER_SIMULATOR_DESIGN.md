@@ -566,6 +566,7 @@ Iy_nominal
 Iz_nominal
 cg_x_nominal
 cg_z_nominal
+tau_steer_nominal
 ```
 
 ### 6.3 Teacher-only 真实参数
@@ -590,6 +591,7 @@ ambient / road temperature profile（环境 / 路面温度 profile）
 aero drag / lift / downforce coefficients（气动阻力 / 升力 / 下压力系数）
 rolling resistance coefficients（滚动阻力系数）
 actuator delay / saturation（执行器延迟 / 饱和）
+steering time constant / compliance / backlash / hysteresis（转向时间常数 / 柔度 / 间隙 / 滞回）
 ABS/TCS/ESC thresholds and modulation gains（阈值与调制增益）
 brake hydraulic pressure dynamics / fade（制动液压动态 / 热衰退）
 engine / motor / gearbox maps（发动机 / 电机 / 变速箱 map）

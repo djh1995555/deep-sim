@@ -45,7 +45,7 @@ EXPERIMENT_PLAN.md:
 核心假设：
 
 ```text
-固定几何/layout + 最小 nominal mass/inertia/cg prior
+固定几何/layout + 最小 nominal mass/inertia/cg/steering-tau prior
 + 少量目标时间段实车数据 fine-tune
 足以让小规模 adapter 适配某台车某段时间的 effective dynamics。
 ```
@@ -915,7 +915,7 @@ MoE vs single-expert tire residual gap
   - 使用 slip-dependent confidence；增加 μ oracle 和 fixed μ 对照。
 - **Stage C 中 VehicleParamAdapter 与 VehicleResidualNN 抢解释权**
   - Stage B 不启用 `VehicleParamAdapter`；Stage C 中 adapter 只输出慢变量，`VehicleResidualNN` 保持小容量 bounded；通过 FT1-FT6 判断适配收益和过拟合风险。
-- **只给 mass/I/cg nominal prior 不足**
+- **只给 mass/I/cg/tau_steer nominal prior 不足**
   - 在 held-out vehicle/config 上观察 FT0-FT6 和数据效率；如果小模块 FT 均无效，再考虑增加可获得的 nominal prior。
 - **单项 ablation 不可归因**
   - 固定 `Base = E1 + T1 + F1 + S1 + M1a + V1 + U0`，每次只替换 E/T/F/S/M/V/U 中的一个模块；共享同一个 base tire model、训练数据和模型容量，并从头训练各配置。
@@ -929,7 +929,7 @@ MoE vs single-expert tire residual gap
 - [x] 计划是独立自包含版本。
 - [x] 目标是多车 base model + 目标车/目标时间段 fine-tune。
 - [x] `fixed_vehicle_context` 已在 `DATA_DESIGN.md` 中定义。
-- [x] `nominal_physics_prior` 已在 `DATA_DESIGN.md` 中限定为 `mass/I/cg`。
+- [x] `nominal_physics_prior` 已在 `DATA_DESIGN.md` 中限定为 `mass/I/cg/tau_steer`。
 - [x] teacher-only 字段已在 `DATA_DESIGN.md` / `TEACHER_SIMULATOR_DESIGN.md` 中定义，且禁止作为 student input。
 - [x] `FT0-FT6` 已在 Stage C 中定义。
 - [x] `Base = E1 + T1 + F1 + S1 + M1a + V1 + U0` 已定义。
