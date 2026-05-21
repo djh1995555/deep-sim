@@ -85,6 +85,33 @@ def observable_history(states: np.ndarray, controls: np.ndarray) -> np.ndarray:
     return np.concatenate([states, controls], axis=-1).astype(np.float32)
 
 
+def _optional_npz_row(npz: Any, key: str, index: int, default: np.ndarray) -> np.ndarray:
+    if key not in npz.files:
+        return default.astype(np.float32)
+    return np.asarray(npz[key][index], dtype=np.float32)
+
+
+def _manifest_item_matches(
+    item: Dict[str, Any],
+    split_role: str,
+    fine_tune_buckets: List[str] | None,
+    target_window_role: str | None,
+    scenario_groups: List[str] | None,
+    vehicle_config_ids: List[str] | None,
+) -> bool:
+    if split_role and item.get("split_role") != split_role:
+        return False
+    if fine_tune_buckets and item.get("fine_tune_data_bucket") not in fine_tune_buckets:
+        return False
+    if target_window_role and item.get("target_window_role") != target_window_role:
+        return False
+    if scenario_groups and item.get("scenario_group") not in scenario_groups:
+        return False
+    if vehicle_config_ids and item.get("vehicle_config_id") not in vehicle_config_ids:
+        return False
+    return True
+
+
 def validate_canonical_dataset(dataset_dir: str) -> Dict[str, int]:
     manifest = load_manifest(dataset_dir)
     episode_count = len(manifest.get("episodes", []))
@@ -161,6 +188,10 @@ class TorchTransitionDataset:
         stride: int = 1,
         max_episodes: int = 0,
         max_samples: int = 0,
+        fine_tune_buckets: List[str] | None = None,
+        target_window_role: str | None = None,
+        scenario_groups: List[str] | None = None,
+        vehicle_config_ids: List[str] | None = None,
     ):
         try:
             import torch  # noqa: F401
@@ -169,14 +200,28 @@ class TorchTransitionDataset:
         self.dataset_dir = dataset_dir
         self.history_len = int(history_len)
         self.stride = max(1, int(stride))
+        self.fine_tune_buckets = fine_tune_buckets
+        self.target_window_role = target_window_role
         manifest = load_manifest(dataset_dir)
         items = [
             (idx, item)
             for idx, item in enumerate(manifest.get("episodes", []))
-            if item.get("split_role") == split_role
+            if _manifest_item_matches(
+                item,
+                split_role,
+                fine_tune_buckets,
+                target_window_role,
+                scenario_groups,
+                vehicle_config_ids,
+            )
         ]
         if not items:
-            items = list(enumerate(manifest.get("episodes", [])))
+            fallback_items = [
+                (idx, item)
+                for idx, item in enumerate(manifest.get("episodes", []))
+                if not split_role or item.get("split_role") == split_role
+            ]
+            items = fallback_items or list(enumerate(manifest.get("episodes", [])))
         max_episode_count = int(max_episodes or 0)
         if max_episode_count > 0:
             items = items[:max_episode_count]
@@ -198,9 +243,16 @@ class TorchTransitionDataset:
         global_index, state_index = self.indices[index]
         record = load_episode_record(self.dataset_dir, global_index)
         states, controls = episode_arrays(record)
+        npz = np.load(record.array_path, allow_pickle=False)
         hist = observable_history(states, controls)
         start = state_index - self.history_len
         window = hist[start:state_index]
+        fz_default = np.zeros((4,), dtype=np.float32)
+        force_default = np.zeros((4,), dtype=np.float32)
+        mu_default = np.full((4,), 0.8, dtype=np.float32)
+        delta_default = np.zeros((2,), dtype=np.float32)
+        fx = _optional_npz_row(npz, "aux__Fx_true_i", state_index, force_default)
+        fy = _optional_npz_row(npz, "aux__Fy_true_i", state_index, force_default)
         return {
             "observable_history": torch.from_numpy(window),
             "current_state": torch.from_numpy(states[state_index]),
@@ -208,6 +260,18 @@ class TorchTransitionDataset:
             "target_next_state": torch.from_numpy(states[state_index + 1]),
             "context": torch.from_numpy(context_vector(record)),
             "dt": torch.tensor(float(record.metadata["dt"]), dtype=torch.float32),
+            "fz_true": torch.from_numpy(
+                _optional_npz_row(npz, "aux__Fz_true_i", state_index, fz_default)
+            ),
+            "tire_force_true": torch.from_numpy(
+                np.stack([fx, fy], axis=-1).reshape(-1).astype(np.float32)
+            ),
+            "mu_true": torch.from_numpy(
+                _optional_npz_row(npz, "aux__mu_true_i", state_index, mu_default)
+            ),
+            "steering_true": torch.from_numpy(
+                _optional_npz_row(npz, "aux__delta_eff_i", state_index, delta_default)
+            ),
             "episode_id": record.episode_id,
             "state_index": torch.tensor(state_index, dtype=torch.int64),
         }

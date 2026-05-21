@@ -1,0 +1,12 @@
+ M experiments/run.py
+ M experiments/torch_training.py
+ M student_model/data.py
+ M student_model/torch_model.py
+ M tests/test_student_model.py
+ M tests/test_torch_training.py
+?? configs/runs/R112.yaml
+?? configs/runs/R113.yaml
+?? configs/runs/R114.yaml
+?? runs/R112_pytorch_fair_small_comparison/
+?? runs/R113_pytorch_model_variant_smoke/
+?? runs/R114_pytorch_fine_tune_adapter_smoke/

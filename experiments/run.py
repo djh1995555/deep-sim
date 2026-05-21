@@ -384,6 +384,34 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
             "torch_black_box_training_passed",
             0,
         )
+    if run_id == "R112":
+        return "torch_fair_compare_passed", metrics.get("torch_fair_compare_passed", 0)
+    if run_id == "R113":
+        return "torch_model_variant_smoke_passed", metrics.get(
+            "torch_model_variant_smoke_passed",
+            0,
+        )
+    if run_id == "R114":
+        return "torch_fine_tune_smoke_passed", metrics.get(
+            "torch_fine_tune_smoke_passed",
+            0,
+        )
+    if run_id == "R115":
+        return "torch_ensemble_training_passed", metrics.get(
+            "torch_ensemble_training_passed",
+            0,
+        )
+    for metric_name in [
+        "torch_ensemble_training_passed",
+        "torch_fine_tune_smoke_passed",
+        "torch_fair_compare_passed",
+        "torch_model_variant_smoke_passed",
+        "torch_black_box_training_passed",
+        "torch_one_step_training_passed",
+        "torch_rollout_eval_passed",
+    ]:
+        if metric_name in metrics:
+            return metric_name, metrics.get(metric_name, 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -505,6 +533,25 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("torch_resume_eval_passed", 0) == 1
     if run_id == "R110":
         return metrics.get("torch_black_box_training_passed", 0) == 1
+    if run_id == "R112":
+        return metrics.get("torch_fair_compare_passed", 0) == 1
+    if run_id == "R113":
+        return metrics.get("torch_model_variant_smoke_passed", 0) == 1
+    if run_id == "R114":
+        return metrics.get("torch_fine_tune_smoke_passed", 0) == 1
+    if run_id == "R115":
+        return metrics.get("torch_ensemble_training_passed", 0) == 1
+    for metric_name in [
+        "torch_ensemble_training_passed",
+        "torch_fine_tune_smoke_passed",
+        "torch_fair_compare_passed",
+        "torch_model_variant_smoke_passed",
+        "torch_black_box_training_passed",
+        "torch_one_step_training_passed",
+        "torch_rollout_eval_passed",
+    ]:
+        if metric_name in metrics:
+            return metrics.get(metric_name, 0) == 1
     return report["passed"]
 
 

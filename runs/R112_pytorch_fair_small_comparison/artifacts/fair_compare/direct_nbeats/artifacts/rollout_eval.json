@@ -1,0 +1,45 @@
+{
+  "checkpoint_path": "runs/R112_pytorch_fair_small_comparison/artifacts/fair_compare/direct_nbeats/checkpoints/direct_nbeats.pt",
+  "dataset_summary": {
+    "context_dim": 17,
+    "control_dim": 12,
+    "episode_count": 120,
+    "sequence_len": 101,
+    "split_role_count": 6,
+    "state_dim": 12
+  },
+  "episodes": [
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP10-L0-Y2_seed_375",
+      "finite_fraction": 1.0,
+      "rmse": 5.350122928619385,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP09-L4-Y4_seed_372",
+      "finite_fraction": 1.0,
+      "rmse": 10.149243354797363,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP06-L1-Y3_seed_281",
+      "finite_fraction": 1.0,
+      "rmse": 5.339591026306152,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP05-L0-Y1_seed_1249",
+      "finite_fraction": 1.0,
+      "rmse": 5.3584699630737305,
+      "split_role": "validation",
+      "steps": 16
+    }
+  ]
+}

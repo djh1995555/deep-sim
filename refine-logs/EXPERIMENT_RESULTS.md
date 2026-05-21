@@ -119,6 +119,10 @@
 | R109 | Resume + eval-only smoke | torch_resume_eval_passed | 1 | DONE |
 | R110 | Direct TCN black-box PyTorch baseline | torch_black_box_training_passed | 1 | DONE |
 | R111 | Base hybrid small PyTorch training | torch_one_step_training_passed | 1 | DONE |
+| R112 | Matched fair small comparison | torch_fair_compare_passed | 1 | DONE |
+| R113 | Component/model variant smoke | torch_model_variant_smoke_passed | 1 | DONE |
+| R114 | Fine-tune adapter smoke | torch_fine_tune_smoke_passed | 1 | DONE |
+| R115 | Deep ensemble smoke | torch_ensemble_training_passed | 1 | DONE |
 
 Key R107-R111 development metrics:
 
@@ -128,13 +132,32 @@ R108 rollout RMSE = 9.982708 over 4 validation episodes
 R109 resume step = 60 -> 70, validation MSE = 5.879991 -> 5.781471
 R110 direct TCN black-box loss ratio = 0.934590, validation MSE = 1.482733
 R111 base hybrid small-train loss ratio = 0.984881, validation MSE = 5.890477
+R112 fair comparison: hybrid/best black-box raw MSE ratio = 4.447071, rollout ratio = 1.666144
+R113 variant smoke: 14 component/model variants passed forward checks
+R114 fine-tune smoke: FT0-FT6 trainability passed over 2 data bucket cells
+R115 ensemble smoke: K=3 ensemble MSE = 6.010266, predictive variance = 0.085524
 ```
 
 Interpretation:
 
 ```text
 R107-R111 validate the PyTorch training infrastructure, not final model quality.
-The current small direct TCN black-box baseline is stronger than the small hybrid on one-step validation MSE, so final claims still require full fair training and rollout/cross-split evaluation.
+R112 confirms the current small direct black-box family is still stronger than the small hybrid on raw one-step MSE and rollout RMSE. The hybrid has lower normalized one-step loss in this small run, but final claims still require full fair training, rollout/cross-split evaluation, and model/loss tuning.
+```
+
+PyTorch development report:
+
+```text
+reports/PYTORCH_DEV_REPORT.md
+reports/PYTORCH_DEV_REPORT.json
+```
+
+Generated full training matrix:
+
+```text
+configs/torch_matrix/MANIFEST.json
+R200-R216: trainable PyTorch single-factor ablation configs
+R300-R334: FT0-FT6 × five fine-tune data bucket configs
 ```
 
 Generated artifacts:
@@ -214,6 +237,13 @@ runs/R108_pytorch_rollout_eval/
 runs/R109_pytorch_resume_eval_smoke/
 runs/R110_pytorch_black_box_tcn_baseline/
 runs/R111_pytorch_base_model_small_training/
+runs/R112_pytorch_fair_small_comparison/
+runs/R113_pytorch_model_variant_smoke/
+runs/R114_pytorch_fine_tune_adapter_smoke/
+runs/R115_pytorch_deep_ensemble_smoke/
+reports/PYTORCH_DEV_REPORT.md
+reports/PYTORCH_DEV_REPORT.json
+configs/torch_matrix/
 reports/B0_teacher.md
 reports/B3_baselines.md
 reports/B3_base_hybrid.md

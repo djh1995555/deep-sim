@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import os
 import tempfile
 import unittest
@@ -53,15 +54,32 @@ class TorchTrainingRunnerTest(unittest.TestCase):
             "R109": "resume_eval_smoke",
             "R110": "one_step_train",
             "R111": "one_step_train",
+            "R112": "fair_compare",
+            "R113": "model_variant_smoke",
+            "R114": "fine_tune_smoke",
+            "R115": "ensemble_train",
         }
         for run_id, mode in expected_modes.items():
             with self.subTest(run_id=run_id):
                 cfg = load_yaml("configs/runs/%s.yaml" % run_id)
                 self.assertEqual(cfg["dataset_source"], "existing")
-                self.assertEqual(cfg["data"]["dataset_path"], "data/ds1_v1")
+                expected_dataset = "data/ds1_proxy_ft_v1" if run_id == "R114" else "data/ds1_v1"
+                self.assertEqual(cfg["data"]["dataset_path"], expected_dataset)
                 self.assertEqual(cfg["torch_training"]["mode"], mode)
                 self.assertEqual(cfg["logging"]["output_dir"].split("/")[1][:4], run_id)
-                if run_id in {"R105", "R106", "R107", "R108", "R109", "R110", "R111"}:
+                if run_id in {
+                    "R105",
+                    "R106",
+                    "R107",
+                    "R108",
+                    "R109",
+                    "R110",
+                    "R111",
+                    "R112",
+                    "R113",
+                    "R114",
+                    "R115",
+                }:
                     self.assertTrue(cfg["torch_training"]["require_cuda"])
                     self.assertEqual(cfg["torch_training"]["device"], "cuda")
                 if run_id == "R110":
@@ -85,6 +103,35 @@ class TorchTrainingRunnerTest(unittest.TestCase):
         payload = _checkpoint_payload(model, None, cfg, step=80, metrics={})
         restored = _restore_model_from_checkpoint(torch, payload, device)
         self.assertEqual(restored.encoder.input_proj.out_channels, 32)
+
+    def test_direct_nbeats_checkpoint_restores(self):
+        if importlib.util.find_spec("torch") is None:
+            self.skipTest("PyTorch is not installed")
+        import torch
+
+        device = torch.device("cpu")
+        cfg = {
+            "model_type": "direct_nbeats",
+            "baseline_config": {
+                "hidden_dim": 32,
+                "context_dim": 17,
+                "history_len": 8,
+                "direct_arch": "nbeats",
+            },
+        }
+        model = _build_direct_model(torch, cfg["baseline_config"], device)
+        payload = _checkpoint_payload(model, None, cfg, step=80, metrics={})
+        restored = _restore_model_from_checkpoint(torch, payload, device)
+        self.assertTrue(hasattr(restored, "backcast"))
+
+    def test_generated_torch_matrix_manifest(self):
+        with open("configs/torch_matrix/MANIFEST.json", "r", encoding="utf-8") as handle:
+            manifest = json.load(handle)
+        self.assertEqual(manifest["ablation_count"], 17)
+        self.assertEqual(manifest["fine_tune_count"], 35)
+        self.assertEqual(manifest["config_count"], 52)
+        for item in manifest["configs"]:
+            self.assertTrue(os.path.exists(item["path"]))
 
 
 if __name__ == "__main__":

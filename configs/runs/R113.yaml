@@ -1,0 +1,63 @@
+run:
+  id: R113
+  name: pytorch_model_variant_smoke
+  milestone: P6
+  experiment_block: P6.3
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: test
+model:
+  system_name: pytorch_component_variant_smoke
+  student_config: all_core_variants_forward_smoke
+  baseline_config: direct_tcn_direct_gru_direct_transformer_direct_nbeats
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 4
+  rollout_horizon: 1
+  max_steps: 0
+  early_stopping_metric: torch_model_variant_smoke_passed
+  early_stopping_patience: 0
+evaluation:
+  horizons: [1-step]
+  metrics: [torch_model_variant_smoke_passed, torch_model_variant_count]
+  report_splits: [train]
+logging:
+  output_dir: runs/R113_pytorch_model_variant_smoke
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_v1.yaml
+dataset_source: existing
+artifact_dataset_subdir: ds1
+primary_metric: torch_model_variant_smoke_passed
+torch_training:
+  name: pytorch_model_variant_smoke
+  mode: model_variant_smoke
+  seed: 23
+  split_role: train
+  history_len: 8
+  batch_size: 4
+  max_samples: 8
+  device: cuda
+  require_cuda: true
+  variants:
+    - {name: hybrid_E1_GRU, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, encoder_type: gru}}
+    - {name: hybrid_E2_TCN, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, encoder_type: tcn}}
+    - {name: hybrid_E3_Transformer, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, encoder_type: transformer}}
+    - {name: hybrid_T0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T0}}
+    - {name: hybrid_T1_no_projection, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T1, tire_projection: false}}
+    - {name: hybrid_T2_param, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T2, mu_mode: M1a}}
+    - {name: hybrid_F0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, fz_mode: F0}}
+    - {name: hybrid_S0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, steering_mode: S0}}
+    - {name: hybrid_M1a, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, mu_mode: M1a}}
+    - {name: hybrid_V0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, vehicle_mode: V0}}
+    - {name: direct_tcn, model_type: direct_tcn, baseline_config: {hidden_dim: 32, context_dim: 17, history_len: 8}}
+    - {name: direct_gru, model_type: direct_gru, baseline_config: {hidden_dim: 32, context_dim: 17, history_len: 8}}
+    - {name: direct_transformer, model_type: direct_transformer, baseline_config: {hidden_dim: 32, context_dim: 17, history_len: 8}}
+    - {name: direct_nbeats, model_type: direct_nbeats, baseline_config: {hidden_dim: 32, context_dim: 17, history_len: 8}}

@@ -1,0 +1,5 @@
+{
+  "artifact_dataset_subdir": "ds1",
+  "dataset_path": "data/ds1_v1",
+  "dataset_source": "existing"
+}

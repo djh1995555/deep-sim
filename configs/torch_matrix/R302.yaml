@@ -1,0 +1,84 @@
+run:
+  id: R302
+  name: pytorch_finetune_FT0_B2
+  milestone: P9
+  experiment_block: P9.generated
+  seed: 23
+data:
+  dataset_id: DS1_PROXY_FT_V1
+  dataset_path: data/ds1_proxy_ft_v1
+  schema_version: v0
+  split_id: ds1_proxy_ft_v1_scaffold
+  train_filter: fine-tune
+  val_filter: test-window
+  test_filter: test-window
+model:
+  system_name: pytorch_finetune_FT0_B2
+  student_config: generated_pytorch_matrix
+  baseline_config: null
+training:
+  optimizer: adamw
+  learning_rate: 0.0001
+  batch_size: 16
+  rollout_horizon: 1
+  max_steps: 400
+  early_stopping_metric: torch_one_step_training_passed
+  early_stopping_patience: 0
+evaluation:
+  horizons:
+  - 1-step
+  - 16-step
+  metrics:
+  - torch_one_step_training_passed
+  - torch_one_step_training_val_mse
+  report_splits:
+  - train
+  - validation
+logging:
+  output_dir: runs/R302_pytorch_finetune_FT0_B2
+  save_checkpoints: true
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_proxy_ft_v1.yaml
+dataset_source: existing
+artifact_dataset_subdir: ds1_proxy_ft
+primary_metric: torch_one_step_training_passed
+torch_training:
+  name: pytorch_finetune_FT0_B2
+  mode: one_step_train
+  seed: 23
+  split_role: fine-tune
+  val_split_role: test-window
+  history_len: 8
+  batch_size: 16
+  max_episodes: 32
+  max_samples: 1024
+  max_val_samples: 512
+  sample_stride: 1
+  max_steps: 0
+  eval_interval: 100
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  grad_clip: 1.0
+  success_loss_ratio: 1.1
+  loss_mode: normalized_mse
+  checkpoint_name: model.pt
+  device: cuda
+  require_cuda: true
+  model_config:
+    hidden_dim: 64
+    history_len: 8
+    encoder_type: tcn
+    tire_mode: T1
+    tire_projection: true
+    fz_mode: F1
+    steering_mode: S1
+    mu_mode: M1a
+    vehicle_mode: V1
+  target_window_role: target_train
+  val_target_window_role: target_test
+  fine_tune_mode: FT0
+  fine_tune_buckets:
+  - FTD1
+  - FTD2
+  - FTD3
+  resume_from: runs/R111_pytorch_base_model_small_training/checkpoints/base_model_small.pt

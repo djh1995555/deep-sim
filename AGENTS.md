@@ -36,6 +36,10 @@
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml`
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml`
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml`
 
 ## Ready Smoke Runs
 
@@ -52,7 +56,19 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
 ```
+
+## Generated Training Matrix
+
+```bash
+conda run -n deep-sim python -m experiments.torch_config_matrix --write
+```
+
+This writes `configs/torch_matrix/R200-R216.yaml` for trainable PyTorch ablations and `configs/torch_matrix/R300-R334.yaml` for FT0-FT6 data-efficiency runs.
 
 ## Remote GPU
 

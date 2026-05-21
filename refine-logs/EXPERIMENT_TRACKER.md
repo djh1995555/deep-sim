@@ -61,4 +61,10 @@
 | R109 | P5 | PyTorch resume/eval-only smoke | resume R107 checkpoint and evaluate | MUST | DONE |
 | R110 | P5 | PyTorch black-box baseline | direct TCN train/validation/checkpoint on CUDA | MUST | DONE |
 | R111 | P6 | PyTorch base model small training | final single hybrid small training on CUDA | MUST | DONE |
+| R112 | P6 | PyTorch fair small comparison | matched-budget hybrid vs direct TCN/GRU/N-BEATS with one-step + rollout metrics | MUST | DONE |
+| R113 | P6 | PyTorch component variant smoke | E/T/F/S/M/V switches plus direct baselines forward on CUDA | MUST | DONE |
+| R114 | P7 | PyTorch fine-tune adapter smoke | FT0-FT6 trainability over two target data buckets | MUST | DONE |
+| R115 | P7 | PyTorch deep ensemble smoke | U1 K=3 ensemble checkpoint + predictive variance | MUST | DONE |
+| R200-R216 | P8 | Generated PyTorch ablation matrix | real trainable configs for E/T/F/S/M/V/U single-factor comparisons | MUST | READY |
+| R300-R334 | P9 | Generated PyTorch fine-tune matrix | FT0-FT6 × five fine-tune data buckets | MUST | READY |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |

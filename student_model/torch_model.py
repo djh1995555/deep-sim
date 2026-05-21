@@ -15,11 +15,21 @@ class HybridStudentConfig:
     context_dim: int = 17
     hidden_dim: int = 128
     history_len: int = 8
+    encoder_type: str = "tcn"
+    fz_mode: str = "residual"
+    tire_mode: str = "force"
+    tire_projection: bool = True
+    steering_mode: str = "residual"
+    mu_mode: str = "fixed"
+    vehicle_mode: str = "residual"
+    uncertainty_mode: str = "heteroscedastic"
+    vehicle_param_adapter_enabled: bool = False
     residual_bound: float = 0.4
     fz_bound: float = 500.0
     tire_force_bound: float = 2500.0
     steering_bound: float = 0.08
     fixed_mu: float = 0.8
+    adapter_bound: float = 0.08
 
 
 class CausalConvBlock(nn.Module):
@@ -59,6 +69,65 @@ class CausalTCNEncoder(nn.Module):
         return x[:, :, -1]
 
 
+class GRUEncoder(nn.Module):
+    def __init__(self, input_dim: int, hidden_dim: int) -> None:
+        super().__init__()
+        self.gru = nn.GRU(input_dim, hidden_dim, batch_first=True)
+
+    def forward(self, history: torch.Tensor) -> torch.Tensor:
+        _, h = self.gru(history)
+        return h[-1]
+
+
+class CausalTransformerEncoder(nn.Module):
+    def __init__(self, input_dim: int, hidden_dim: int, history_len: int) -> None:
+        super().__init__()
+        nhead = 4 if hidden_dim % 4 == 0 else 2
+        self.input_proj = nn.Linear(input_dim, hidden_dim)
+        self.pos = nn.Parameter(torch.zeros(1, max(1, history_len), hidden_dim))
+        layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim,
+            nhead=nhead,
+            dim_feedforward=hidden_dim * 2,
+            dropout=0.0,
+            activation="gelu",
+            batch_first=True,
+            norm_first=True,
+        )
+        self.encoder = nn.TransformerEncoder(layer, num_layers=2)
+
+    def forward(self, history: torch.Tensor) -> torch.Tensor:
+        length = history.shape[1]
+        if length > self.pos.shape[1]:
+            pad = self.pos[:, -1:, :].expand(-1, length - self.pos.shape[1], -1)
+            pos = torch.cat([self.pos, pad], dim=1)
+        else:
+            pos = self.pos
+        x = self.input_proj(history) + pos[:, :length, :]
+        causal_mask = torch.triu(
+            torch.ones(length, length, dtype=torch.bool, device=history.device),
+            diagonal=1,
+        )
+        x = self.encoder(x, mask=causal_mask)
+        return x[:, -1, :]
+
+
+def make_encoder(
+    encoder_type: str,
+    input_dim: int,
+    hidden_dim: int,
+    history_len: int,
+) -> nn.Module:
+    normalized = str(encoder_type).lower()
+    if normalized in {"e1", "gru"}:
+        return GRUEncoder(input_dim, hidden_dim)
+    if normalized in {"e2", "tcn", "causal_tcn"}:
+        return CausalTCNEncoder(input_dim, hidden_dim)
+    if normalized in {"e3", "transformer", "causal_transformer"}:
+        return CausalTransformerEncoder(input_dim, hidden_dim, history_len)
+    raise ValueError("unknown encoder_type: %s" % encoder_type)
+
+
 class MLPHead(nn.Module):
     def __init__(self, input_dim: int, hidden_dim: int, output_dim: int) -> None:
         super().__init__()
@@ -74,6 +143,14 @@ class MLPHead(nn.Module):
         return self.net(x)
 
 
+def zero_last_linear(module: nn.Module) -> None:
+    for layer in reversed(list(module.modules())):
+        if isinstance(layer, nn.Linear):
+            nn.init.zeros_(layer.weight)
+            nn.init.zeros_(layer.bias)
+            return
+
+
 class HybridStudentModel(nn.Module):
     def __init__(self, config: Optional[HybridStudentConfig] = None) -> None:
         super().__init__()
@@ -81,12 +158,17 @@ class HybridStudentModel(nn.Module):
         c = self.config
         obs_dim = c.state_dim + c.control_dim
         feature_dim = c.hidden_dim + c.state_dim + c.control_dim + c.context_dim
-        self.encoder = CausalTCNEncoder(obs_dim, c.hidden_dim)
+        self.encoder = make_encoder(c.encoder_type, obs_dim, c.hidden_dim, c.history_len)
         self.fz_head = MLPHead(feature_dim, c.hidden_dim, 4)
+        self.mu_head = MLPHead(feature_dim, c.hidden_dim, 4)
         self.tire_head = MLPHead(feature_dim + 4, c.hidden_dim, 8)
+        self.tire_param_head = MLPHead(feature_dim + 4 + 4, c.hidden_dim, 12)
         self.steering_head = MLPHead(feature_dim, c.hidden_dim, 1)
-        self.vehicle_head = MLPHead(feature_dim + 13, c.hidden_dim, c.state_dim)
+        vehicle_hidden = c.hidden_dim * 2 if c.vehicle_mode in {"large", "V1-large"} else c.hidden_dim
+        self.vehicle_head = MLPHead(feature_dim + 13, vehicle_hidden, c.state_dim)
+        self.vehicle_param_adapter = MLPHead(c.context_dim, c.hidden_dim, c.state_dim)
         self.uncertainty_head = MLPHead(feature_dim, c.hidden_dim, c.state_dim)
+        zero_last_linear(self.vehicle_param_adapter)
 
     def forward(
         self,
@@ -114,31 +196,92 @@ class HybridStudentModel(nn.Module):
         z = self.encoder(observable_history)
         features = torch.cat([z, current_state, current_control, context], dim=-1)
         physics_next = nominal_physics_step(current_state, current_control, context, dt)
-        fz_delta = torch.tanh(self.fz_head(features)) * c.fz_bound
         fz_nominal = nominal_fz(context)
+        if c.fz_mode in {"none", "F0"}:
+            fz_delta = torch.zeros_like(fz_nominal)
+        else:
+            fz_delta = torch.tanh(self.fz_head(features)) * c.fz_bound
         fz = torch.clamp(fz_nominal + fz_delta, min=50.0)
-        tire_raw = torch.tanh(self.tire_head(torch.cat([features, fz], dim=-1)))
-        tire_forces = tire_raw * c.tire_force_bound
-        tire_forces = project_friction_ellipse(tire_forces, fz, c.fixed_mu)
-        steering_delta = torch.tanh(self.steering_head(features)) * c.steering_bound
+        if c.mu_mode in {"fixed", "M0", "M0-fixed"}:
+            mu = fz.new_full(fz.shape, float(c.fixed_mu))
+        else:
+            mu = 0.05 + 1.45 * torch.sigmoid(self.mu_head(features))
+        if c.tire_mode in {"none", "T0"}:
+            tire_forces = features.new_zeros(features.shape[0], 8)
+            tire_params = features.new_zeros(features.shape[0], 12)
+        elif c.tire_mode in {"param", "T2"}:
+            tire_params = torch.tanh(
+                self.tire_param_head(torch.cat([features, fz, mu], dim=-1))
+            )
+            tire_forces = tire_param_forces(
+                tire_params,
+                current_state,
+                current_control,
+                fz,
+                context,
+            )
+        else:
+            tire_params = features.new_zeros(features.shape[0], 12)
+            tire_raw = torch.tanh(self.tire_head(torch.cat([features, fz], dim=-1)))
+            tire_forces = tire_raw * c.tire_force_bound
+        if c.tire_projection:
+            tire_forces = project_friction_ellipse(tire_forces, fz, mu)
+        if c.steering_mode in {"none", "S0"}:
+            steering_delta = features.new_zeros(features.shape[0], 1)
+        else:
+            steering_delta = torch.tanh(self.steering_head(features)) * c.steering_bound
         vehicle_features = torch.cat(
             [features, fz_delta, tire_forces, steering_delta],
             dim=-1,
         )
-        delta_x = torch.tanh(self.vehicle_head(vehicle_features)) * c.residual_bound
+        if c.vehicle_mode in {"none", "V0"}:
+            delta_x = features.new_zeros(features.shape[0], c.state_dim)
+        else:
+            delta_x = torch.tanh(self.vehicle_head(vehicle_features)) * c.residual_bound
+        if c.vehicle_param_adapter_enabled:
+            delta_x = delta_x + torch.tanh(self.vehicle_param_adapter(context)) * c.adapter_bound
         x_next = sanitize_state(physics_next + delta_x)
-        logvar = torch.clamp(self.uncertainty_head(features), min=-8.0, max=5.0)
+        if c.uncertainty_mode in {"none", "U0-deterministic"}:
+            logvar = torch.zeros_like(x_next)
+        else:
+            logvar = torch.clamp(self.uncertainty_head(features), min=-8.0, max=5.0)
         return {
             "x_next": x_next,
             "physics_next": physics_next,
             "delta_x": delta_x,
             "fz": fz,
             "fz_delta": fz_delta,
+            "mu": mu,
             "tire_forces": tire_forces,
+            "tire_params": tire_params,
             "steering_delta": steering_delta,
             "logvar": logvar,
             "z_shared": z,
         }
+
+    def set_trainability(self, fine_tune_mode: str) -> None:
+        mode = str(fine_tune_mode or "FT6").upper()
+        self.config.vehicle_param_adapter_enabled = mode in {"FT1", "FT6"}
+        for param in self.parameters():
+            param.requires_grad = False
+        if mode == "FT0":
+            return
+        if mode == "FT6":
+            for param in self.parameters():
+                param.requires_grad = True
+            return
+        modules = {
+            "FT1": [self.vehicle_param_adapter],
+            "FT2": [self.mu_head],
+            "FT3": [self.fz_head],
+            "FT4": [self.tire_head, self.tire_param_head],
+            "FT5": [self.steering_head],
+        }.get(mode)
+        if modules is None:
+            raise ValueError("unknown fine_tune_mode: %s" % fine_tune_mode)
+        for module in modules:
+            for param in module.parameters():
+                param.requires_grad = True
 
 
 def nominal_physics_step(
@@ -206,13 +349,44 @@ def nominal_fz(context: torch.Tensor) -> torch.Tensor:
 def project_friction_ellipse(
     tire_forces: torch.Tensor,
     fz: torch.Tensor,
-    mu: float,
+    mu: float | torch.Tensor,
 ) -> torch.Tensor:
     forces = tire_forces.view(tire_forces.shape[0], 4, 2)
-    radius = (fz * float(mu)).clamp_min(1.0)
+    if torch.is_tensor(mu):
+        radius = (fz * mu).clamp_min(1.0)
+    else:
+        radius = (fz * float(mu)).clamp_min(1.0)
     norm = torch.linalg.norm(forces, dim=-1).clamp_min(1e-6)
     scale = torch.minimum(torch.ones_like(norm), radius / norm)
     return (forces * scale[..., None]).reshape(tire_forces.shape[0], 8)
+
+
+def tire_param_forces(
+    tire_params: torch.Tensor,
+    state: torch.Tensor,
+    control: torch.Tensor,
+    fz: torch.Tensor,
+    context: torch.Tensor,
+) -> torch.Tensor:
+    radius = context[:, 3:4].clamp_min(1e-6)
+    vx = state[:, STATE_KEYS.index("vx") : STATE_KEYS.index("vx") + 1].clamp_min(0.5)
+    omega_start = STATE_KEYS.index("omega_fl")
+    wheel_omega = state[:, omega_start : omega_start + 4]
+    slip_ratio = ((wheel_omega * radius - vx) / vx).clamp(-2.0, 2.0)
+    steering_ratio = context[:, 4:5].clamp_min(1e-6)
+    steer_proxy = (control[:, 0:1] / steering_ratio).clamp(-0.7, 0.7)
+    alpha_front = steer_proxy.expand(-1, 2)
+    alpha_rear = state[:, STATE_KEYS.index("vy") : STATE_KEYS.index("vy") + 1] / vx
+    slip_angle = torch.cat([alpha_front, alpha_rear.expand(-1, 2)], dim=-1).clamp(-0.7, 0.7)
+    d_calpha = tire_params[:, 0:4]
+    d_ckappa = tire_params[:, 4:8]
+    d_mu = tire_params[:, 8:12]
+    c_alpha = 0.18 + 0.12 * d_calpha
+    c_kappa = 0.22 + 0.14 * d_ckappa
+    mu_scale = (1.0 + 0.4 * d_mu).clamp(0.4, 1.6)
+    fx = c_kappa * slip_ratio * fz * mu_scale
+    fy = c_alpha * slip_angle * fz * mu_scale
+    return torch.stack([fx, fy], dim=-1).reshape(state.shape[0], 8)
 
 
 def sanitize_state(state: torch.Tensor) -> torch.Tensor:

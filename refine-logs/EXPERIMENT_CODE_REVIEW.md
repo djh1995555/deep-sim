@@ -295,6 +295,52 @@ Residual risk:
 R100-R111 pass. These validate environment readiness, runner plumbing, checkpoint/resume, rollout evaluation, and a first PyTorch black-box baseline. They are still small-run development gates, not final model-quality evidence.
 ```
 
+## P4 PyTorch Development Addendum
+
+**Date**: 2026-05-21 19:33 CST
+**Scope**: R112-R115 plus generated PyTorch matrix configs
+**Mode**: local-only fallback; secondary delegated review not used because the current task did not explicitly request sub-agent delegation.
+
+Reviewed files:
+
+```text
+student_model/data.py
+student_model/torch_model.py
+experiments/torch_training.py
+experiments/torch_config_matrix.py
+experiments/torch_dev_report.py
+experiments/run.py
+configs/runs/R112.yaml
+configs/runs/R113.yaml
+configs/runs/R114.yaml
+configs/runs/R115.yaml
+configs/torch_matrix/MANIFEST.json
+tests/test_student_model.py
+tests/test_torch_training.py
+reports/PYTORCH_DEV_REPORT.md
+```
+
+Checklist:
+
+| Check | Verdict |
+|---|---|
+| E1 GRU, E2 TCN, and E3 causal Transformer encoders instantiate and forward on canonical DS1 batches | pass |
+| T0/T1/T1-no-proj/T2 tire residual switches, F0/F1, S0/S1, M0/M1a, and V0/V1 variants have CUDA forward coverage | pass via R113 |
+| Teacher aux labels are exposed by the transition dataset without entering `observable_history` | pass |
+| Normalized loss and per-channel RMSE are emitted in one-step validation metrics | pass |
+| Rollout eval emits per-channel RMSE and constraint violation rate against dataset ground truth | pass |
+| R112 trains hybrid/direct TCN/direct GRU/direct N-BEATS with matched small budget and evaluates rollout for each | pass |
+| R114 verifies FT0 has zero trainable parameters and FT1-FT6 expose the intended trainable modules | pass |
+| R115 trains K=3 ensemble members and reports predictive variance | pass |
+| Generated `configs/torch_matrix` contains trainable ablation and fine-tune run configs | pass |
+| Unknown generated run ids now use available torch pass metrics instead of falling back to schema-only success | pass |
+
+Residual risk:
+
+```text
+R112-R115 are development-scale gates. R112 shows the current hybrid still trails the best direct black-box on raw one-step MSE and rollout RMSE. This is an implementation and diagnosis checkpoint, not evidence that the hybrid method is superior.
+```
+
 ## Verification Commands
 
 ```bash

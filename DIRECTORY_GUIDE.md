@@ -17,7 +17,7 @@
 | `reports/` | 实验报告 | B0/B3/B4 阶段报告和 ablation 汇总 JSON | 面向阅读的实验阶段输出，通常由 run 或汇总脚本生成/更新。 |
 | `research-wiki/` | 研究知识库 | 论文卡片、idea 卡片、claim/gap/query 记录 | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。 |
 | `runs/` | 实验运行产物 | R000-R045 scaffold 产物以及 R100+ PyTorch smoke 产物 | 每次实验运行的输出目录。当前主要是 scaffold 数据、指标、报告中间产物和 PyTorch blocked/smoke 输出。 |
-| `student_model/` | PyTorch 模型源码 | Student model v0 的数据接口、常量和模型 forward skeleton | 正式训练阶段的模型实现入口。当前有 forward skeleton，训练 smoke 由 `experiments/torch_training.py` 调度。 |
+| `student_model/` | PyTorch 模型源码 | Student model 的数据接口、常量、E1/E2/E3 encoder、residual heads、adapter trainability | 正式训练阶段的模型实现入口；训练由 `experiments/torch_training.py` 调度。 |
 | `teacher_simulator/` | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现 | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。 |
 | `tests/` | 测试代码 | teacher simulator、canonical data、student model、PyTorch runner 测试 | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。 |
 
@@ -55,7 +55,8 @@ Teacher 数据集生成配置。
 | `R034-R036` | B5 跨车 / 跨配置泛化 scaffold。 |
 | `R037` | M8 final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | B6 target fine-tune 数据效率 scaffold。 |
-| `R100-R111` | PyTorch training smoke/dev runs：data loader、forward/loss、tiny overfit、rollout、checkpoint、CUDA gates、one-step train、resume、black-box baseline、小规模 base train。当前已通过。 |
+| `R100-R115` | PyTorch training smoke/dev runs：data loader、forward/loss、tiny overfit、rollout、checkpoint、CUDA gates、one-step train、resume、black-box baseline、小规模 base train、公平对比、组件变体、fine-tune adapter、K=3 ensemble。当前已通过。 |
+| `configs/torch_matrix/` | 由 `experiments.torch_config_matrix` 生成的完整 PyTorch ablation/fine-tune 配置矩阵：`R200-R216` 和 `R300-R334`。 |
 
 运行方式统一使用 Miniforge/conda 环境：
 
@@ -76,7 +77,9 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `baselines.py` | physics-only baseline 和 black-box baseline scaffold 逻辑。 |
 | `hybrid.py` | base hybrid、组件 ablation、评估指标和 residual 审计的 scaffold 实现。 |
 | `ablation_report.py` | 汇总 R015-R033 组件 ablation 结果，生成 markdown/JSON 报告。 |
-| `torch_training.py` | PyTorch runner，覆盖 R100-R111 的 data loader、loss、tiny overfit、rollout、checkpoint、CUDA、训练、resume 和 black-box baseline 检查。 |
+| `torch_training.py` | PyTorch runner，覆盖 R100-R115 的 data loader、loss、tiny overfit、rollout、checkpoint、CUDA、训练、resume、black-box baseline、公平对比、fine-tune 和 ensemble 检查。 |
+| `torch_config_matrix.py` | 生成 trainable PyTorch ablation / fine-tune 配置矩阵。 |
+| `torch_dev_report.py` | 聚合 R112-R115 结果到 `reports/PYTORCH_DEV_REPORT.md/json`。 |
 | `__init__.py` | Python package 标记。 |
 
 `experiments/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
@@ -91,7 +94,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `data.py` | canonical dataset 读取、episode array 解析、context vector 编码、可选 Torch dataset wrapper。 |
 | `torch_model.py` | 当前 final single skeleton：`E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0`。 |
 
-当前限制：这里仍是小规模训练开发链路，不是完整训练结论。训练 loss、optimizer、rollout、checkpoint save/load、resume 和 direct TCN baseline 已在 `experiments/torch_training.py` 中接入，并且 R100-R111 已通过。
+当前限制：这里仍是小规模训练开发链路，不是完整训练结论。训练 loss、optimizer、rollout、checkpoint save/load、resume、direct black-box baseline、fair comparison、fine-tune adapter 和 ensemble 已在 `experiments/torch_training.py` 中接入，并且 R100-R115 已通过。
 
 ## Teacher Simulator 目录
 

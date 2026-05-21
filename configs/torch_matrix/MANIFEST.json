@@ -1,0 +1,267 @@
+{
+  "ablation_count": 17,
+  "config_count": 52,
+  "configs": [
+    {
+      "name": "pytorch_ablation_encoder_E1",
+      "path": "configs/torch_matrix/R200.yaml",
+      "run_id": "R200"
+    },
+    {
+      "name": "pytorch_ablation_encoder_E2",
+      "path": "configs/torch_matrix/R201.yaml",
+      "run_id": "R201"
+    },
+    {
+      "name": "pytorch_ablation_encoder_E3",
+      "path": "configs/torch_matrix/R202.yaml",
+      "run_id": "R202"
+    },
+    {
+      "name": "pytorch_ablation_tire_T0",
+      "path": "configs/torch_matrix/R203.yaml",
+      "run_id": "R203"
+    },
+    {
+      "name": "pytorch_ablation_tire_T1",
+      "path": "configs/torch_matrix/R204.yaml",
+      "run_id": "R204"
+    },
+    {
+      "name": "pytorch_ablation_tire_T1_no_proj",
+      "path": "configs/torch_matrix/R205.yaml",
+      "run_id": "R205"
+    },
+    {
+      "name": "pytorch_ablation_tire_T2",
+      "path": "configs/torch_matrix/R206.yaml",
+      "run_id": "R206"
+    },
+    {
+      "name": "pytorch_ablation_fz_F0",
+      "path": "configs/torch_matrix/R207.yaml",
+      "run_id": "R207"
+    },
+    {
+      "name": "pytorch_ablation_fz_F1",
+      "path": "configs/torch_matrix/R208.yaml",
+      "run_id": "R208"
+    },
+    {
+      "name": "pytorch_ablation_steer_S0",
+      "path": "configs/torch_matrix/R209.yaml",
+      "run_id": "R209"
+    },
+    {
+      "name": "pytorch_ablation_steer_S1",
+      "path": "configs/torch_matrix/R210.yaml",
+      "run_id": "R210"
+    },
+    {
+      "name": "pytorch_ablation_mu_M0",
+      "path": "configs/torch_matrix/R211.yaml",
+      "run_id": "R211"
+    },
+    {
+      "name": "pytorch_ablation_mu_M1a",
+      "path": "configs/torch_matrix/R212.yaml",
+      "run_id": "R212"
+    },
+    {
+      "name": "pytorch_ablation_vehicle_V0",
+      "path": "configs/torch_matrix/R213.yaml",
+      "run_id": "R213"
+    },
+    {
+      "name": "pytorch_ablation_vehicle_V1",
+      "path": "configs/torch_matrix/R214.yaml",
+      "run_id": "R214"
+    },
+    {
+      "name": "pytorch_ablation_vehicle_V1_large",
+      "path": "configs/torch_matrix/R215.yaml",
+      "run_id": "R215"
+    },
+    {
+      "name": "pytorch_ablation_uncertainty_U1_ensemble",
+      "path": "configs/torch_matrix/R216.yaml",
+      "run_id": "R216"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B0",
+      "path": "configs/torch_matrix/R300.yaml",
+      "run_id": "R300"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B1",
+      "path": "configs/torch_matrix/R301.yaml",
+      "run_id": "R301"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B2",
+      "path": "configs/torch_matrix/R302.yaml",
+      "run_id": "R302"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B3",
+      "path": "configs/torch_matrix/R303.yaml",
+      "run_id": "R303"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B4",
+      "path": "configs/torch_matrix/R304.yaml",
+      "run_id": "R304"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B0",
+      "path": "configs/torch_matrix/R305.yaml",
+      "run_id": "R305"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B1",
+      "path": "configs/torch_matrix/R306.yaml",
+      "run_id": "R306"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B2",
+      "path": "configs/torch_matrix/R307.yaml",
+      "run_id": "R307"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B3",
+      "path": "configs/torch_matrix/R308.yaml",
+      "run_id": "R308"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B4",
+      "path": "configs/torch_matrix/R309.yaml",
+      "run_id": "R309"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B0",
+      "path": "configs/torch_matrix/R310.yaml",
+      "run_id": "R310"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B1",
+      "path": "configs/torch_matrix/R311.yaml",
+      "run_id": "R311"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B2",
+      "path": "configs/torch_matrix/R312.yaml",
+      "run_id": "R312"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B3",
+      "path": "configs/torch_matrix/R313.yaml",
+      "run_id": "R313"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B4",
+      "path": "configs/torch_matrix/R314.yaml",
+      "run_id": "R314"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B0",
+      "path": "configs/torch_matrix/R315.yaml",
+      "run_id": "R315"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B1",
+      "path": "configs/torch_matrix/R316.yaml",
+      "run_id": "R316"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B2",
+      "path": "configs/torch_matrix/R317.yaml",
+      "run_id": "R317"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B3",
+      "path": "configs/torch_matrix/R318.yaml",
+      "run_id": "R318"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B4",
+      "path": "configs/torch_matrix/R319.yaml",
+      "run_id": "R319"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B0",
+      "path": "configs/torch_matrix/R320.yaml",
+      "run_id": "R320"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B1",
+      "path": "configs/torch_matrix/R321.yaml",
+      "run_id": "R321"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B2",
+      "path": "configs/torch_matrix/R322.yaml",
+      "run_id": "R322"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B3",
+      "path": "configs/torch_matrix/R323.yaml",
+      "run_id": "R323"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B4",
+      "path": "configs/torch_matrix/R324.yaml",
+      "run_id": "R324"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B0",
+      "path": "configs/torch_matrix/R325.yaml",
+      "run_id": "R325"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B1",
+      "path": "configs/torch_matrix/R326.yaml",
+      "run_id": "R326"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B2",
+      "path": "configs/torch_matrix/R327.yaml",
+      "run_id": "R327"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B3",
+      "path": "configs/torch_matrix/R328.yaml",
+      "run_id": "R328"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B4",
+      "path": "configs/torch_matrix/R329.yaml",
+      "run_id": "R329"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B0",
+      "path": "configs/torch_matrix/R330.yaml",
+      "run_id": "R330"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B1",
+      "path": "configs/torch_matrix/R331.yaml",
+      "run_id": "R331"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B2",
+      "path": "configs/torch_matrix/R332.yaml",
+      "run_id": "R332"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B3",
+      "path": "configs/torch_matrix/R333.yaml",
+      "run_id": "R333"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B4",
+      "path": "configs/torch_matrix/R334.yaml",
+      "run_id": "R334"
+    }
+  ],
+  "fine_tune_count": 35
+}

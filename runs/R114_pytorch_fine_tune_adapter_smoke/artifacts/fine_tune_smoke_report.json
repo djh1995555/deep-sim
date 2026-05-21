@@ -1,0 +1,172 @@
+{
+  "rows": [
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT0_B0/checkpoints/FT0_B0.pt",
+      "mode": "FT0",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 0,
+      "val_mse": 0.7964039742946625
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT0_B1/checkpoints/FT0_B1.pt",
+      "mode": "FT0",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 0,
+      "val_mse": 0.797560433546702
+    },
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT1_B0/checkpoints/FT1_B0.pt",
+      "mode": "FT1",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 6092,
+      "val_mse": 1.3123923341433208
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT1_B1/checkpoints/FT1_B1.pt",
+      "mode": "FT1",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 6092,
+      "val_mse": 0.6973633567492167
+    },
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT2_B0/checkpoints/FT2_B0.pt",
+      "mode": "FT2",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 11204,
+      "val_mse": 0.7920340895652771
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT2_B1/checkpoints/FT2_B1.pt",
+      "mode": "FT2",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 11204,
+      "val_mse": 0.7967067857583364
+    },
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT3_B0/checkpoints/FT3_B0.pt",
+      "mode": "FT3",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 11204,
+      "val_mse": 0.7976324260234833
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT3_B1/checkpoints/FT3_B1.pt",
+      "mode": "FT3",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 11204,
+      "val_mse": 0.7975084284941355
+    },
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT4_B0/checkpoints/FT4_B0.pt",
+      "mode": "FT4",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 23956,
+      "val_mse": 0.7943210502465566
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT4_B1/checkpoints/FT4_B1.pt",
+      "mode": "FT4",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 23956,
+      "val_mse": 0.7966886063416799
+    },
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT5_B0/checkpoints/FT5_B0.pt",
+      "mode": "FT5",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 11009,
+      "val_mse": 0.7975594600041708
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT5_B1/checkpoints/FT5_B1.pt",
+      "mode": "FT5",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 11009,
+      "val_mse": 0.7976328531901041
+    },
+    {
+      "buckets": [
+        "FTD1"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT6_B0/checkpoints/FT6_B0.pt",
+      "mode": "FT6",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 126785,
+      "val_mse": 0.6970498561859131
+    },
+    {
+      "buckets": [
+        "FTD1",
+        "FTD2",
+        "FTD3"
+      ],
+      "checkpoint": "runs/R114_pytorch_fine_tune_adapter_smoke/artifacts/fine_tune/FT6_B1/checkpoints/FT6_B1.pt",
+      "mode": "FT6",
+      "passed": true,
+      "trainability_ok": true,
+      "trainable_parameter_count": 126785,
+      "val_mse": 0.697985847791036
+    }
+  ]
+}

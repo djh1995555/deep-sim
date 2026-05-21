@@ -1,0 +1,45 @@
+{
+  "checkpoint_path": "runs/R112_pytorch_fair_small_comparison/artifacts/fair_compare/hybrid/checkpoints/hybrid.pt",
+  "dataset_summary": {
+    "context_dim": 17,
+    "control_dim": 12,
+    "episode_count": 120,
+    "sequence_len": 101,
+    "split_role_count": 6,
+    "state_dim": 12
+  },
+  "episodes": [
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP10-L0-Y2_seed_375",
+      "finite_fraction": 1.0,
+      "rmse": 11.892162322998047,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP09-L4-Y4_seed_372",
+      "finite_fraction": 1.0,
+      "rmse": 12.624870300292969,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP06-L1-Y3_seed_281",
+      "finite_fraction": 1.0,
+      "rmse": 8.171941757202148,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "constraint_violation_rate": 0.0,
+      "episode_id": "ep_SP05-L0-Y1_seed_1249",
+      "finite_fraction": 1.0,
+      "rmse": 12.517098426818848,
+      "split_role": "validation",
+      "steps": 16
+    }
+  ]
+}
