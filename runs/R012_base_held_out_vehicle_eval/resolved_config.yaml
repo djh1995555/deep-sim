@@ -1,0 +1,64 @@
+run:
+  id: R012
+  name: base_held_out_vehicle_eval
+  milestone: M5
+  experiment_block: B3.8
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: held-out-vehicle
+model:
+  system_name: Base_E1_T1_F1_S1_M1a_V1_U0
+  student_config: base_hybrid_numpy_scaffold
+  baseline_config: null
+training:
+  optimizer: ridge_regression_residual_dot
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 100
+  max_steps: 1
+  early_stopping_metric: held_out_vehicle_base_vs_physics_ratio_h100
+  early_stopping_patience: 0
+evaluation:
+  horizons:
+  - 1s
+  - 2s
+  - 4s
+  metrics:
+  - base_held_out_vehicle_eval_passed
+  - rollout_rmse
+  - yaw_drift
+  - constraint_violation
+  report_splits:
+  - held-out-vehicle
+logging:
+  output_dir: runs/R012_base_held_out_vehicle_eval
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_v1.yaml
+artifact_dataset_subdir: ds1
+primary_metric: base_held_out_vehicle_eval_passed
+hybrid:
+  success_profile: held_out_vehicle
+  seed: 23
+  report_groups:
+  - train
+  - validation
+  - test
+  - seen-config
+  - held-out-road
+  - held-out-vehicle
+  - test-window
+  horizon_steps:
+  - 25
+  - 50
+  - 100
+  history_len: 4
+  ridge_lambda: 10000.0
+  bootstrap_fraction: 1.0
+  write_markdown_report: true

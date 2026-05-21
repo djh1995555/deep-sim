@@ -1,4 +1,4 @@
-# Experiment Bridge Data/Physics/Baseline Report
+# Experiment Bridge Data/Physics/Baseline/Hybrid Report
 
 | Run | Status | Primary Metric | Value | Success | Notes |
 |---|---|---:|---:|---|---|
@@ -24,3 +24,9 @@
 | R006 | success | black_box_baseline_passed | 1 | True | experiment gate passed for this run |
 | R007 | success | baseline_fairness_passed | 1 | True | experiment gate passed for this run |
 | R008 | success | baseline_report_passed | 1 | True | experiment gate passed for this run |
+| R009 | success | base_hybrid_training_passed | 1 | True | experiment gate passed for this run |
+| R010 | success | base_seen_config_eval_passed | 1 | True | experiment gate passed for this run |
+| R011 | success | base_held_out_road_eval_passed | 1 | True | experiment gate passed for this run |
+| R012 | success | base_held_out_vehicle_eval_passed | 1 | True | experiment gate passed for this run |
+| R013 | success | base_residual_constraint_audit_passed | 1 | True | experiment gate passed for this run |
+| R014 | success | base_seed_replication_passed | 1 | True | experiment gate passed for this run |

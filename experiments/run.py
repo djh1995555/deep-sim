@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from experiments.baselines import baseline_metrics_for_runner, run_baseline_suite
+from experiments.hybrid import base_hybrid_metrics_for_runner, run_base_hybrid_suite
 from experiments.sanity import run_sanity_check
 from teacher_simulator.config import load_yaml, write_yaml
 from teacher_simulator.generate import generate_dataset
@@ -171,6 +172,15 @@ def run_config(config_path: str) -> int:
             if not baseline_report.get("passed", False):
                 report_dict["passed"] = False
                 report_dict["errors"].append("baseline suite failed")
+        hybrid_cfg = cfg.get("hybrid")
+        if hybrid_cfg:
+            base_hybrid_report = run_base_hybrid_suite(dataset_dir, hybrid_cfg, out_dir)
+            report_dict["metrics"].update(
+                base_hybrid_metrics_for_runner(base_hybrid_report)
+            )
+            if not base_hybrid_report.get("passed", False):
+                report_dict["passed"] = False
+                report_dict["errors"].append("base hybrid suite failed")
         report_path = os.path.join(out_dir, "artifacts", "validation_report.json")
         _write_json(report_path, report_dict)
         primary_metric, primary_value = _primary_metric(run_id, report_dict)
@@ -268,6 +278,18 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "baseline_fairness_passed", metrics.get("baseline_fairness_passed", 0)
     if run_id == "R008":
         return "baseline_report_passed", metrics.get("baseline_report_passed", 0)
+    if run_id == "R009":
+        return "base_hybrid_training_passed", metrics.get("base_hybrid_training_passed", 0)
+    if run_id == "R010":
+        return "base_seen_config_eval_passed", metrics.get("base_seen_config_eval_passed", 0)
+    if run_id == "R011":
+        return "base_held_out_road_eval_passed", metrics.get("base_held_out_road_eval_passed", 0)
+    if run_id == "R012":
+        return "base_held_out_vehicle_eval_passed", metrics.get("base_held_out_vehicle_eval_passed", 0)
+    if run_id == "R013":
+        return "base_residual_constraint_audit_passed", metrics.get("base_residual_constraint_audit_passed", 0)
+    if run_id == "R014":
+        return "base_seed_replication_passed", metrics.get("base_seed_replication_passed", 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -343,6 +365,18 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("baseline_fairness_passed", 0) == 1
     if run_id == "R008":
         return metrics.get("baseline_report_passed", 0) == 1
+    if run_id == "R009":
+        return metrics.get("base_hybrid_training_passed", 0) == 1
+    if run_id == "R010":
+        return metrics.get("base_seen_config_eval_passed", 0) == 1
+    if run_id == "R011":
+        return metrics.get("base_held_out_road_eval_passed", 0) == 1
+    if run_id == "R012":
+        return metrics.get("base_held_out_vehicle_eval_passed", 0) == 1
+    if run_id == "R013":
+        return metrics.get("base_residual_constraint_audit_passed", 0) == 1
+    if run_id == "R014":
+        return metrics.get("base_seed_replication_passed", 0) == 1
     return report["passed"]
 
 
@@ -434,6 +468,12 @@ def _write_stage_a_report() -> None:
         "runs/R006_black_box_baseline",
         "runs/R007_baseline_fairness_audit",
         "runs/R008_baseline_rollout_report",
+        "runs/R009_base_hybrid_training",
+        "runs/R010_base_seen_config_eval",
+        "runs/R011_base_held_out_road_eval",
+        "runs/R012_base_held_out_vehicle_eval",
+        "runs/R013_base_residual_constraint_audit",
+        "runs/R014_base_seed_replication",
     ]
     rows = []
     for run_dir in run_dirs:
@@ -444,7 +484,7 @@ def _write_stage_a_report() -> None:
             summary = json.load(handle)
         rows.append(summary)
     lines = [
-        "# Experiment Bridge Data/Physics/Baseline Report",
+        "# Experiment Bridge Data/Physics/Baseline/Hybrid Report",
         "",
         "| Run | Status | Primary Metric | Value | Success | Notes |",
         "|---|---|---:|---:|---|---|",

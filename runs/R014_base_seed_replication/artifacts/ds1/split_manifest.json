@@ -1,0 +1,188 @@
+{
+  "dataset_id": "DS1_V1",
+  "split_roles": {
+    "fine-tune": [
+      "ep_R00-L0-Y0_seed_23",
+      "ep_R00-L2-Y2_seed_35",
+      "ep_SP03-L0-Y2_seed_200",
+      "ep_TR10-L0-Y2_seed_675",
+      "ep_R02-L0-Y3_seed_1076",
+      "ep_R03-L2-Y2_seed_1110",
+      "ep_SP05-L1-Y3_seed_1256",
+      "ep_TR05-L4-Y2_seed_1570",
+      "ep_R00-L0-Y2_seed_2025",
+      "ep_R02-L3-Y3_seed_2091",
+      "ep_SP02-L4-Y2_seed_2195",
+      "ep_TR03-L1-Y2_seed_2505"
+    ],
+    "held-out": [
+      "ep_R01-L0-Y0_seed_3048",
+      "ep_R02-L2-Y0_seed_3083",
+      "ep_R03-L4-Y2_seed_3120",
+      "ep_R01-L4-Y1_seed_3069",
+      "ep_R03-L1-Y3_seed_3106",
+      "ep_SP06-L0-Y0_seed_3273",
+      "ep_SP06-L2-Y1_seed_3284",
+      "ep_SP10-L4-Y4_seed_3397",
+      "ep_SP03-L4-Y1_seed_3219",
+      "ep_SP01-L2-Y3_seed_3161",
+      "ep_TR03-L0-Y1_seed_3499",
+      "ep_TR02-L2-Y3_seed_3486",
+      "ep_TR10-L4-Y3_seed_3696",
+      "ep_TR11-L1-Y1_seed_3704",
+      "ep_TR08-L3-Y3_seed_3641"
+    ],
+    "test": [
+      "ep_TR06-L0-Y0_seed_573",
+      "ep_TR00-L1-Y0_seed_428",
+      "ep_TR09-L0-Y4_seed_1652",
+      "ep_TR03-L1-Y0_seed_1503",
+      "ep_TR04-L0-Y4_seed_2527",
+      "ep_TR09-L3-Y0_seed_2663"
+    ],
+    "test-window": [
+      "ep_R00-L1-Y0_seed_3028",
+      "ep_R01-L3-Y4_seed_3067",
+      "ep_R00-L0-Y0_seed_3023",
+      "ep_R00-L1-Y2_seed_3030",
+      "ep_R03-L4-Y4_seed_3122",
+      "ep_SP07-L1-Y0_seed_3303",
+      "ep_SP06-L3-Y2_seed_3290",
+      "ep_SP11-L2-Y0_seed_3408",
+      "ep_SP06-L1-Y2_seed_3280",
+      "ep_SP05-L4-Y4_seed_3272",
+      "ep_TR04-L1-Y2_seed_3530",
+      "ep_TR07-L3-Y0_seed_3613",
+      "ep_TR02-L4-Y0_seed_3493",
+      "ep_TR09-L2-Y2_seed_3660",
+      "ep_TR09-L3-Y4_seed_3667"
+    ],
+    "train": [
+      "ep_R02-L1-Y3_seed_81",
+      "ep_R01-L2-Y3_seed_61",
+      "ep_R02-L3-Y2_seed_90",
+      "ep_R01-L4-Y0_seed_68",
+      "ep_R00-L2-Y0_seed_33",
+      "ep_R02-L2-Y1_seed_84",
+      "ep_R00-L2-Y3_seed_36",
+      "ep_R02-L3-Y4_seed_92",
+      "ep_SP05-L1-Y1_seed_254",
+      "ep_SP04-L2-Y2_seed_235",
+      "ep_SP06-L3-Y4_seed_292",
+      "ep_SP10-L4-Y0_seed_393",
+      "ep_SP03-L2-Y1_seed_209",
+      "ep_SP07-L0-Y4_seed_302",
+      "ep_TR07-L1-Y4_seed_607",
+      "ep_TR04-L2-Y4_seed_537",
+      "ep_TR00-L3-Y2_seed_440",
+      "ep_TR06-L4-Y4_seed_597",
+      "ep_TR03-L1-Y1_seed_504",
+      "ep_TR05-L2-Y3_seed_561",
+      "ep_TR07-L0-Y4_seed_602",
+      "ep_R03-L1-Y3_seed_1106",
+      "ep_R02-L2-Y2_seed_1085",
+      "ep_R02-L3-Y0_seed_1088",
+      "ep_R03-L4-Y1_seed_1119",
+      "ep_R00-L2-Y0_seed_1033",
+      "ep_R01-L4-Y1_seed_1069",
+      "ep_R02-L4-Y3_seed_1096",
+      "ep_R01-L2-Y4_seed_1062",
+      "ep_SP09-L1-Y3_seed_1356",
+      "ep_SP00-L2-Y2_seed_1135",
+      "ep_SP00-L3-Y1_seed_1139",
+      "ep_SP06-L4-Y0_seed_1293",
+      "ep_SP09-L2-Y2_seed_1360",
+      "ep_SP02-L0-Y0_seed_1173",
+      "ep_TR00-L1-Y4_seed_1432",
+      "ep_TR08-L2-Y4_seed_1637",
+      "ep_TR06-L3-Y0_seed_1588",
+      "ep_TR04-L4-Y3_seed_1546",
+      "ep_TR10-L4-Y1_seed_1694",
+      "ep_TR07-L3-Y3_seed_1616",
+      "ep_TR04-L0-Y4_seed_1527",
+      "ep_R02-L1-Y4_seed_2082",
+      "ep_R03-L2-Y0_seed_2108",
+      "ep_R01-L3-Y1_seed_2064",
+      "ep_R01-L4-Y4_seed_2072",
+      "ep_R01-L4-Y0_seed_2068",
+      "ep_R00-L4-Y1_seed_2044",
+      "ep_R02-L2-Y4_seed_2087",
+      "ep_R01-L1-Y2_seed_2055",
+      "ep_SP08-L1-Y1_seed_2329",
+      "ep_SP06-L2-Y1_seed_2284",
+      "ep_SP10-L3-Y0_seed_2388",
+      "ep_SP03-L2-Y0_seed_2208",
+      "ep_SP00-L1-Y1_seed_2129",
+      "ep_SP11-L0-Y4_seed_2402",
+      "ep_TR02-L1-Y2_seed_2480",
+      "ep_TR10-L2-Y2_seed_2685",
+      "ep_TR05-L3-Y0_seed_2563",
+      "ep_TR05-L4-Y3_seed_2571",
+      "ep_TR03-L1-Y1_seed_2504",
+      "ep_TR09-L1-Y3_seed_2656",
+      "ep_TR09-L3-Y4_seed_2667"
+    ],
+    "validation": [
+      "ep_SP10-L0-Y2_seed_375",
+      "ep_SP09-L4-Y4_seed_372",
+      "ep_SP06-L1-Y3_seed_281",
+      "ep_SP05-L0-Y1_seed_1249",
+      "ep_SP02-L4-Y3_seed_1196",
+      "ep_SP02-L4-Y4_seed_1197",
+      "ep_SP01-L0-Y1_seed_2149",
+      "ep_SP08-L4-Y1_seed_2344",
+      "ep_SP02-L3-Y3_seed_2191"
+    ]
+  },
+  "target_windows": {
+    "tw_vehicle_A_base_00": [
+      "ep_R00-L0-Y0_seed_23"
+    ],
+    "tw_vehicle_A_base_07": [
+      "ep_R00-L2-Y2_seed_35",
+      "ep_SP03-L0-Y2_seed_200",
+      "ep_TR10-L0-Y2_seed_675"
+    ],
+    "tw_vehicle_A_mass_variant_00": [
+      "ep_R02-L0-Y3_seed_1076"
+    ],
+    "tw_vehicle_A_mass_variant_07": [
+      "ep_R03-L2-Y2_seed_1110",
+      "ep_SP05-L1-Y3_seed_1256",
+      "ep_TR05-L4-Y2_seed_1570"
+    ],
+    "tw_vehicle_B_geometry_variant_00": [
+      "ep_R00-L0-Y2_seed_2025"
+    ],
+    "tw_vehicle_B_geometry_variant_07": [
+      "ep_R02-L3-Y3_seed_2091",
+      "ep_SP02-L4-Y2_seed_2195",
+      "ep_TR03-L1-Y2_seed_2505"
+    ],
+    "tw_vehicle_C_drive_layout_variant_01": [
+      "ep_R00-L1-Y0_seed_3028",
+      "ep_SP07-L1-Y0_seed_3303",
+      "ep_TR04-L1-Y2_seed_3530"
+    ],
+    "tw_vehicle_C_drive_layout_variant_03": [
+      "ep_R01-L3-Y4_seed_3067",
+      "ep_SP06-L3-Y2_seed_3290",
+      "ep_TR07-L3-Y0_seed_3613"
+    ],
+    "tw_vehicle_C_drive_layout_variant_05": [
+      "ep_R00-L0-Y0_seed_3023",
+      "ep_SP11-L2-Y0_seed_3408",
+      "ep_TR02-L4-Y0_seed_3493"
+    ],
+    "tw_vehicle_C_drive_layout_variant_07": [
+      "ep_R00-L1-Y2_seed_3030",
+      "ep_SP06-L1-Y2_seed_3280",
+      "ep_TR09-L2-Y2_seed_3660"
+    ],
+    "tw_vehicle_C_drive_layout_variant_09": [
+      "ep_R03-L4-Y4_seed_3122",
+      "ep_SP05-L4-Y4_seed_3272",
+      "ep_TR09-L3-Y4_seed_3667"
+    ]
+  }
+}

@@ -28,12 +28,12 @@
 | R006   | M4        | B3.2 black-box baseline                     | TCN / GRU / MLP direct predictor + N-BEATSx direct multi-horizon predictor | MUST     | DONE   |
 | R007   | M4        | B3.3 baseline fairness audit                | matched inputs / budget / horizons                                         | MUST     | DONE   |
 | R008   | M4        | B3.4 baseline rollout report                | physics-only vs black-box                                                  | MUST     | DONE   |
-| R009   | M5        | B3.5 base hybrid training                   | E1 + T1 + F1 + S1 + M1a + V1 + U0                                          | MUST     | TODO   |
-| R010   | M5        | B3.6 base seen-config evaluation            | base hybrid on seen vehicle/config                                         | MUST     | TODO   |
-| R011   | M5        | B3.7 base held-out road evaluation          | base hybrid on held-out road μ                                             | MUST     | TODO   |
-| R012   | M5        | B3.8 base held-out vehicle evaluation       | base hybrid on held-out vehicle/config                                     | MUST     | TODO   |
-| R013   | M5        | B3.9 base residual/constraint audit         | residual magnitude + physical constraints                                  | MUST     | TODO   |
-| R014   | M5        | B3.10 base seed replication                 | B3 key table 3 seeds                                                       | MUST     | TODO   |
+| R009   | M5        | B3.5 base hybrid training                   | E1 + T1 + F1 + S1 + M1a + V1 + U0                                          | MUST     | DONE   |
+| R010   | M5        | B3.6 base seen-config evaluation            | base hybrid on seen vehicle/config                                         | MUST     | DONE   |
+| R011   | M5        | B3.7 base held-out road evaluation          | base hybrid on held-out road μ                                             | MUST     | DONE   |
+| R012   | M5        | B3.8 base held-out vehicle evaluation       | base hybrid on held-out vehicle/config                                     | MUST     | DONE   |
+| R013   | M5        | B3.9 base residual/constraint audit         | residual magnitude + physical constraints                                  | MUST     | DONE   |
+| R014   | M5        | B3.10 base seed replication                 | B3 key table 3 seeds                                                       | MUST     | DONE   |
 
 ## Later Explicit Runs
 
