@@ -26,26 +26,26 @@ Interpretation:
 
 ## R113 Variant Coverage
 
-- Variant forward checks passed for `14` model/component variants.
+- Variant forward checks passed for `15` model/component variants.
 
 ## R114 Fine-Tune Adapter Smoke
 
 | Mode | Buckets | Trainable Params | Val MSE |
 |---|---|---:|---:|
 | FT0 | FTD1 | 0 | 0.796404 |
-| FT0 | FTD1+FTD2+FTD3 | 0 | 0.797560 |
-| FT1 | FTD1 | 6092 | 1.312392 |
-| FT1 | FTD1+FTD2+FTD3 | 6092 | 0.697363 |
-| FT2 | FTD1 | 11204 | 0.792034 |
-| FT2 | FTD1+FTD2+FTD3 | 11204 | 0.796707 |
+| FT0 | FTD1+FTD2+FTD3 | 0 | 0.796707 |
+| FT1 | FTD1 | 6092 | 0.696542 |
+| FT1 | FTD1+FTD2+FTD3 | 6092 | 0.697283 |
+| FT2 | FTD1 | 11204 | 0.797289 |
+| FT2 | FTD1+FTD2+FTD3 | 11204 | 0.792034 |
 | FT3 | FTD1 | 11204 | 0.797632 |
-| FT3 | FTD1+FTD2+FTD3 | 11204 | 0.797508 |
-| FT4 | FTD1 | 23956 | 0.794321 |
-| FT4 | FTD1+FTD2+FTD3 | 23956 | 0.796689 |
-| FT5 | FTD1 | 11009 | 0.797559 |
-| FT5 | FTD1+FTD2+FTD3 | 11009 | 0.797633 |
-| FT6 | FTD1 | 126785 | 0.697050 |
-| FT6 | FTD1+FTD2+FTD3 | 126785 | 0.697986 |
+| FT3 | FTD1+FTD2+FTD3 | 11204 | 0.781296 |
+| FT4 | FTD1 | 71535 | 0.796689 |
+| FT4 | FTD1+FTD2+FTD3 | 71535 | 0.794320 |
+| FT5 | FTD1 | 11009 | 0.797560 |
+| FT5 | FTD1+FTD2+FTD3 | 11009 | 0.792034 |
+| FT6 | FTD1 | 174364 | 0.699251 |
+| FT6 | FTD1+FTD2+FTD3 | 174364 | 0.691679 |
 
 ## R115 Deep Ensemble Smoke
 

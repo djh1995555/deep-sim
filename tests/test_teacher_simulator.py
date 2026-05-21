@@ -6,6 +6,8 @@ from teacher_simulator.config import load_teacher_config
 from teacher_simulator.export import export_dataset
 from teacher_simulator.scenario import (
     make_ds1_proxy_scenarios,
+    make_ds2_extreme_matrix,
+    make_ds2_extreme_scenarios,
     make_proxy_perturbation_profiles,
     make_ds0_scenarios,
     make_ds1_scenario_matrix,
@@ -91,6 +93,28 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
         self.assertEqual(
             len({scenario.perturbation_profile_id for scenario in scenarios}),
             3,
+        )
+
+    def test_ds2_extreme_scenarios(self):
+        matrix = make_ds2_extreme_matrix()
+        self.assertEqual(len(matrix), 6)
+        scenarios = make_ds2_extreme_scenarios(
+            seed=47,
+            vehicle_count=3,
+            samples_per_vehicle=6,
+        )
+        self.assertEqual(len(scenarios), 18)
+        self.assertEqual(
+            {scenario.scenario_group for scenario in scenarios},
+            {"DS2-EXTREME"},
+        )
+        self.assertIn(
+            "fishhook_left_right",
+            {scenario.control_script.lateral for scenario in scenarios},
+        )
+        self.assertIn(
+            "held-out",
+            {scenario.split_metadata.split_role for scenario in scenarios},
         )
 
 

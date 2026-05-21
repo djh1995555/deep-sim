@@ -142,7 +142,7 @@ StudentModelConfig:
   steering: S0 | S1
   fz_residual: F0 | F1 | F2
   mu_head: M0-fixed | M1a | M1b | M2-oracle
-  tire_residual: T0 | T1 | T1-no-proj | T2
+  tire_residual: T0 | T1 | T1-no-proj | T2 | T3-MoE
   vehicle_residual: V0 | V1 | V1-large | V2-small
   uncertainty: U0 | U1
   vehicle_param_adapter: disabled | FT1 | FT6
@@ -385,6 +385,9 @@ T1-no-proj:
 
 T2:
   parameter-level residual ΔC_alpha_i / ΔC_kappa_i / Δμ_scale_i
+
+T3-MoE:
+  mixture of force-level tire residual experts for DS2/B7 only
 ```
 
 Requirements:
@@ -392,6 +395,7 @@ Requirements:
 ```text
 T1 default must project to friction ellipse
 T1-no-proj must keep violation metrics
+T3-MoE must expose gate weights and remain behind a DS2/B7 config gate
 TireResidualNN must not bypass MuHead silently; report sensitivity to μ_i
 ```
 

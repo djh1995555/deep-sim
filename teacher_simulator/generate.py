@@ -9,6 +9,8 @@ from teacher_simulator.config import load_teacher_config, load_yaml
 from teacher_simulator.export import export_dataset
 from teacher_simulator.scenario import (
     make_ds0_scenarios,
+    make_ds2_extreme_matrix,
+    make_ds2_extreme_scenarios,
     make_ds1_proxy_scenarios_from_profiles,
     make_ds1_scenario_matrix,
     make_ds1_scenarios,
@@ -62,6 +64,14 @@ def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:
             ),
             perturb=False,
         )
+    elif scenario_set == "ds2_extreme":
+        ds2_cfg = raw.get("ds2", {})
+        matrix = make_ds2_extreme_matrix()
+        scenarios = make_ds2_extreme_scenarios(
+            seed=cfg.seed,
+            vehicle_count=int(ds2_cfg.get("vehicle_count", 3)),
+            samples_per_vehicle=int(ds2_cfg.get("samples_per_vehicle", 6)),
+        )
     else:
         raise ValueError("unsupported scenario_set=%s" % scenario_set)
     episodes = [sim.run_episode(scenario) for scenario in scenarios]
@@ -75,7 +85,7 @@ def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:
         schema_version=cfg.schema_version,
         teacher_model_version=cfg.teacher_model_version,
     )
-    if scenario_set in ["ds1", "ds1_proxy"]:
+    if scenario_set in ["ds1", "ds1_proxy", "ds2_extreme"]:
         _write_json(os.path.join(out_dir, "scenario_matrix.json"), matrix)
         _write_json(os.path.join(out_dir, "split_manifest.json"), _split_manifest(manifest))
         _write_json(

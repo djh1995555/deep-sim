@@ -208,7 +208,7 @@ All commands must write `command.txt` and `resolved_config.yaml`.
 | `M7` | `R034-R036` | cross-vehicle/config generalization | held-out vehicle/config evidence |
 | `M8` | `R037` | final single model freeze | final E/T/F/S/M/V/U selected |
 | `M9` | `R038-R045` | target fine-tune | FT0-FT6 × FTD0-FTD5 data efficiency |
-| `M10` | `R046+` | DS2 extreme + MoE | optional second phase |
+| `M10` | `R046-R047`, `R048+` | DS2 extreme + MoE | DS2/MoE development smoke done; full training/eval optional second phase |
 
 ## 6. Stage A: Teacher And Data Runs
 
@@ -619,7 +619,7 @@ small-data overfitting signs
 
 ## 14. DS2 / MoE Runs
 
-### R046+
+### R046-R047 / R048+
 
 Entry criteria:
 
@@ -628,6 +628,13 @@ DS1 single model stable
 T0/T1/T2 decision complete
 normal DS1 regression tests available
 DS2 extreme handling data generated
+```
+
+Development smoke:
+
+```text
+R046: generate DS2_EXTREME_V0 scaffold data
+R047: run T1/T2/T3-MoE CUDA forward smoke on DS2
 ```
 
 MoE tire residual is kept only if:

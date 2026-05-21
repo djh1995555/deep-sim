@@ -714,11 +714,14 @@ held-out road 或 held-out vehicle/config 不明显退化
 
 ### B7：极限操控与 MoE Tire Residual
 
-- **状态**：后续阶段。
+- **状态**：工程入口已完成；full training/eval 属于后续阶段。
 - **触发条件**：
   - T0/T1/T2 稳定；
   - low-μ / Split-μ 已验证；
   - DS2 Expanded Dataset 中加入 large-slip / fishhook / emergency maneuver 数据。
+- **已完成开发入口**：
+  - `R046`：`DS2_EXTREME_V0` scaffold 数据生成与 schema smoke；
+  - `R047`：`T1/T2/T3-MoE` 在 DS2 上的 CUDA forward smoke。
 - **原则**：
   - MoE 只在极限操控明显提升且不伤害常规工况时保留；
   - 不作为第一版主线。
@@ -949,7 +952,7 @@ MoE vs single-expert tire residual gap
 | M7 | Cross-vehicle/config generalization | R034-R036 | held-out vehicle/config 泛化结果明确 |
 | M8 | Final single model | R037 | 第一版单模型结构冻结 |
 | M9 | B6 adaptation | R038-R045 | FT0-FT6 × FTD0-FTD5 数据效率曲线完成 |
-| M10 | B7 extreme + MoE | R046+ | large-slip 明显收益且不伤害常规工况 |
+| M10 | B7 extreme + MoE | R046-R047 / R048+ | DS2/MoE 工程入口可运行；large-slip 明显收益且不伤害常规工况需要 R048+ full training/eval |
 | M11 | Real vehicle validation | TBD | 有实车数据后验证 sim-to-real gap 和少量数据 fine-tune 假设 |
 
 ## 14. 风险与缓解

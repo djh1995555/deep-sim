@@ -6,3 +6,11 @@
 {"grad_norm": 0.0, "step": 166, "train_loss": 22701.43359375, "train_mse": 0.4161876142024994}
 {"grad_norm": 0.0, "step": 167, "train_loss": 22768.78515625, "train_mse": 0.5138401389122009}
 {"grad_norm": 0.0, "step": 168, "train_loss": 22667.72265625, "train_mse": 0.4739404618740082, "val_loss": 22828.925455729168, "val_mse": 0.7976328531901041, "val_nll": 558.1767883300781, "val_normalized_mse": 22828.925455729168}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 161, "train_loss": 22667.18359375, "train_mse": 0.4801819324493408}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 162, "train_loss": 22726.1640625, "train_mse": 0.3857100009918213}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 163, "train_loss": 22782.2890625, "train_mse": 0.5030161142349243}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 164, "train_loss": 22751.6875, "train_mse": 0.5102678537368774}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 165, "train_loss": 22716.68359375, "train_mse": 0.48719322681427}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 166, "train_loss": 22713.224609375, "train_mse": 0.6655178070068359}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 167, "train_loss": 22649.78125, "train_mse": 0.6730948686599731}
+{"grad_norm": 0.0, "lr": 0.0001, "step": 168, "train_loss": 22744.8203125, "train_mse": 0.4982166290283203, "val_loss": 22827.494466145832, "val_mse": 0.7920340895652771, "val_nll": 558.1767883300781, "val_normalized_mse": 22827.494466145832}

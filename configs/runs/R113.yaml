@@ -53,6 +53,7 @@ torch_training:
     - {name: hybrid_T0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T0}}
     - {name: hybrid_T1_no_projection, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T1, tire_projection: false}}
     - {name: hybrid_T2_param, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T2, mu_mode: M1a}}
+    - {name: hybrid_T3_moe, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, tire_mode: T3, mu_mode: M1a, tire_moe_expert_count: 3}}
     - {name: hybrid_F0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, fz_mode: F0}}
     - {name: hybrid_S0, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, steering_mode: S0}}
     - {name: hybrid_M1a, model_type: hybrid, model_config: {hidden_dim: 32, history_len: 8, mu_mode: M1a}}

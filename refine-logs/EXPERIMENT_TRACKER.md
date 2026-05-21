@@ -65,9 +65,11 @@
 | R113 | P6 | PyTorch component variant smoke | E/T/F/S/M/V switches plus direct baselines forward on CUDA | MUST | DONE |
 | R114 | P7 | PyTorch fine-tune adapter smoke | FT0-FT6 trainability over two target data buckets | MUST | DONE |
 | R115 | P7 | PyTorch deep ensemble smoke | U1 K=3 ensemble checkpoint + predictive variance | MUST | DONE |
+| R046 | M10 | DS2 extreme dataset smoke | emergency/fishhook/lane-change scaffold data generation | NICE | DONE |
+| R047 | M10 | DS2 MoE tire residual smoke | T1/T2/T3-MoE forward coverage on DS2 | NICE | DONE |
 | R200-R216 | P8 | Generated PyTorch ablation matrix | real trainable configs for E/T/F/S/M/V/U single-factor comparisons | MUST | READY |
 | R300-R334 | P9 | Generated PyTorch fine-tune matrix | FT0-FT6 × five fine-tune data buckets | MUST | READY |
-| R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |
+| R048+ | M10 | DS2 MoE tire residual training/eval | full large-slip MoE vs T1/T2 comparison | NICE | READY |
 
 ## Development Tooling
 

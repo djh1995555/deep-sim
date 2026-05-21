@@ -36,6 +36,7 @@ Teacher 数据集生成配置。
 | `ds0_minimal.yaml` | 最小 teacher simulator 数据集配置，用于早期 sanity 和 R000-R000d。 |
 | `ds1_v1.yaml` | DS1 多车、多工况 scaffold 数据集配置，用于当前主线实验。 |
 | `ds1_proxy_v1.yaml` | sim-to-real proxy 数据配置，用于扰动 profile、target window 和分布 sanity。 |
+| `ds2_extreme_v0.yaml` | DS2 极限操控 scaffold 数据配置，用于 B7 / MoE tire residual 后续实验入口。 |
 
 ### `configs/runs/`
 
@@ -55,6 +56,7 @@ Teacher 数据集生成配置。
 | `R034-R036` | B5 跨车 / 跨配置泛化 scaffold。 |
 | `R037` | M8 final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | B6 target fine-tune 数据效率 scaffold。 |
+| `R046-R047` | DS2 extreme dataset smoke 和 T3-MoE tire residual forward smoke。 |
 | `R100-R115` | PyTorch training smoke/dev runs：data loader、forward/loss、tiny overfit、rollout、checkpoint、CUDA gates、one-step train、resume、black-box baseline、小规模 base train、公平对比、组件变体、fine-tune adapter、K=3 ensemble。当前已通过。 |
 | `configs/torch_matrix/` | 由 `experiments.torch_config_matrix` 生成的完整 PyTorch ablation/fine-tune 配置矩阵：`R200-R216` 和 `R300-R334`。当前已生成，等待队列运行。 |
 
@@ -146,7 +148,7 @@ Teacher simulator 的物理/工程子模块。
 | 文件 | 用途 |
 | --- | --- |
 | `EXPERIMENT_PLAN.md` | 当前实验设计总方案，包含实验块、成功标准、数据/模型/训练策略的高层说明。 |
-| `EXPERIMENT_TRACKER.md` | R000-R033 的执行跟踪表，记录 TODO/PASS 等状态。 |
+| `EXPERIMENT_TRACKER.md` | 当前 run 执行跟踪表，记录 DONE/READY 等状态。 |
 | `EXPERIMENT_RESULTS.md` | 最新实验结果汇总。 |
 | `EXPERIMENT_CODE_REVIEW.md` | 当前实现和实验产物的本地 code review 记录。 |
 | `EXPERIMENT_RUN_SPEC.md` | 实验运行规范，包含 conda 环境要求和运行命令约定。 |
@@ -206,6 +208,7 @@ Teacher simulator 的物理/工程子模块。
 | `B5_cross_generalization_summary.json` | B5 汇总的机器可读 JSON。 |
 | `B6_fine_tune.md` | FT0-FT6 × FTD0-FTD5 target fine-tune 数据效率 scaffold 汇总报告。 |
 | `B6_fine_tune_summary.json` | B6 汇总的机器可读 JSON。 |
+| `B7_extreme_moe.md` | DS2 extreme 数据和 T3-MoE tire residual 开发 smoke 报告。 |
 | `PYTORCH_DEV_REPORT.md/json` | R112-R115 PyTorch 开发 gate 汇总。 |
 | `PYTORCH_MATRIX_REPORT.md/json` | R200-R216 ablation 和 R300-R334 fine-tune 矩阵状态/结果汇总。当前矩阵 run 仍是 pending。 |
 
@@ -233,6 +236,7 @@ Teacher simulator 的物理/工程子模块。
 | `R034-R036` | cross-vehicle / cross-config generalization scaffold。 |
 | `R037` | final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | target fine-tune data-efficiency scaffold。 |
+| `R046-R047` | DS2 extreme dataset smoke 和 T3-MoE tire residual forward smoke；当前已通过。 |
 | `R100` | PyTorch data loader smoke；当前已通过。 |
 | `R101-R104` | PyTorch forward/loss、tiny overfit、rollout、checkpoint smoke；当前已通过。 |
 | `R105` | PyTorch CUDA-required forward/loss smoke；当前已通过。 |

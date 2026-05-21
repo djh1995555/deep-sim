@@ -1,0 +1,23 @@
+ M configs/runs/R113.yaml
+ M refine-logs/MODULE_DESIGN.md
+ M refine-logs/STUDENT_MODEL_SPEC.md
+ M reports/PYTORCH_DEV_REPORT.json
+ M reports/PYTORCH_DEV_REPORT.md
+ M runs/R113_pytorch_model_variant_smoke/artifacts/model_variant_smoke.json
+ M runs/R113_pytorch_model_variant_smoke/artifacts/torch_training_report.json
+ M runs/R113_pytorch_model_variant_smoke/artifacts/validation_report.json
+ M runs/R113_pytorch_model_variant_smoke/config.yaml
+ M runs/R113_pytorch_model_variant_smoke/git_status.txt
+ M runs/R113_pytorch_model_variant_smoke/metrics.jsonl
+ M runs/R113_pytorch_model_variant_smoke/resolved_config.yaml
+ M runs/R113_pytorch_model_variant_smoke/summary.json
+ M student_model/torch_model.py
+ M teacher_simulator/generate.py
+ M teacher_simulator/scenario.py
+ M tests/test_student_model.py
+ M tests/test_teacher_simulator.py
+?? configs/runs/R046.yaml
+?? configs/runs/R047.yaml
+?? configs/teacher/ds2_extreme_v0.yaml
+?? runs/R046_ds2_extreme_dataset_smoke/
+?? runs/R047_pytorch_ds2_moe_tire_smoke/

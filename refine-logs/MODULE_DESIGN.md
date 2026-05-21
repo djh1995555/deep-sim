@@ -449,7 +449,7 @@ friction usage consistency
 
 ## 6. TireResidualNN
 
-实验引用：`T0/T1/T1-no-proj/T2`，fine-tune 引用：`FT4`。
+实验引用：`T0/T1/T1-no-proj/T2`，B7 可选引用：`T3-MoE`，fine-tune 引用：`FT4`。
 
 `TireResidualNN` 补偿轮胎物理模型误差。Base 使用 `T1` force-level residual，并把最终轮胎力投影回 friction ellipse。
 
@@ -461,6 +461,7 @@ friction usage consistency
 | `T1` | `ΔFx_i / ΔFy_i` | base 默认 |
 | `T1-no-proj` | `ΔFx_i / ΔFy_i` without projection | projection 必要性对照 |
 | `T2` | `ΔC_alpha_i / ΔC_kappa_i / Δμ_scale_i` | parameter-level residual 对照 |
+| `T3-MoE` | mixture of force-level tire residual experts | DS2 extreme handling 可选，不进入第一版 base |
 
 输入来自：
 
@@ -494,6 +495,16 @@ C_kappa_eff = C_kappa_nominal * exp(clip(ΔC_kappa))
 μ_eff = μ_i * exp(clip(Δμ_scale))
 ```
 
+`T3-MoE` 参数化：
+
+```text
+g_i = softmax(Gate(z_shared, slip, Fz_i, μ_i) / temperature)
+ΔF_expert_k = bound_force_i * tanh(Expert_k(z_shared, slip, Fz_i, μ_i))
+ΔF_i = Σ_k g_{i,k} * ΔF_expert_{i,k}
+```
+
+`T3-MoE` 只用于 B7 / DS2 large-slip、fishhook、emergency maneuver 等极限操控数据。保留条件是 large-slip rollout 明显优于同预算 T1/T2，同时 DS1 常规工况不退化。
+
 ### 6.2 Structure Flow
 
 ```mermaid
@@ -525,6 +536,13 @@ flowchart TD
   PEFF --> TP2["tire physics recompute"]
   TP2 --> FOUT
 
+  TVAR --> T3["T3-MoE<br/>force residual experts"]
+  T3 --> GATE["slip-regime gate"]
+  T3 --> EXP["K bounded force experts"]
+  GATE --> MIX["weighted residual sum"]
+  EXP --> MIX
+  MIX --> ELL
+
   T0OUT --> VEH["vehicle physics aggregation"]
   FOUT --> VEH
 ```
@@ -535,6 +553,7 @@ flowchart TD
 T1 默认启用 friction ellipse projection
 T1-no-proj 只用于证明 projection 的必要性
 T2 更可解释但可能在 large slip / low-μ 中弱于 T1
+T3-MoE 只在 DS2/B7 中评估，不改变当前 R200-R216 单因素矩阵
 FT4 规则见第 10 节
 ```
 

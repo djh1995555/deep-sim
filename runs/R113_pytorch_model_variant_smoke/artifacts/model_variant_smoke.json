@@ -13,11 +13,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 34113,
+      "parameter_count": 49724,
       "shape_ok": true
     },
     {
@@ -33,11 +34,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -53,11 +55,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 46689,
+      "parameter_count": 62300,
       "shape_ok": true
     },
     {
@@ -73,11 +76,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -93,11 +97,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -113,11 +118,33 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
+      "shape_ok": true
+    },
+    {
+      "finite": true,
+      "model_type": "hybrid",
+      "name": "hybrid_T3_moe",
+      "output_keys": [
+        "delta_x",
+        "fz",
+        "fz_delta",
+        "logvar",
+        "mu",
+        "physics_next",
+        "steering_delta",
+        "tire_forces",
+        "tire_moe_weights",
+        "tire_params",
+        "x_next",
+        "z_shared"
+      ],
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -133,11 +160,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -153,11 +181,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -173,11 +202,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -193,11 +223,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {

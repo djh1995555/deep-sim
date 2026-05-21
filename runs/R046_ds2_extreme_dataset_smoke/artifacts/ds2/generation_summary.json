@@ -1,0 +1,7 @@
+{
+  "config": "configs/teacher/ds2_extreme_v0.yaml",
+  "episode_count": 18,
+  "full_matrix_count": 6,
+  "out_dir": "runs/R046_ds2_extreme_dataset_smoke/artifacts/ds2",
+  "scenario_set": "ds2_extreme"
+}

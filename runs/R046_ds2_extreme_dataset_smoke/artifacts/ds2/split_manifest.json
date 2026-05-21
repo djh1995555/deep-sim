@@ -1,0 +1,32 @@
+{
+  "dataset_id": "DS2_EXTREME_V0",
+  "split_roles": {
+    "held-out": [
+      "ep_EX00-vehicle_B_geometry_variant-held-out_seed_2047",
+      "ep_EX02-vehicle_B_geometry_variant-held-out_seed_2049",
+      "ep_EX04-vehicle_B_geometry_variant-held-out_seed_2051"
+    ],
+    "test": [
+      "ep_EX01-vehicle_B_geometry_variant-test_seed_2048",
+      "ep_EX03-vehicle_B_geometry_variant-test_seed_2050",
+      "ep_EX05-vehicle_B_geometry_variant-test_seed_2052"
+    ],
+    "train": [
+      "ep_EX01-vehicle_A_base-train_seed_48",
+      "ep_EX02-vehicle_A_base-train_seed_49",
+      "ep_EX03-vehicle_A_base-train_seed_50",
+      "ep_EX04-vehicle_A_base-train_seed_51",
+      "ep_EX01-vehicle_A_mass_variant-train_seed_1048",
+      "ep_EX02-vehicle_A_mass_variant-train_seed_1049",
+      "ep_EX03-vehicle_A_mass_variant-train_seed_1050",
+      "ep_EX04-vehicle_A_mass_variant-train_seed_1051"
+    ],
+    "validation": [
+      "ep_EX00-vehicle_A_base-validation_seed_47",
+      "ep_EX05-vehicle_A_base-validation_seed_52",
+      "ep_EX00-vehicle_A_mass_variant-validation_seed_1047",
+      "ep_EX05-vehicle_A_mass_variant-validation_seed_1052"
+    ]
+  },
+  "target_windows": {}
+}

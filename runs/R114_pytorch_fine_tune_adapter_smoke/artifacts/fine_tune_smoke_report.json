@@ -22,7 +22,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 0,
-      "val_mse": 0.797560433546702
+      "val_mse": 0.7967067857583364
     },
     {
       "buckets": [
@@ -33,7 +33,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 6092,
-      "val_mse": 1.3123923341433208
+      "val_mse": 0.6965415179729462
     },
     {
       "buckets": [
@@ -46,7 +46,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 6092,
-      "val_mse": 0.6973633567492167
+      "val_mse": 0.6972829898198446
     },
     {
       "buckets": [
@@ -57,7 +57,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7920340895652771
+      "val_mse": 0.7972893019517263
     },
     {
       "buckets": [
@@ -70,7 +70,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7967067857583364
+      "val_mse": 0.7920340895652771
     },
     {
       "buckets": [
@@ -81,7 +81,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7976324260234833
+      "val_mse": 0.7976324657599131
     },
     {
       "buckets": [
@@ -94,7 +94,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7975084284941355
+      "val_mse": 0.781296173731486
     },
     {
       "buckets": [
@@ -104,8 +104,8 @@
       "mode": "FT4",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 23956,
-      "val_mse": 0.7943210502465566
+      "trainable_parameter_count": 71535,
+      "val_mse": 0.7966886063416799
     },
     {
       "buckets": [
@@ -117,8 +117,8 @@
       "mode": "FT4",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 23956,
-      "val_mse": 0.7966886063416799
+      "trainable_parameter_count": 71535,
+      "val_mse": 0.7943195303281149
     },
     {
       "buckets": [
@@ -129,7 +129,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11009,
-      "val_mse": 0.7975594600041708
+      "val_mse": 0.797560433546702
     },
     {
       "buckets": [
@@ -142,7 +142,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11009,
-      "val_mse": 0.7976328531901041
+      "val_mse": 0.7920340895652771
     },
     {
       "buckets": [
@@ -152,8 +152,8 @@
       "mode": "FT6",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 126785,
-      "val_mse": 0.6970498561859131
+      "trainable_parameter_count": 174364,
+      "val_mse": 0.6992510755856832
     },
     {
       "buckets": [
@@ -165,8 +165,8 @@
       "mode": "FT6",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 126785,
-      "val_mse": 0.697985847791036
+      "trainable_parameter_count": 174364,
+      "val_mse": 0.6916793088118235
     }
   ]
 }

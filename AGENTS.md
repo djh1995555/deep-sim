@@ -41,6 +41,9 @@
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml`
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml`
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml`
+- DS2 / MoE development smoke runs:
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml`
 
 ## Ready Smoke Runs
 
@@ -61,6 +64,8 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
 ```
 
 ## Generated Training Matrix

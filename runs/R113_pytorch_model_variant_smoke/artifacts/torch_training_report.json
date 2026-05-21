@@ -4,7 +4,7 @@
   "errors": [],
   "metrics": {
     "torch_device": "cuda",
-    "torch_model_variant_count": 14,
+    "torch_model_variant_count": 15,
     "torch_model_variant_smoke_passed": 1
   },
   "mode": "model_variant_smoke",

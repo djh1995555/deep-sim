@@ -1,0 +1,74 @@
+[
+  {
+    "lateral": "fishhook_left_right",
+    "lateral_factor_id": "EY0",
+    "longitudinal": "emergency_braking",
+    "longitudinal_factor_id": "EL0",
+    "road_factor_id": "EX00",
+    "road_type": "single",
+    "scenario_group": "DS2-EXTREME",
+    "scenario_id": "EX00",
+    "surface_a": "dry",
+    "surface_b": ""
+  },
+  {
+    "lateral": "emergency_lane_change_left",
+    "lateral_factor_id": "EY1",
+    "longitudinal": "trail_braking",
+    "longitudinal_factor_id": "EL1",
+    "road_factor_id": "EX01",
+    "road_type": "single",
+    "scenario_group": "DS2-EXTREME",
+    "scenario_id": "EX01",
+    "surface_a": "wet",
+    "surface_b": ""
+  },
+  {
+    "lateral": "sine_sweep",
+    "lateral_factor_id": "EY2",
+    "longitudinal": "power_on_exit",
+    "longitudinal_factor_id": "EL2",
+    "road_factor_id": "EX02",
+    "road_type": "single",
+    "scenario_group": "DS2-EXTREME",
+    "scenario_id": "EX02",
+    "surface_a": "snow",
+    "surface_b": ""
+  },
+  {
+    "lateral": "fishhook_left_right",
+    "lateral_factor_id": "EY3",
+    "longitudinal": "emergency_braking",
+    "longitudinal_factor_id": "EL3",
+    "road_factor_id": "EX03",
+    "road_type": "split",
+    "scenario_group": "DS2-EXTREME",
+    "scenario_id": "EX03",
+    "surface_a": "dry",
+    "surface_b": "ice"
+  },
+  {
+    "lateral": "emergency_lane_change_left",
+    "lateral_factor_id": "EY4",
+    "longitudinal": "trail_braking",
+    "longitudinal_factor_id": "EL4",
+    "road_factor_id": "EX04",
+    "road_type": "split",
+    "scenario_group": "DS2-EXTREME",
+    "scenario_id": "EX04",
+    "surface_a": "wet",
+    "surface_b": "snow"
+  },
+  {
+    "lateral": "sine_sweep",
+    "lateral_factor_id": "EY5",
+    "longitudinal": "power_on_exit",
+    "longitudinal_factor_id": "EL5",
+    "road_factor_id": "EX05",
+    "road_type": "transition",
+    "scenario_group": "DS2-EXTREME",
+    "scenario_id": "EX05",
+    "surface_a": "wet",
+    "surface_b": "ice"
+  }
+]

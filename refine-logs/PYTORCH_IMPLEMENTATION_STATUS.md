@@ -1,6 +1,6 @@
 # PyTorch Implementation Status
 
-**Date**: 2026-05-21 20:01 CST
+**Date**: 2026-05-21 20:43 CST
 
 ## Scope
 
@@ -18,6 +18,7 @@ P6: R106 GPU backward/optimizer smoke passed
 P7: R107-R111 training loop development passed
 P8: R112-R115 fair comparison, variant, fine-tune, and ensemble development passed
 P9: experiment queue, matrix report, real-data adapter, and training governance completed
+P10: DS2 extreme scaffold and T3-MoE tire residual forward path completed
 ```
 
 ## P1 Canonical Data
@@ -102,6 +103,9 @@ Implemented files:
 | `configs/runs/R113.yaml` | Model/component variant forward smoke for E/T/F/S/M/V and black-box variants. |
 | `configs/runs/R114.yaml` | FT0-FT6 fine-tune adapter smoke over two data-size buckets. |
 | `configs/runs/R115.yaml` | U1 K=3 deep ensemble smoke. |
+| `configs/teacher/ds2_extreme_v0.yaml` | DS2 extreme handling scaffold data config. |
+| `configs/runs/R046.yaml` | DS2 emergency/fishhook/lane-change dataset smoke. |
+| `configs/runs/R047.yaml` | DS2 T1/T2/T3-MoE tire residual forward smoke. |
 | `experiments/torch_config_matrix.py` | Generates full PyTorch ablation and fine-tune config matrix under `configs/torch_matrix/`. |
 | `experiments/torch_dev_report.py` | Aggregates R112-R115 results into `reports/PYTORCH_DEV_REPORT.md/json`. |
 | `experiments/experiment_queue.py` | Local queue runner for direct config lists or `configs/torch_matrix/MANIFEST.json`, with dry-run, retry, skip-success, queue state, logs, and optional post-rollout eval. |
@@ -187,6 +191,40 @@ conda run -n deep-sim python -m experiments.real_data_adapter \
   --field-map-json path/to/field_map.json
 ```
 
+## P10 DS2 / MoE Development Entry
+
+Added optional B7 engineering support:
+
+```text
+DS2_EXTREME_V0 dataset scaffold
+R046 DS2 extreme dataset smoke
+R047 DS2 T1/T2/T3-MoE forward smoke
+T3-MoE tire residual branch with exposed tire_moe_weights
+FT4 trainability coverage includes the MoE tire residual heads
+```
+
+R046/R047 commands:
+
+```bash
+conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
+```
+
+R046/R047 results:
+
+```text
+R046: pass, DS2_EXTREME_V0 generated 18 episodes from 6 extreme matrix entries
+R047: pass, T1/T2/T3-MoE CUDA forward checks passed on DS2
+```
+
+Scope boundary:
+
+```text
+T3-MoE is now an implemented optional path, not a selected first-version component.
+It does not change Base or the R200-R216 DS1 single-factor matrix.
+MoE value still requires later DS2 training/eval against T1/T2.
+```
+
 ## Verification
 
 Commands run:
@@ -212,12 +250,15 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
 conda run -n deep-sim python -m experiments.torch_config_matrix --write
 conda run -n deep-sim python -m experiments.torch_dev_report
 conda run -n deep-sim python -m experiments.experiment_queue --configs configs/runs/R111.yaml --limit 1 --max-retries 0 --skip-success --rollout-eval --rollout-steps 8 --rollout-max-episodes 2 --state-path runs/queue_state_smoke.json --log-dir runs/_queue_logs_smoke
 conda run -n deep-sim python -m experiments.matrix_report
 conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_experiment_engineering tests.test_torch_training
+conda run -n deep-sim python -m unittest tests.test_teacher_simulator tests.test_student_model
 git diff --check
 ```
 
@@ -303,11 +344,13 @@ R109: pass, resumed step 60 -> 70, validation MSE 5.879991 -> 5.781471
 R110: pass, direct TCN black-box train loss ratio = 0.934590, validation MSE = 1.482733
 R111: pass, base hybrid train loss ratio = 0.984881, validation MSE = 5.890477
 R112: pass, hybrid raw MSE / best black-box raw MSE = 4.447071, rollout ratio = 1.666144
-R113: pass, 14 component/model variants forward on CUDA
+R113: pass, 15 component/model variants forward on CUDA including optional T3-MoE
 R114: pass, FT0-FT6 trainability and two fine-tune bucket cells validated
 R115: pass, K=3 ensemble MSE = 6.010266, predictive variance = 0.085524
 R111 post-rollout queue smoke: pass, rollout RMSE = 5.861144 over 2 episodes x 8 steps
 matrix report: generated, 52 pending matrix configs
+R046: pass, DS2 extreme dataset smoke generated 18 episodes
+R047: pass, DS2 T1/T2/T3-MoE forward smoke
 ```
 
 Local GPU training scaffolding is now ready through one-step training, rollout eval, resume/eval-only, PyTorch black-box baselines, matched fair comparison, model/component variant smoke, fine-tune adapter smoke, and K=3 ensemble training. These are still development-scale gates, not final training-quality results.

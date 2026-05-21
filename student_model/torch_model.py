@@ -27,6 +27,8 @@ class HybridStudentConfig:
     residual_bound: float = 0.4
     fz_bound: float = 500.0
     tire_force_bound: float = 2500.0
+    tire_moe_expert_count: int = 3
+    tire_moe_temperature: float = 1.0
     steering_bound: float = 0.08
     fixed_mu: float = 0.8
     adapter_bound: float = 0.08
@@ -163,6 +165,11 @@ class HybridStudentModel(nn.Module):
         self.mu_head = MLPHead(feature_dim, c.hidden_dim, 4)
         self.tire_head = MLPHead(feature_dim + 4, c.hidden_dim, 8)
         self.tire_param_head = MLPHead(feature_dim + 4 + 4, c.hidden_dim, 12)
+        tire_moe_expert_count = max(1, int(c.tire_moe_expert_count))
+        self.tire_moe_gate = MLPHead(feature_dim + 4 + 4, c.hidden_dim, tire_moe_expert_count)
+        self.tire_moe_experts = nn.ModuleList(
+            [MLPHead(feature_dim + 4 + 4, c.hidden_dim, 8) for _ in range(tire_moe_expert_count)]
+        )
         self.steering_head = MLPHead(feature_dim, c.hidden_dim, 1)
         vehicle_hidden = c.hidden_dim * 2 if c.vehicle_mode in {"large", "V1-large"} else c.hidden_dim
         self.vehicle_head = MLPHead(feature_dim + 13, vehicle_hidden, c.state_dim)
@@ -209,6 +216,7 @@ class HybridStudentModel(nn.Module):
         if c.tire_mode in {"none", "T0"}:
             tire_forces = features.new_zeros(features.shape[0], 8)
             tire_params = features.new_zeros(features.shape[0], 12)
+            tire_moe_weights = features.new_zeros(features.shape[0], max(1, int(c.tire_moe_expert_count)))
         elif c.tire_mode in {"param", "T2"}:
             tire_params = torch.tanh(
                 self.tire_param_head(torch.cat([features, fz, mu], dim=-1))
@@ -220,10 +228,22 @@ class HybridStudentModel(nn.Module):
                 fz,
                 context,
             )
+            tire_moe_weights = features.new_zeros(features.shape[0], max(1, int(c.tire_moe_expert_count)))
+        elif c.tire_mode in {"moe", "T3", "T3-moe"}:
+            tire_params = features.new_zeros(features.shape[0], 12)
+            moe_input = torch.cat([features, fz, mu], dim=-1)
+            temperature = max(1.0e-3, float(c.tire_moe_temperature))
+            tire_moe_weights = torch.softmax(self.tire_moe_gate(moe_input) / temperature, dim=-1)
+            expert_forces = torch.stack(
+                [torch.tanh(expert(moe_input)) * c.tire_force_bound for expert in self.tire_moe_experts],
+                dim=1,
+            )
+            tire_forces = (expert_forces * tire_moe_weights[..., None]).sum(dim=1)
         else:
             tire_params = features.new_zeros(features.shape[0], 12)
             tire_raw = torch.tanh(self.tire_head(torch.cat([features, fz], dim=-1)))
             tire_forces = tire_raw * c.tire_force_bound
+            tire_moe_weights = features.new_zeros(features.shape[0], max(1, int(c.tire_moe_expert_count)))
         if c.tire_projection:
             tire_forces = project_friction_ellipse(tire_forces, fz, mu)
         if c.steering_mode in {"none", "S0"}:
@@ -254,6 +274,7 @@ class HybridStudentModel(nn.Module):
             "mu": mu,
             "tire_forces": tire_forces,
             "tire_params": tire_params,
+            "tire_moe_weights": tire_moe_weights,
             "steering_delta": steering_delta,
             "logvar": logvar,
             "z_shared": z,
@@ -274,7 +295,7 @@ class HybridStudentModel(nn.Module):
             "FT1": [self.vehicle_param_adapter],
             "FT2": [self.mu_head],
             "FT3": [self.fz_head],
-            "FT4": [self.tire_head, self.tire_param_head],
+            "FT4": [self.tire_head, self.tire_param_head, self.tire_moe_gate, self.tire_moe_experts],
             "FT5": [self.steering_head],
         }.get(mode)
         if modules is None:

@@ -402,7 +402,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 0,
-      "val_mse": 0.797560433546702
+      "val_mse": 0.7967067857583364
     },
     {
       "buckets": [
@@ -413,7 +413,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 6092,
-      "val_mse": 1.3123923341433208
+      "val_mse": 0.6965415179729462
     },
     {
       "buckets": [
@@ -426,7 +426,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 6092,
-      "val_mse": 0.6973633567492167
+      "val_mse": 0.6972829898198446
     },
     {
       "buckets": [
@@ -437,7 +437,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7920340895652771
+      "val_mse": 0.7972893019517263
     },
     {
       "buckets": [
@@ -450,7 +450,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7967067857583364
+      "val_mse": 0.7920340895652771
     },
     {
       "buckets": [
@@ -461,7 +461,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7976324260234833
+      "val_mse": 0.7976324657599131
     },
     {
       "buckets": [
@@ -474,7 +474,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11204,
-      "val_mse": 0.7975084284941355
+      "val_mse": 0.781296173731486
     },
     {
       "buckets": [
@@ -484,8 +484,8 @@
       "mode": "FT4",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 23956,
-      "val_mse": 0.7943210502465566
+      "trainable_parameter_count": 71535,
+      "val_mse": 0.7966886063416799
     },
     {
       "buckets": [
@@ -497,8 +497,8 @@
       "mode": "FT4",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 23956,
-      "val_mse": 0.7966886063416799
+      "trainable_parameter_count": 71535,
+      "val_mse": 0.7943195303281149
     },
     {
       "buckets": [
@@ -509,7 +509,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11009,
-      "val_mse": 0.7975594600041708
+      "val_mse": 0.797560433546702
     },
     {
       "buckets": [
@@ -522,7 +522,7 @@
       "passed": true,
       "trainability_ok": true,
       "trainable_parameter_count": 11009,
-      "val_mse": 0.7976328531901041
+      "val_mse": 0.7920340895652771
     },
     {
       "buckets": [
@@ -532,8 +532,8 @@
       "mode": "FT6",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 126785,
-      "val_mse": 0.6970498561859131
+      "trainable_parameter_count": 174364,
+      "val_mse": 0.6992510755856832
     },
     {
       "buckets": [
@@ -545,11 +545,11 @@
       "mode": "FT6",
       "passed": true,
       "trainability_ok": true,
-      "trainable_parameter_count": 126785,
-      "val_mse": 0.697985847791036
+      "trainable_parameter_count": 174364,
+      "val_mse": 0.6916793088118235
     }
   ],
-  "model_variant_count": 14,
+  "model_variant_count": 15,
   "model_variants": [
     {
       "finite": true,
@@ -564,11 +564,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 34113,
+      "parameter_count": 49724,
       "shape_ok": true
     },
     {
@@ -584,11 +585,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -604,11 +606,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 46689,
+      "parameter_count": 62300,
       "shape_ok": true
     },
     {
@@ -624,11 +627,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -644,11 +648,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -664,11 +669,33 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
+      "shape_ok": true
+    },
+    {
+      "finite": true,
+      "model_type": "hybrid",
+      "name": "hybrid_T3_moe",
+      "output_keys": [
+        "delta_x",
+        "fz",
+        "fz_delta",
+        "logvar",
+        "mu",
+        "physics_next",
+        "steering_delta",
+        "tire_forces",
+        "tire_moe_weights",
+        "tire_params",
+        "x_next",
+        "z_shared"
+      ],
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -684,11 +711,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -704,11 +732,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -724,11 +753,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -744,11 +774,12 @@
         "physics_next",
         "steering_delta",
         "tire_forces",
+        "tire_moe_weights",
         "tire_params",
         "x_next",
         "z_shared"
       ],
-      "parameter_count": 38849,
+      "parameter_count": 54460,
       "shape_ok": true
     },
     {
@@ -826,7 +857,7 @@
     {
       "config_name": "pytorch_model_variant_smoke",
       "dataset_id": "DS1_V1",
-      "end_time": "2026-05-21T11:27:01.849953+00:00",
+      "end_time": "2026-05-21T12:37:31.106405+00:00",
       "experiment_block": "P6.3",
       "milestone": "P6",
       "notes": "experiment gate passed for this run",
@@ -834,7 +865,7 @@
       "primary_metric_value": 1,
       "run_id": "R113",
       "seed": 23,
-      "start_time": "2026-05-21T11:26:59.039473+00:00",
+      "start_time": "2026-05-21T12:37:28.366534+00:00",
       "status": "success",
       "success_criteria_met": true,
       "test_split": "test",
@@ -844,7 +875,7 @@
     {
       "config_name": "pytorch_fine_tune_adapter_smoke",
       "dataset_id": "DS1_PROXY_FT_V1",
-      "end_time": "2026-05-21T11:27:53.839437+00:00",
+      "end_time": "2026-05-21T12:47:47.994019+00:00",
       "experiment_block": "P7.1",
       "milestone": "P7",
       "notes": "experiment gate passed for this run",
@@ -852,7 +883,7 @@
       "primary_metric_value": 1,
       "run_id": "R114",
       "seed": 23,
-      "start_time": "2026-05-21T11:27:43.018165+00:00",
+      "start_time": "2026-05-21T12:47:37.024087+00:00",
       "status": "success",
       "success_criteria_met": true,
       "test_split": "test-window",

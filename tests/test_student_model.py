@@ -66,6 +66,34 @@ class StudentModelSmokeTest(unittest.TestCase):
                 self.assertEqual(tuple(out["mu"].shape), (1, 4))
                 self.assertEqual(tuple(out["tire_params"].shape), (1, 12))
 
+    def test_moe_tire_residual_forward(self):
+        import torch
+
+        from student_model.torch_model import HybridStudentConfig, HybridStudentModel
+
+        record = load_episode_record("data/ds1_v1", 0)
+        states, controls = episode_arrays(record)
+        history = observable_history(states, controls)[:8]
+        model = HybridStudentModel(
+            HybridStudentConfig(
+                hidden_dim=32,
+                history_len=8,
+                tire_mode="T3",
+                mu_mode="M1a",
+                tire_moe_expert_count=3,
+            )
+        )
+        out = model(
+            observable_history=torch.from_numpy(history[None, :, :]),
+            current_state=torch.from_numpy(states[7:8]),
+            current_control=torch.from_numpy(controls[7:8]),
+            context=torch.from_numpy(context_vector(record)[None, :]),
+            dt=torch.tensor([float(record.metadata["dt"])], dtype=torch.float32),
+        )
+        self.assertEqual(tuple(out["tire_forces"].shape), (1, 8))
+        self.assertEqual(tuple(out["tire_moe_weights"].shape), (1, 3))
+        self.assertTrue(torch.allclose(out["tire_moe_weights"].sum(dim=-1), torch.ones(1), atol=1e-5))
+
     def test_fine_tune_trainability_matrix(self):
         from student_model.torch_model import HybridStudentConfig, HybridStudentModel
 
@@ -82,6 +110,10 @@ class StudentModelSmokeTest(unittest.TestCase):
                 elif mode == "FT6":
                     self.assertGreater(len(trainable), 10)
                     self.assertTrue(model.config.vehicle_param_adapter_enabled)
+                elif mode == "FT4":
+                    self.assertTrue(
+                        any(name.startswith("tire_moe_") for name in trainable)
+                    )
                 else:
                     self.assertGreater(len(trainable), 0)
 

@@ -57,7 +57,7 @@
     "target_window_role_count": 0,
     "target_window_roles": [],
     "torch_device": "cuda",
-    "torch_model_variant_count": 14,
+    "torch_model_variant_count": 15,
     "torch_model_variant_smoke_passed": 1,
     "validation_cases": [
       "braking",

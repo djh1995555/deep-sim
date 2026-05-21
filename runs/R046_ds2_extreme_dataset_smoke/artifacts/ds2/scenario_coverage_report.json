@@ -1,0 +1,30 @@
+{
+  "covers_cg_single": false,
+  "covers_cg_split": false,
+  "covers_cg_transition": false,
+  "full_group_counts": {
+    "DS2-EXTREME": 6
+  },
+  "full_matrix_count": 6,
+  "sampled_episode_count": 18,
+  "sampled_group_counts": {
+    "DS2-EXTREME": 18
+  },
+  "sampled_lateral_factor_counts": {
+    "EY0": 3,
+    "EY1": 3,
+    "EY2": 3,
+    "EY3": 3,
+    "EY4": 3,
+    "EY5": 3
+  },
+  "sampled_longitudinal_factor_counts": {
+    "EL0": 3,
+    "EL1": 3,
+    "EL2": 3,
+    "EL3": 3,
+    "EL4": 3,
+    "EL5": 3
+  },
+  "sampled_road_factor_count": 6
+}

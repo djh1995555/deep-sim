@@ -75,6 +75,15 @@ class ControlScript:
         elif self.longitudinal == "large_braking":
             throttle = 0.0
             brake = 0.72 * ramp
+        elif self.longitudinal == "emergency_braking":
+            throttle = 0.0
+            brake = 0.95 * ramp
+        elif self.longitudinal == "trail_braking":
+            throttle = 0.0
+            brake = 0.62 * ramp * np.exp(-0.20 * max(0.0, t - 1.0))
+        elif self.longitudinal == "power_on_exit":
+            throttle = 0.16 * ramp if t < 1.5 else 0.82 * ramp
+            brake = 0.0
 
         sw_amp = 0.0
         if self.lateral == "small_left_steer":
@@ -85,7 +94,20 @@ class ControlScript:
             sw_amp = 1.10
         elif self.lateral == "large_right_steer":
             sw_amp = -1.10
-        steer_wave = sw_amp * ramp
+        if self.lateral == "fishhook_left_right":
+            if t < 1.55:
+                steer_wave = 1.35 * ramp
+            elif t < 2.65:
+                steer_wave = -1.35 * (1.0 - np.exp(-(t - 1.55) / 0.35))
+            else:
+                steer_wave = 0.30 * np.exp(-(t - 2.65) / 0.65)
+        elif self.lateral == "emergency_lane_change_left":
+            phase = np.clip((t - 0.45) / 2.1, 0.0, 1.0)
+            steer_wave = 1.28 * np.sin(np.pi * phase)
+        elif self.lateral == "sine_sweep":
+            steer_wave = 1.10 * np.sin(2.0 * np.pi * 0.65 * max(0.0, t - 0.4)) * ramp
+        else:
+            steer_wave = sw_amp * ramp
         if "large" in self.lateral:
             steer_wave *= 0.85 + 0.15 * np.sin(2.0 * np.pi * 0.25 * t)
         return {
@@ -313,6 +335,63 @@ def make_ds1_scenario_matrix() -> List[Dict[str, str]]:
                         }
                     )
     return matrix
+
+
+DS2_EXTREME_FACTORS = [
+    ("EX00", "single", "dry", "", "emergency_braking", "fishhook_left_right"),
+    ("EX01", "single", "wet", "", "trail_braking", "emergency_lane_change_left"),
+    ("EX02", "single", "snow", "", "power_on_exit", "sine_sweep"),
+    ("EX03", "split", "dry", "ice", "emergency_braking", "fishhook_left_right"),
+    ("EX04", "split", "wet", "snow", "trail_braking", "emergency_lane_change_left"),
+    ("EX05", "transition", "wet", "ice", "power_on_exit", "sine_sweep"),
+]
+
+
+def make_ds2_extreme_matrix() -> List[Dict[str, str]]:
+    matrix: List[Dict[str, str]] = []
+    for idx, (factor_id, road_type, first, second, longitudinal, lateral) in enumerate(DS2_EXTREME_FACTORS):
+        matrix.append(
+            {
+                "scenario_id": factor_id,
+                "scenario_group": "DS2-EXTREME",
+                "road_factor_id": factor_id,
+                "longitudinal_factor_id": "EL%d" % idx,
+                "lateral_factor_id": "EY%d" % idx,
+                "longitudinal": longitudinal,
+                "lateral": lateral,
+                "road_type": road_type,
+                "surface_a": first,
+                "surface_b": second,
+            }
+        )
+    return matrix
+
+
+def make_ds2_extreme_scenarios(
+    seed: int = 47,
+    vehicle_count: int = 3,
+    samples_per_vehicle: int = 6,
+) -> List[ScenarioConfig]:
+    matrix = make_ds2_extreme_matrix()
+    vehicles = make_vehicle_config_variants(vehicle_count)
+    scenarios: List[ScenarioConfig] = []
+    for vehicle_idx, vehicle in enumerate(vehicles):
+        for local_idx, item in enumerate(matrix[:samples_per_vehicle]):
+            split_role = "train"
+            if vehicle_idx == vehicle_count - 1:
+                split_role = "held-out" if local_idx % 2 == 0 else "test"
+            elif local_idx % 5 == 0:
+                split_role = "validation"
+            scenarios.append(
+                _ds2_extreme_scenario_from_item(
+                    item,
+                    vehicle,
+                    split_role,
+                    seed + vehicle_idx * 1000 + local_idx,
+                    local_idx,
+                )
+            )
+    return scenarios
 
 
 def make_ds1_scenarios(
@@ -604,6 +683,75 @@ def _ds1_scenario_from_matrix_item(
         full_matrix_index=matrix_idx,
         perturbation_profile_id=perturbation_profile_id,
         target_window_role=target_window_role,
+    )
+
+
+def _ds2_extreme_scenario_from_item(
+    item: Dict[str, str],
+    vehicle: VehicleConfig,
+    split_role: str,
+    seed: int,
+    matrix_idx: int,
+) -> ScenarioConfig:
+    road_type = item["road_type"]
+    if road_type == "single":
+        road = RoadProfile(
+            "single",
+            item["surface_a"],
+            single_surface=item["surface_a"],
+            roughness_amp_m=0.006,
+            factor_id_override=item["road_factor_id"],
+            scenario_group=item["scenario_group"],
+        )
+    elif road_type == "split":
+        road = RoadProfile(
+            "split",
+            "split",
+            split_left=item["surface_a"],
+            split_right=item["surface_b"],
+            roughness_amp_m=0.007,
+            factor_id_override=item["road_factor_id"],
+            scenario_group=item["scenario_group"],
+        )
+    else:
+        road = RoadProfile(
+            "transition",
+            "transition",
+            transition_from=item["surface_a"],
+            transition_to=item["surface_b"],
+            transition_start_s=0.9,
+            transition_duration_s=1.0,
+            roughness_amp_m=0.007,
+            factor_id_override=item["road_factor_id"],
+            scenario_group=item["scenario_group"],
+        )
+    control = ControlScript(
+        longitudinal=item["longitudinal"],
+        lateral=item["lateral"],
+        initial_speed_mps=18.0 + float(seed % 5),
+        longitudinal_id=item["longitudinal_factor_id"],
+        lateral_id=item["lateral_factor_id"],
+    )
+    scenario_id = "%s-%s-%s" % (
+        item["scenario_id"],
+        vehicle.vehicle_config_id,
+        split_role,
+    )
+    return ScenarioConfig(
+        scenario_id=scenario_id,
+        vehicle_config=vehicle,
+        road_profile=road,
+        control_script=control,
+        actuator_profile=ActuatorProfile(steering_saturation_rad=0.72, sensor_delay_steps=1),
+        sensor_profile=SensorProfile(noise_scale=1.15, timestamp_jitter_std_s=0.0002),
+        split_metadata=SplitMetadata(split_role=split_role),
+        validation_case="extreme_handling",
+        seed=seed,
+        scenario_group=item["scenario_group"],
+        road_factor_id=item["road_factor_id"],
+        longitudinal_factor_id=item["longitudinal_factor_id"],
+        lateral_factor_id=item["lateral_factor_id"],
+        full_matrix_index=matrix_idx,
     )
 
 
