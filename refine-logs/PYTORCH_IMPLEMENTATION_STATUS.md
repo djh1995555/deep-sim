@@ -1,6 +1,6 @@
 # PyTorch Implementation Status
 
-**Date**: 2026-05-21 18:05 CST
+**Date**: 2026-05-21 18:41 CST
 
 ## Scope
 
@@ -14,6 +14,7 @@ P2: PyTorch Student Model v0 skeleton
 P3: PyTorch smoke runner scaffold
 P4: R100-R104 CPU smoke passed
 P5: R105 GPU smoke passed
+P6: R106 GPU backward/optimizer smoke passed
 ```
 
 ## P1 Canonical Data
@@ -81,6 +82,7 @@ Implemented files:
 | `configs/runs/R103.yaml` | Short rollout smoke. |
 | `configs/runs/R104.yaml` | Checkpoint save/load smoke. |
 | `configs/runs/R105.yaml` | CUDA-required one-step forward/loss smoke. |
+| `configs/runs/R106.yaml` | CUDA-required tiny-overfit smoke with backward and optimizer steps. |
 | `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
 | `AGENTS.md` | Local run-experiment environment notes, GPU status, and smoke run commands. |
 
@@ -107,6 +109,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R102.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml
 git diff --check
 ```
 
@@ -119,6 +122,7 @@ torch training runner tests: pass
 compileall: pass
 R100-R104 runner invocations: pass
 R105 runner invocation: pass on CUDA
+R106 runner invocation: pass on CUDA with backward and optimizer steps
 diff check: pass
 ```
 
@@ -161,6 +165,7 @@ R102: tiny overfit on 5-10 short episodes
 R103: short rollout smoke
 R104: checkpoint save/load smoke
 R105: CUDA-required forward/loss smoke
+R106: CUDA-required tiny-overfit smoke
 ```
 
 Current local status:
@@ -172,6 +177,7 @@ R102: pass, tiny-overfit loss ratio = 0.850854
 R103: pass, 8-step rollout finite fraction = 1.0
 R104: pass, checkpoint save/load max abs diff = 0.0
 R105: pass, torch_device = cuda
+R106: pass, torch_device = cuda, tiny-overfit loss ratio = 0.850852
 ```
 
-Local GPU smoke is now ready for `/run-experiment`. This is still a smoke-stage gate, not a full training-quality result.
+Local GPU smoke is now ready for `/run-experiment`, including a CUDA backward/optimizer gate. This is still a smoke-stage gate, not a full training-quality result.

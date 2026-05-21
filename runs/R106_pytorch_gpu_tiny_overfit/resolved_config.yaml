@@ -1,0 +1,60 @@
+run:
+  id: R106
+  name: pytorch_gpu_tiny_overfit
+  milestone: P4
+  experiment_block: P4.2
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: test
+model:
+  system_name: final_single_pytorch_gpu_smoke
+  student_config: E2_T1_F1_S1_M0_V2_U0_pytorch_cuda_v0
+  baseline_config: null
+training:
+  optimizer: adamw
+  learning_rate: 0.0001
+  batch_size: 4
+  rollout_horizon: 1
+  max_steps: 25
+  early_stopping_metric: torch_tiny_overfit_loss_ratio
+  early_stopping_patience: 0
+evaluation:
+  horizons:
+  - 1-step
+  metrics:
+  - torch_tiny_overfit_passed
+  - torch_tiny_overfit_loss_ratio
+  report_splits:
+  - train
+logging:
+  output_dir: runs/R106_pytorch_gpu_tiny_overfit
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_v1.yaml
+dataset_source: existing
+artifact_dataset_subdir: ds1
+primary_metric: torch_tiny_overfit_passed
+torch_training:
+  name: pytorch_gpu_tiny_overfit
+  mode: tiny_overfit
+  seed: 23
+  split_role: train
+  history_len: 8
+  batch_size: 4
+  max_episodes: 8
+  max_steps: 25
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  grad_clip: 1.0
+  success_loss_ratio: 0.995
+  device: cuda
+  require_cuda: true
+  model_config:
+    hidden_dim: 32
+    history_len: 8

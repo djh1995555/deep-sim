@@ -237,8 +237,8 @@ The implemented scope is intentionally minimal and covers DS0/DS1/proxy scaffold
 
 ## P3 PyTorch Smoke Addendum
 
-**Date**: 2026-05-21 18:05 CST
-**Scope**: R100-R105 PyTorch smoke runner scaffold
+**Date**: 2026-05-21 18:41 CST
+**Scope**: R100-R106 PyTorch smoke runner scaffold
 **Mode**: local-only fallback; secondary delegated review not used because the current task did not explicitly request sub-agent delegation.
 
 Reviewed files:
@@ -252,6 +252,7 @@ configs/runs/R102.yaml
 configs/runs/R103.yaml
 configs/runs/R104.yaml
 configs/runs/R105.yaml
+configs/runs/R106.yaml
 tests/test_torch_training.py
 refine-logs/PYTORCH_IMPLEMENTATION_STATUS.md
 ```
@@ -262,6 +263,7 @@ Checklist:
 |---|---|
 | R100-R104 use canonical `data/ds1_v1` through `dataset_source: existing` | pass |
 | R105 uses canonical `data/ds1_v1` and requires CUDA instead of silently falling back to CPU | pass |
+| R106 uses canonical `data/ds1_v1` and requires CUDA for backward + optimizer tiny-overfit | pass |
 | PyTorch import is lazy and runner remains import-safe without torch installed | pass |
 | Missing PyTorch produces explicit `blocked` summary instead of fake success | pass |
 | Missing CUDA produces explicit `blocked` summary for CUDA-required runs | pass |
@@ -269,15 +271,16 @@ Checklist:
 | Metrics are appended to `metrics.jsonl` and primary metric gates are wired in `run.py` | pass |
 | Data loader / forward / tiny overfit / rollout / checkpoint modes have separate run configs | pass |
 | Evaluation compares model output against dataset ground truth, not another model output | pass for R101-R103 smoke design |
-| Current local environment can complete passing R100-R105 | pass, including R105 on CUDA |
+| Current local environment can complete passing R100-R106 | pass, including R105/R106 on CUDA |
 | `sanitize_state()` avoids in-place mutation on tensors requiring gradients | pass |
 | R102 tiny-overfit compares loss before/after on the same fixed tiny batch | pass |
+| R106 confirms CUDA backward and AdamW optimizer path with loss ratio below gate | pass |
 | `AGENTS.md` documents the local conda environment, GPU status, and smoke commands for `/run-experiment` | pass |
 
 Residual risk:
 
 ```text
-R100-R105 pass, including a CUDA-required forward/loss smoke. This validates environment readiness and runner plumbing, not final training quality.
+R100-R106 pass, including CUDA-required forward/loss and backward/optimizer smoke. This validates environment readiness and runner plumbing, not final training quality.
 ```
 
 ## Verification Commands

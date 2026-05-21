@@ -28,6 +28,8 @@
   - `/var/run/reboot-required` was present
 - GPU smoke run:
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml`
+- GPU backward/optimizer smoke run:
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml`
 
 ## Ready Smoke Runs
 
@@ -38,6 +40,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R102.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml
 ```
 
 ## Remote GPU

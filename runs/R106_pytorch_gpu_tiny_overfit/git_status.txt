@@ -1,0 +1,4 @@
+ M experiments/run.py
+ M tests/test_torch_training.py
+?? configs/runs/R106.yaml
+?? runs/R106_pytorch_gpu_tiny_overfit/
