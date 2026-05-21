@@ -15,7 +15,8 @@
 | `refine-logs/` | 方案与规格文档 | 实验计划、模块设计、数据设计、Teacher 设计、运行规格、结果总结 | 当前方案设计和实验执行状态的权威文档目录。 |
 | `reports/` | 实验报告 | B0/B3/B4 阶段报告和 ablation 汇总 JSON | 面向阅读的实验阶段输出，通常由 run 或汇总脚本生成/更新。 |
 | `research-wiki/` | 研究知识库 | 论文卡片、idea 卡片、claim/gap/query 记录 | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。 |
-| `runs/` | 实验运行产物 | R000-R033 的 artifacts、logs、checkpoints | 每次实验运行的输出目录。当前主要是 scaffold 数据、指标和报告中间产物。 |
+| `runs/` | 实验运行产物 | R000-R045 的 artifacts、logs、checkpoints | 每次实验运行的输出目录。当前主要是 scaffold 数据、指标和报告中间产物。 |
+| `student_model/` | PyTorch 模型源码 | Student model v0 的数据接口、常量和模型 forward skeleton | 正式训练阶段的模型实现入口。当前是 forward-pass skeleton，还没有训练 loop。 |
 | `teacher_simulator/` | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现 | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。 |
 | `tests/` | 测试代码 | teacher simulator 单元测试 | 验证数据生成、采样和基础物理逻辑没有被破坏。 |
 
@@ -77,6 +78,18 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 
 `experiments/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
 
+### `student_model/`
+
+正式 PyTorch Student Model 的源码入口。
+
+| 文件 | 用途 |
+| --- | --- |
+| `constants.py` | 状态、控制、context 字段顺序定义。 |
+| `data.py` | canonical dataset 读取、episode array 解析、context vector 编码、可选 Torch dataset wrapper。 |
+| `torch_model.py` | 当前 final single skeleton：`E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0`。 |
+
+当前限制：这里只实现了 forward-pass skeleton，尚未实现训练 loop、loss、checkpoint save/load 或正式 PyTorch 实验 run。
+
 ## Teacher Simulator 目录
 
 ### `teacher_simulator/`
@@ -134,6 +147,7 @@ Teacher simulator 的物理/工程子模块。
 | `STUDENT_MODEL_SPEC.md` | Student model 的实现规格。 |
 | `TEACHER_SIMULATOR_DESIGN.md` | Teacher simulator 设计文档。 |
 | `TEACHER_SIMULATOR_SPEC.md` | Teacher simulator 实现规格。 |
+| `PYTORCH_IMPLEMENTATION_STATUS.md` | 从 scaffold 进入 PyTorch 训练实现的状态记录。 |
 | `*_2026*.md` | 历史快照或阶段性 checkpoint，用于追溯方案变更。 |
 
 ### `idea-stage/`
