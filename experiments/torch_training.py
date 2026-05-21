@@ -119,14 +119,6 @@ def _loss_metrics(torch: Any, out: Dict[str, Any], batch: Dict[str, Any]) -> Tup
     }
 
 
-def _next_batch(loader: Any, iterator: Any) -> Tuple[Dict[str, Any], Any]:
-    try:
-        return next(iterator), iterator
-    except StopIteration:
-        iterator = iter(loader)
-        return next(iterator), iterator
-
-
 def _data_loader_smoke(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> Tuple[bool, Dict[str, Any]]:
     summary = validate_canonical_dataset(dataset_dir)
     loader = _build_loader(torch, dataset_dir, torch_cfg)
@@ -176,7 +168,8 @@ def _forward_loss_smoke(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any])
 
 def _tiny_overfit(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> Tuple[bool, Dict[str, Any]]:
     device = _device(torch, torch_cfg)
-    loader = _build_loader(torch, dataset_dir, {**torch_cfg, "shuffle": True})
+    loader = _build_loader(torch, dataset_dir, {**torch_cfg, "shuffle": False})
+    fixed_batch = _batch_to_device(next(iter(loader)), device)
     model = _build_model(torch_cfg, device)
     optimizer = torch.optim.AdamW(
         model.parameters(),
@@ -185,28 +178,31 @@ def _tiny_overfit(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> Tu
     )
     max_steps = int(torch_cfg.get("max_steps", 25))
     grad_clip = float(torch_cfg.get("grad_clip", 1.0))
-    iterator = iter(loader)
-    initial_loss = None
-    final_loss = None
+    model.eval()
+    with torch.no_grad():
+        out = _forward(model, fixed_batch)
+        initial_loss, _ = _loss_metrics(torch, out, fixed_batch)
+        initial_loss_value = float(initial_loss.detach().cpu())
+    model.train()
     for _ in range(max_steps):
-        batch, iterator = _next_batch(loader, iterator)
-        batch = _batch_to_device(batch, device)
         optimizer.zero_grad(set_to_none=True)
-        out = _forward(model, batch)
-        loss, _ = _loss_metrics(torch, out, batch)
-        if initial_loss is None:
-            initial_loss = float(loss.detach().cpu())
+        out = _forward(model, fixed_batch)
+        loss, _ = _loss_metrics(torch, out, fixed_batch)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
         optimizer.step()
-        final_loss = float(loss.detach().cpu())
-    ratio = final_loss / max(initial_loss, 1.0e-12)
+    model.eval()
+    with torch.no_grad():
+        out = _forward(model, fixed_batch)
+        final_loss, _ = _loss_metrics(torch, out, fixed_batch)
+        final_loss_value = float(final_loss.detach().cpu())
+    ratio = final_loss_value / max(initial_loss_value, 1.0e-12)
     threshold = float(torch_cfg.get("success_loss_ratio", 0.995))
-    passed = bool(np.isfinite(final_loss) and ratio <= threshold)
+    passed = bool(np.isfinite(final_loss_value) and ratio <= threshold)
     metrics = {
         "torch_tiny_overfit_passed": int(passed),
-        "torch_tiny_overfit_initial_loss": float(initial_loss),
-        "torch_tiny_overfit_final_loss": float(final_loss),
+        "torch_tiny_overfit_initial_loss": float(initial_loss_value),
+        "torch_tiny_overfit_final_loss": float(final_loss_value),
         "torch_tiny_overfit_loss_ratio": float(ratio),
         "torch_tiny_overfit_steps": max_steps,
         "torch_device": str(device),

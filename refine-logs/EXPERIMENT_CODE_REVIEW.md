@@ -237,7 +237,7 @@ The implemented scope is intentionally minimal and covers DS0/DS1/proxy scaffold
 
 ## P3 PyTorch Smoke Addendum
 
-**Date**: 2026-05-21 17:06 CST
+**Date**: 2026-05-21 17:25 CST
 **Scope**: R100-R104 PyTorch smoke runner scaffold
 **Mode**: local-only fallback; secondary delegated review not used because the current task did not explicitly request sub-agent delegation.
 
@@ -266,12 +266,15 @@ Checklist:
 | Metrics are appended to `metrics.jsonl` and primary metric gates are wired in `run.py` | pass |
 | Data loader / forward / tiny overfit / rollout / checkpoint modes have separate run configs | pass |
 | Evaluation compares model output against dataset ground truth, not another model output | pass for R101-R103 smoke design |
-| Current local environment can complete passing R100-R104 | blocked: PyTorch missing |
+| Current local environment can complete passing R100-R104 | pass on CPU |
+| `sanitize_state()` avoids in-place mutation on tensors requiring gradients | pass |
+| R102 tiny-overfit compares loss before/after on the same fixed tiny batch | pass |
+| `AGENTS.md` documents the local conda environment and GPU blocker for `/run-experiment` | pass |
 
 Residual risk:
 
 ```text
-R100-R104 are scaffolded and blocked cleanly locally. They still need to be re-run after installing PyTorch in deep-sim before any training-grade claims can start.
+R100-R104 pass on CPU. Training-grade GPU runs remain blocked until local NVML/CUDA is repaired or a remote GPU backend is configured.
 ```
 
 ## Verification Commands

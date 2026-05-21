@@ -1,12 +1,18 @@
 {
-  "blocked": true,
-  "blocked_reason": "PyTorch is not installed in the current environment",
-  "errors": [
-    "PyTorch is not installed in the current environment"
-  ],
-  "metrics": {},
+  "blocked": false,
+  "blocked_reason": "",
+  "errors": [],
+  "metrics": {
+    "torch_batch_size": 4,
+    "torch_context_dim": 17,
+    "torch_control_dim": 12,
+    "torch_data_loader_smoke_passed": 1,
+    "torch_dataset_sample_count": 8,
+    "torch_observable_dim": 24,
+    "torch_state_dim": 12
+  },
   "mode": "data_loader_smoke",
   "name": "pytorch_data_loader_smoke",
-  "passed": false,
+  "passed": true,
   "warnings": []
 }

@@ -49,9 +49,9 @@
 | R034-R036 | M7 | cross-vehicle/config generalization | final single model vs baselines | MUST | DONE |
 | R037 | M8 | final single model freeze | selected E/T/F/S/M/V/U configuration | MUST | DONE |
 | R038-R045 | M9 | target fine-tune data efficiency | FT0-FT6 × FTD0-FTD5 | MUST | DONE |
-| R100 | P3 | PyTorch data loader smoke | canonical DS1 loader through runner | MUST | BLOCKED: PyTorch missing |
-| R101 | P3 | PyTorch forward/loss smoke | E2+T1+F1+S1+M0+V2+U0 one-step loss | MUST | READY after PyTorch install |
-| R102 | P3 | PyTorch tiny overfit smoke | small DS1 train subset with AdamW | MUST | READY after PyTorch install |
-| R103 | P3 | PyTorch rollout smoke | short autoregressive rollout | MUST | READY after PyTorch install |
-| R104 | P3 | PyTorch checkpoint smoke | save/load trained-weight format | MUST | READY after PyTorch install |
+| R100 | P3 | PyTorch data loader smoke | canonical DS1 loader through runner | MUST | DONE |
+| R101 | P3 | PyTorch forward/loss smoke | E2+T1+F1+S1+M0+V2+U0 one-step loss | MUST | DONE |
+| R102 | P3 | PyTorch tiny overfit smoke | small DS1 train subset with AdamW | MUST | DONE |
+| R103 | P3 | PyTorch rollout smoke | short autoregressive rollout | MUST | DONE |
+| R104 | P3 | PyTorch checkpoint smoke | save/load trained-weight format | MUST | DONE |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |

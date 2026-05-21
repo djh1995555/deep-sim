@@ -216,21 +216,24 @@ def project_friction_ellipse(
 
 
 def sanitize_state(state: torch.Tensor) -> torch.Tensor:
-    out = state.clone()
-    out[:, STATE_KEYS.index("vx")] = out[:, STATE_KEYS.index("vx")].clamp_min(0.03)
-    for key in ["omega_fl", "omega_fr", "omega_rl", "omega_rr"]:
-        out[:, STATE_KEYS.index(key)] = out[:, STATE_KEYS.index(key)].clamp_min(0.0)
-    for key, limit in [
-        ("vy", 80.0),
-        ("roll", 2.0),
-        ("pitch", 2.0),
-        ("yaw", 200.0),
-        ("p", 20.0),
-        ("q", 20.0),
-        ("r", 20.0),
-    ]:
-        out[:, STATE_KEYS.index(key)] = out[:, STATE_KEYS.index(key)].clamp(
-            -limit,
-            limit,
-        )
-    return out
+    columns = []
+    omega_keys = {"omega_fl", "omega_fr", "omega_rl", "omega_rr"}
+    symmetric_limits = {
+        "vy": 80.0,
+        "roll": 2.0,
+        "pitch": 2.0,
+        "yaw": 200.0,
+        "p": 20.0,
+        "q": 20.0,
+        "r": 20.0,
+    }
+    for idx, key in enumerate(STATE_KEYS):
+        value = state[:, idx]
+        if key == "vx":
+            value = value.clamp_min(0.03)
+        elif key in omega_keys:
+            value = value.clamp_min(0.0)
+        elif key in symmetric_limits:
+            value = value.clamp(-symmetric_limits[key], symmetric_limits[key])
+        columns.append(value)
+    return torch.stack(columns, dim=-1)

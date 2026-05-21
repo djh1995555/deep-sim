@@ -1,6 +1,6 @@
 # PyTorch Implementation Status
 
-**Date**: 2026-05-21 16:58 CST
+**Date**: 2026-05-21 17:25 CST
 
 ## Scope
 
@@ -12,6 +12,7 @@ Current completed step:
 P1: canonical data entry points
 P2: PyTorch Student Model v0 skeleton
 P3: PyTorch smoke runner scaffold
+P4: R100-R104 CPU smoke passed
 ```
 
 ## P1 Canonical Data
@@ -79,6 +80,7 @@ Implemented files:
 | `configs/runs/R103.yaml` | Short rollout smoke. |
 | `configs/runs/R104.yaml` | Checkpoint save/load smoke. |
 | `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
+| `AGENTS.md` | Local run-experiment environment notes and GPU blocker status. |
 
 The new runner branch supports:
 
@@ -98,6 +100,10 @@ conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_canonical_data tests.test_student_model
 conda run -n deep-sim python -m unittest
 conda run -n deep-sim python -m experiments.run --config configs/runs/R100.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R101.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R102.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
 git diff --check
 ```
 
@@ -105,10 +111,10 @@ Result:
 
 ```text
 canonical data test: pass
-student model smoke test: skipped because PyTorch is not installed in the current deep-sim environment
-torch training runner tests: pass, blocked-path behavior covered
+student model smoke test: pass
+torch training runner tests: pass
 compileall: pass
-R100 runner invocation: blocked as expected because PyTorch is not installed
+R100-R104 runner invocations: pass on CPU
 diff check: pass
 ```
 
@@ -116,18 +122,28 @@ diff check: pass
 
 `environment.yml` and `requirements.txt` now declare PyTorch.
 
-Current local `deep-sim` environment does not yet have PyTorch installed. Before running R100-R104 as passing smoke tests, update the environment:
+Current local `deep-sim` environment now has PyTorch installed through:
 
 ```bash
-conda env update -n deep-sim -f environment.yml
-python -m pip install -r requirements.txt
+mamba env update -n deep-sim -f environment.yml
 ```
 
-or install the project-preferred CUDA/CPU PyTorch build manually.
+Observed PyTorch status:
+
+```text
+torch.__version__ = 2.10.0
+torch.cuda.is_available() = False
+```
+
+Local GPU remains unavailable:
+
+```text
+nvidia-smi: Failed to initialize NVML: Driver/library version mismatch
+```
 
 ## Next Runs
 
-Current next run family:
+Current smoke run family:
 
 ```text
 R100: PyTorch data loader smoke
@@ -140,8 +156,11 @@ R104: checkpoint save/load smoke
 Current local status:
 
 ```text
-R100: blocked, PyTorch missing from deep-sim
-R101-R104: ready to run after PyTorch install
+R100: pass
+R101: pass
+R102: pass, tiny-overfit loss ratio = 0.850854
+R103: pass, 8-step rollout finite fraction = 1.0
+R104: pass, checkpoint save/load max abs diff = 0.0
 ```
 
-Only after R100-R104 pass should training-grade B3/B4/B5/B6 experiments start.
+CPU smoke is now ready for `/run-experiment`. Training-grade GPU experiments still need either a repaired local CUDA/NVML stack or a configured remote GPU backend in `AGENTS.md`.

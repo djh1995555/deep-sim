@@ -1,0 +1,13 @@
+ M configs/runs/R102.yaml
+ M experiments/torch_training.py
+ M runs/R100_pytorch_data_loader_smoke/artifacts/torch_training_report.json
+ M runs/R100_pytorch_data_loader_smoke/artifacts/validation_report.json
+ M runs/R100_pytorch_data_loader_smoke/env.txt
+ M runs/R100_pytorch_data_loader_smoke/git_status.txt
+ M runs/R100_pytorch_data_loader_smoke/metrics.jsonl
+ M runs/R100_pytorch_data_loader_smoke/summary.json
+ M student_model/torch_model.py
+?? runs/R101_pytorch_forward_loss_smoke/
+?? runs/R102_pytorch_tiny_overfit/
+?? runs/R103_pytorch_rollout_smoke/
+?? runs/R104_pytorch_checkpoint_smoke/

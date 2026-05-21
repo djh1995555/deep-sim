@@ -1,8 +1,8 @@
 run:
-  id: R102
-  name: pytorch_tiny_overfit
+  id: R101
+  name: pytorch_forward_loss_smoke
   milestone: P3
-  experiment_block: P3.3
+  experiment_block: P3.2
   seed: 23
 data:
   dataset_id: DS1_V1
@@ -17,37 +17,39 @@ model:
   student_config: E2_T1_F1_S1_M0_V2_U0_pytorch_v0
   baseline_config: null
 training:
-  optimizer: adamw
-  learning_rate: 0.0001
+  optimizer: none
+  learning_rate: 0.0
   batch_size: 4
   rollout_horizon: 1
-  max_steps: 25
-  early_stopping_metric: torch_tiny_overfit_loss_ratio
+  max_steps: 0
+  early_stopping_metric: torch_forward_loss_smoke_passed
   early_stopping_patience: 0
 evaluation:
-  horizons: [1-step]
-  metrics: [torch_tiny_overfit_passed, torch_tiny_overfit_loss_ratio]
-  report_splits: [train]
+  horizons:
+  - 1-step
+  metrics:
+  - torch_forward_loss_smoke_passed
+  - one_step_mse
+  - one_step_nll
+  report_splits:
+  - train
 logging:
-  output_dir: runs/R102_pytorch_tiny_overfit
+  output_dir: runs/R101_pytorch_forward_loss_smoke
   save_checkpoints: false
   save_diagnostics: true
 teacher_config: configs/teacher/ds1_v1.yaml
 dataset_source: existing
 artifact_dataset_subdir: ds1
-primary_metric: torch_tiny_overfit_passed
+primary_metric: torch_forward_loss_smoke_passed
 torch_training:
-  name: pytorch_tiny_overfit
-  mode: tiny_overfit
+  name: pytorch_forward_loss_smoke
+  mode: forward_loss_smoke
   seed: 23
   split_role: train
   history_len: 8
   batch_size: 4
   max_episodes: 8
-  max_steps: 25
-  learning_rate: 0.0001
-  weight_decay: 0.0
-  grad_clip: 1.0
-  success_loss_ratio: 0.995
   device: cpu
-  model_config: {hidden_dim: 32, history_len: 8}
+  model_config:
+    hidden_dim: 32
+    history_len: 8

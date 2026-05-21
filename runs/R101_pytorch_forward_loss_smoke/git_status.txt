@@ -1,0 +1,7 @@
+ M runs/R100_pytorch_data_loader_smoke/artifacts/torch_training_report.json
+ M runs/R100_pytorch_data_loader_smoke/artifacts/validation_report.json
+ M runs/R100_pytorch_data_loader_smoke/env.txt
+ M runs/R100_pytorch_data_loader_smoke/git_status.txt
+ M runs/R100_pytorch_data_loader_smoke/metrics.jsonl
+ M runs/R100_pytorch_data_loader_smoke/summary.json
+?? runs/R101_pytorch_forward_loss_smoke/
