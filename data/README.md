@@ -6,13 +6,13 @@ Current canonical paths:
 
 | Path | Source | Purpose |
 | --- | --- | --- |
-| `data/ds1_v1` | `runs/R000g_dataset_split_generation/artifacts/ds1` | Main DS1 scaffold dataset for base training and held-out evaluation. |
-| `data/ds1_proxy_ft_v1` | `runs/R038_finetune_FT0/artifacts/ds1_proxy` | Proxy target-window dataset for fine-tune scaffolds. |
+| `data/ds1_v1` | local directory | Main DS1 scaffold dataset for base training and held-out evaluation. |
+| `data/ds1_proxy_ft_v1` | local directory | Proxy target-window dataset for fine-tune scaffolds. |
 
-The current entries are symlinks created by:
+These entries are real directories, not symlinks into `runs/`. Validate them with:
 
 ```bash
-conda run -n deep-sim python -m experiments.materialize_data --mode symlink
+conda run -n deep-sim python -m experiments.materialize_data
 ```
 
-Use `--mode copy` only when a backend cannot follow symlinks.
+Use `--mode copy --data-root <target>` only when copying the canonical datasets to another location.

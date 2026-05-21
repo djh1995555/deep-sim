@@ -1,7 +1,0 @@
- M configs/runs/R113.yaml
- M refine-logs/MODULE_DESIGN.md
- M refine-logs/STUDENT_MODEL_SPEC.md
- M runs/R113_pytorch_model_variant_smoke/config.yaml
- M runs/R113_pytorch_model_variant_smoke/resolved_config.yaml
- M student_model/torch_model.py
- M tests/test_student_model.py

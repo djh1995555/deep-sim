@@ -1,7 +1,0 @@
-{
-  "config": "configs/teacher/ds1_v1.yaml",
-  "episode_count": 120,
-  "full_matrix_count": 700,
-  "out_dir": "runs/R041_finetune_FT3_fz_residual/artifacts/ds1_source",
-  "scenario_set": "ds1"
-}

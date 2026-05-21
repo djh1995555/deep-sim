@@ -1,7 +1,0 @@
-{
-  "config": "configs/teacher/ds1_v1.yaml",
-  "episode_count": 120,
-  "full_matrix_count": 700,
-  "out_dir": "runs/R011_base_held_out_road_eval/artifacts/ds1",
-  "scenario_set": "ds1"
-}

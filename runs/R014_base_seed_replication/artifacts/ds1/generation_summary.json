@@ -1,7 +1,0 @@
-{
-  "config": "configs/teacher/ds1_v1.yaml",
-  "episode_count": 120,
-  "full_matrix_count": 700,
-  "out_dir": "runs/R014_base_seed_replication/artifacts/ds1",
-  "scenario_set": "ds1"
-}

@@ -9,14 +9,15 @@
 | `AGENTS.md` | 运行环境说明 | `/run-experiment` 可读取的本地 conda 环境、GPU 状态和 smoke run 命令 | 当前声明本地 `deep-sim` CUDA smoke 可用，GPU 为 NVIDIA RTX A4500。 |
 | `.agents/` | 内部工具 | 本仓库随附的 agent skills 定义 | 给 Codex/ARIS 工作流使用，例如 `experiment-bridge`、`research-wiki`、`experiment-plan`。不是车辆动力学模型源码。 |
 | `.git/` | Git 元数据 | 提交历史、对象库、分支引用 | Git 内部目录，不需要手动修改。 |
+| `EXPERIMENT_USAGE.md` | 手动实验使用指南 | 单 run、队列、矩阵报告、实车 CSV 适配、验证命令 | 给人工手动执行实验时使用，是最直接的操作入口。 |
 | `configs/` | 实验配置 | Teacher 数据集配置和每个 run 的 YAML 配置 | 定义实验入口参数，是复现实验的主要配置来源。 |
-| `data/` | 数据入口 | canonical dataset symlink / copy 入口 | 给 PyTorch 训练阶段提供稳定数据路径，当前 `data/ds1_v1` 指向已生成的 DS1 scaffold 数据。 |
+| `data/` | 数据入口 | canonical dataset 真实目录 | 给 PyTorch 训练阶段提供稳定数据路径，当前保留 `ds1_v1` 和 `ds1_proxy_ft_v1` 两个数据集。 |
 | `experiments/` | 实验执行代码 | runner、sanity、baseline、hybrid、PyTorch smoke、ablation 报告代码 | `python -m experiments.run --config ...` 的执行入口和实验逻辑。 |
 | `idea-stage/` | 早期研究资料 | 文献调研、精读、idea 报告、最终设计决策 | 记录从需求到方案形成的早期推理链，偏研究探索。 |
 | `refine-logs/` | 方案与规格文档 | 实验计划、模块设计、数据设计、Teacher 设计、运行规格、结果总结 | 当前方案设计和实验执行状态的权威文档目录。 |
 | `reports/` | 实验报告 | B0/B3/B4 阶段报告、PyTorch 开发报告、矩阵报告和 ablation 汇总 JSON | 面向阅读的实验阶段输出，通常由 run 或汇总脚本生成/更新。 |
 | `research-wiki/` | 研究知识库 | 论文卡片、idea 卡片、claim/gap/query 记录 | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。 |
-| `runs/` | 实验运行产物 | R000-R045 scaffold 产物以及 R100+ PyTorch smoke 产物 | 每次实验运行的输出目录。当前主要是 scaffold 数据、指标、报告中间产物和 PyTorch blocked/smoke 输出。 |
+| `runs/` | 运行时产物目录 | 当前已彻底删除，重新执行实验时会自动创建 | 只用于保存新 run 的输出；canonical 数据不再放在 `runs/` 下。 |
 | `student_model/` | PyTorch 模型源码 | Student model 的数据接口、常量、E1/E2/E3 encoder、residual heads、adapter trainability | 正式训练阶段的模型实现入口；训练由 `experiments/torch_training.py` 调度。 |
 | `teacher_simulator/` | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现 | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。 |
 | `tests/` | 测试代码 | teacher simulator、canonical data、student model、PyTorch runner 测试 | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。 |
@@ -65,6 +66,8 @@ Teacher 数据集生成配置。
 ```bash
 conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 ```
+
+完整手动操作流程见根目录 `EXPERIMENT_USAGE.md`。
 
 ## 实验代码目录
 
@@ -159,7 +162,9 @@ Teacher simulator 的物理/工程子模块。
 | `TEACHER_SIMULATOR_DESIGN.md` | Teacher simulator 设计文档。 |
 | `TEACHER_SIMULATOR_SPEC.md` | Teacher simulator 实现规格。 |
 | `PYTORCH_IMPLEMENTATION_STATUS.md` | 从 scaffold 进入 PyTorch 训练实现的状态记录。 |
-| `*_2026*.md` | 历史快照或阶段性 checkpoint，用于追溯方案变更。 |
+| `*_2026*.md` | 历史快照或阶段性 checkpoint；当前 timestamped result/review/tracker 快照已清理，只保留最新权威文档。 |
+
+手动运行实验时优先读根目录 `EXPERIMENT_USAGE.md`；需要理解 run 的验收契约时再读 `EXPERIMENT_RUN_SPEC.md`。
 
 ### `idea-stage/`
 
@@ -216,6 +221,17 @@ Teacher simulator 的物理/工程子模块。
 
 每次实验运行的实际输出。目录名通常为 `Rxxx_实验名/`。
 
+当前仓库已经做过运行产物瘦身：历史 R000-R115 产物、timestamped result/review/tracker 快照和 Python `__pycache__` 已删除。`runs/` 目录当前不存在；重新执行实验时，runner 会按配置自动创建新的 `runs/{run_id}_{run_name}/`。
+
+canonical 数据已经移动到 `data/` 下，不再通过 symlink 指向 `runs/`：
+
+| 数据目录 | 用途 |
+| --- | --- |
+| `data/ds1_v1` | 主 DS1 scaffold 数据集，供 base training / held-out eval 使用。 |
+| `data/ds1_proxy_ft_v1` | fine-tune target-window proxy 数据集，供 FT 数据效率实验使用。 |
+
+其余历史 run 的结果摘要仍保留在 `reports/`、`refine-logs/EXPERIMENT_RESULTS.md` 和 `refine-logs/EXPERIMENT_TRACKER.md` 中；如需重新生成某个 run，使用对应的 `configs/runs/Rxxx.yaml`。
+
 每个 run 目录通常包含：
 
 | 子目录 | 用途 |
@@ -224,7 +240,7 @@ Teacher simulator 的物理/工程子模块。
 | `logs/` | 日志目录。当前 scaffold run 中不一定都有大量日志。 |
 | `checkpoints/` | checkpoint 目录。当前多数 run 是 scaffold，没有真实深度模型权重。 |
 
-当前已完成的主要 run：
+已完成过、但历史产物已清理的主要 run：
 
 | Run 范围 | 内容 |
 | --- | --- |
@@ -246,7 +262,7 @@ Teacher simulator 的物理/工程子模块。
 | `R200-R216` | 真实可训练 PyTorch 单因素 ablation 矩阵；配置已生成，运行状态 pending。 |
 | `R300-R334` | FT0-FT6 × FTD1-FTD5 fine-tune 数据效率矩阵；配置已生成，运行状态 pending。 |
 
-注意：`runs/` 是运行结果目录，不是手写源码。重新运行实验可能覆盖或新增其中的文件。
+注意：`runs/` 是运行结果目录，不是手写源码。当前可以不存在；重新运行实验会重新创建它，实验结束后也可以再次删除。
 
 ## 测试目录
 
@@ -277,6 +293,7 @@ conda run -n deep-sim python -m unittest
 | --- | --- |
 | `MANIFEST.md` | 自动维护的产物清单，按时间记录技能、文件、阶段和说明。 |
 | `DIRECTORY_GUIDE.md` | 当前文件，按目录解释仓库结构和用途。 |
+| `EXPERIMENT_USAGE.md` | 手动实验操作手册，说明如何运行单个实验、批量矩阵、报告汇总和实车 CSV 适配。 |
 | `AGENTS.md` | `/run-experiment` 环境配置说明，记录本地 `deep-sim`、GPU 状态和 smoke 命令。 |
 | `environment.yml` | Miniforge/conda 环境定义。实验活动应使用 `deep-sim` 环境。 |
 | `requirements.txt` | Python 依赖的轻量记录。PyTorch CUDA build 由 `environment.yml` 通过 conda 管理。 |
@@ -292,9 +309,10 @@ conda run -n deep-sim python -m unittest
 4. `teacher_simulator/`：数据生成和 teacher 物理逻辑。
 5. `reports/`：阶段性结果是否能支持当前 claim。
 6. `tests/`：修改 teacher 或实验逻辑后是否有基本回归测试。
+7. `EXPERIMENT_USAGE.md`：手动流程变化后同步更新操作命令。
 
 通常不要手动改：
 
 1. `.git/`：Git 内部数据。
 2. `__pycache__/`：Python 缓存。
-3. `runs/*` 中的历史产物：除非明确是在清理或重新生成实验结果。
+3. 新生成的 `runs/*` 产物：除非明确是在清理、归档或重新生成实验结果。

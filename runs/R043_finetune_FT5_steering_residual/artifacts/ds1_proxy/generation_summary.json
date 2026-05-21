@@ -1,7 +1,0 @@
-{
-  "config": "configs/teacher/ds1_proxy_ft_v1.yaml",
-  "episode_count": 135,
-  "full_matrix_count": 700,
-  "out_dir": "runs/R043_finetune_FT5_steering_residual/artifacts/ds1_proxy",
-  "scenario_set": "ds1_proxy"
-}

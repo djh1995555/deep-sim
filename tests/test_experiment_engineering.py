@@ -37,9 +37,27 @@ class ExperimentEngineeringTest(unittest.TestCase):
 
     def test_queue_skip_success_can_mark_rollout_needed(self):
         with tempfile.TemporaryDirectory() as tmp:
+            run_dir = os.path.join(tmp, "runs", "RTEST_success")
+            os.makedirs(run_dir, exist_ok=True)
+            config_path = os.path.join(tmp, "RTEST.yaml")
+            with open(config_path, "w", encoding="utf-8") as handle:
+                handle.write(
+                    "\n".join(
+                        [
+                            "run:",
+                            "  id: RTEST",
+                            "  name: queue_success_fixture",
+                            "logging:",
+                            "  output_dir: %s" % run_dir,
+                            "",
+                        ]
+                    )
+                )
+            with open(os.path.join(run_dir, "summary.json"), "w", encoding="utf-8") as handle:
+                json.dump({"status": "success", "success_criteria_met": True}, handle)
             args = argparse.Namespace(
                 manifest="",
-                configs=["configs/runs/R111.yaml"],
+                configs=[config_path],
                 run_ids=[],
                 limit=1,
                 max_retries=0,
@@ -54,10 +72,7 @@ class ExperimentEngineeringTest(unittest.TestCase):
                 log_dir=os.path.join(tmp, "logs"),
             )
             state = run_queue(args)
-            self.assertIn(
-                state["jobs"]["R111"]["status"],
-                {"success_needs_rollout", "skipped_success"},
-            )
+            self.assertEqual(state["jobs"]["RTEST"]["status"], "success_needs_rollout")
 
     def test_matrix_report_reads_generated_manifest(self):
         report = build_matrix_report("configs/torch_matrix/MANIFEST.json")

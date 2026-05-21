@@ -1,6 +1,0 @@
-{
-  "config": "configs/teacher/ds0_minimal.yaml",
-  "episode_count": 8,
-  "out_dir": "runs/R000a_tire_load_validation/artifacts/ds0",
-  "scenario_set": "ds0"
-}

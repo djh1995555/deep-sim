@@ -6,8 +6,8 @@ from typing import Dict
 
 
 CANONICAL_DATASETS: Dict[str, str] = {
-    "ds1_v1": "runs/R000g_dataset_split_generation/artifacts/ds1",
-    "ds1_proxy_ft_v1": "runs/R038_finetune_FT0/artifacts/ds1_proxy",
+    "ds1_v1": "data/ds1_v1",
+    "ds1_proxy_ft_v1": "data/ds1_proxy_ft_v1",
 }
 
 
@@ -18,6 +18,8 @@ def materialize_dataset(name: str, mode: str, data_root: str) -> str:
     dst = os.path.abspath(os.path.join(data_root, name))
     if not os.path.exists(src):
         raise FileNotFoundError(src)
+    if src == dst:
+        return dst
     if os.path.lexists(dst):
         if os.path.islink(dst) and os.path.realpath(dst) == src:
             return dst
