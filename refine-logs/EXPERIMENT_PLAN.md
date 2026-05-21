@@ -10,12 +10,12 @@
 
 具体设计细节放在对应 DESIGN 文档中：
 
-| 内容 | 权威文档 | EXPERIMENT_PLAN 中只保留 |
-|---|---|---|
-| Teacher simulator 动力学、自由度、内部真值、sanity gate | `refine-logs/TEACHER_SIMULATOR_DESIGN.md` | B0 / B1 / B2 的实验目标和验收标准 |
-| 数据集、工况、字段 schema、`fixed_vehicle_context`、`nominal_physics_prior`、teacher-only 字段、split | `refine-logs/DATA_DESIGN.md` | DS0/DS1/DS2 的实验用途和必须支持的划分 |
-| Student model、physics backbone、Steering、VehicleParamAdapter、FzResidualNN、MuHead、TireResidualNN、VehicleResidualNN、Uncertainty、模块边界与模块启用顺序 | `refine-logs/MODULE_DESIGN.md` | 实验中使用的系统编号和 ablation 关系 |
-| 具体 run id、状态、优先级 | `refine-logs/EXPERIMENT_TRACKER.md` | 里程碑和运行顺序摘要 |
+| 内容                                                                                                                                       | 权威文档                                      | EXPERIMENT_PLAN 中只保留      |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------- |
+| Teacher simulator 动力学、自由度、内部真值、sanity gate                                                                                               | `refine-logs/TEACHER_SIMULATOR_DESIGN.md` | B0 / B1 / B2 的实验目标和验收标准   |
+| 数据集、工况、字段 schema、`fixed_vehicle_context`、`nominal_physics_prior`、teacher-only 字段、split                                                   | `refine-logs/DATA_DESIGN.md`              | DS0/DS1/DS2 的实验用途和必须支持的划分 |
+| Student model、physics backbone、Steering、VehicleParamAdapter、FzResidualNN、MuHead、TireResidualNN、VehicleResidualNN、Uncertainty、模块边界与模块启用顺序 | `refine-logs/MODULE_DESIGN.md`            | 实验中使用的系统编号和 ablation 关系   |
+| 具体 run id、状态、优先级                                                                                                                         | `refine-logs/EXPERIMENT_TRACKER.md`       | 里程碑和运行顺序摘要                |
 
 维护规则：
 
