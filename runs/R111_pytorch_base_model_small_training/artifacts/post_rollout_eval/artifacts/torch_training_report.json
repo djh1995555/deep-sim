@@ -1,0 +1,30 @@
+{
+  "blocked": false,
+  "blocked_reason": "",
+  "errors": [],
+  "metrics": {
+    "torch_device": "cuda",
+    "torch_rollout_eval_constraint_violation_rate": 0.0,
+    "torch_rollout_eval_episode_count": 2,
+    "torch_rollout_eval_finite_fraction": 1.0,
+    "torch_rollout_eval_passed": 1,
+    "torch_rollout_eval_rmse": 5.861143589019775,
+    "torch_rollout_eval_rmse_omega_fl": 10.810489654541016,
+    "torch_rollout_eval_rmse_omega_fr": 11.151142120361328,
+    "torch_rollout_eval_rmse_omega_rl": 8.383244514465332,
+    "torch_rollout_eval_rmse_omega_rr": 8.818008422851562,
+    "torch_rollout_eval_rmse_p": 1.764328956604004,
+    "torch_rollout_eval_rmse_pitch": 1.573409080505371,
+    "torch_rollout_eval_rmse_q": 1.7470897436141968,
+    "torch_rollout_eval_rmse_r": 0.8907957673072815,
+    "torch_rollout_eval_rmse_roll": 1.5722951889038086,
+    "torch_rollout_eval_rmse_vx": 1.9940893650054932,
+    "torch_rollout_eval_rmse_vy": 1.639540195465088,
+    "torch_rollout_eval_rmse_yaw": 2.101055383682251,
+    "torch_rollout_eval_steps": 8
+  },
+  "mode": "rollout_eval",
+  "name": "R111_post_rollout_eval",
+  "passed": true,
+  "warnings": []
+}

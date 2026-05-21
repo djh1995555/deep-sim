@@ -68,3 +68,13 @@
 | R200-R216 | P8 | Generated PyTorch ablation matrix | real trainable configs for E/T/F/S/M/V/U single-factor comparisons | MUST | READY |
 | R300-R334 | P9 | Generated PyTorch fine-tune matrix | FT0-FT6 × five fine-tune data buckets | MUST | READY |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |
+
+## Development Tooling
+
+| Item | Milestone | Purpose | Artifact | Status |
+|------|-----------|---------|----------|--------|
+| Q1 | P10 | Local experiment queue | `experiments/experiment_queue.py` with retry, dry-run, skip-success, state JSON, per-attempt logs, and optional post-rollout eval | DONE |
+| Q2 | P10 | Queue smoke on existing successful run | `runs/queue_state_smoke.json` and R111 `artifacts/post_rollout_eval/summary.json` | DONE |
+| Q3 | P10 | Matrix status/result report | `experiments/matrix_report.py`, `reports/PYTORCH_MATRIX_REPORT.md/json` | DONE |
+| Q4 | P10 | CSV real-data adapter | `experiments/real_data_adapter.py` with canonical dataset validation | DONE |
+| Q5 | P10 | Training governance | best checkpoint, early stopping, LR scheduler, nonfinite loss guard, filtered rollout eval in `experiments/torch_training.py` | DONE |

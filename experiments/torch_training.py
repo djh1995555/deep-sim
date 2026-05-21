@@ -452,10 +452,26 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
             checkpoint = _load_training_checkpoint(torch, resume_from, device)
             if checkpoint.get("optimizer_state_dict"):
                 optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+    scheduler = None
+    if optimizer is not None:
+        scheduler_name = str(torch_cfg.get("lr_scheduler", "none")).lower()
+        if scheduler_name == "cosine":
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+                optimizer,
+                T_max=max(1, int(torch_cfg.get("max_steps", 100))),
+            )
+        elif scheduler_name == "step":
+            scheduler = torch.optim.lr_scheduler.StepLR(
+                optimizer,
+                step_size=max(1, int(torch_cfg.get("lr_step_size", 100))),
+                gamma=float(torch_cfg.get("lr_gamma", 0.5)),
+            )
 
     max_steps = int(torch_cfg.get("max_steps", 100))
     eval_interval = max(1, int(torch_cfg.get("eval_interval", max_steps)))
     grad_clip = float(torch_cfg.get("grad_clip", 1.0))
+    early_stopping_patience = int(torch_cfg.get("early_stopping_patience", 0) or 0)
+    min_delta = float(torch_cfg.get("early_stopping_min_delta", 0.0))
     history_path = os.path.join(out_dir, "artifacts", "training_history.jsonl")
     os.makedirs(os.path.dirname(history_path), exist_ok=True)
     iterator = _cycle_batches(train_loader)
@@ -469,6 +485,17 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
         aux_weights=aux_weights,
     )
     final_loss = None
+    completed_steps = 0
+    stopped_early = False
+    nonfinite_detected = False
+    best_val_loss = float("inf")
+    best_step = start_step
+    stale_evals = 0
+    best_checkpoint_name = torch_cfg.get(
+        "best_checkpoint_name",
+        "best_%s" % torch_cfg.get("checkpoint_name", "model.pt"),
+    )
+    best_checkpoint_path = os.path.join(out_dir, "checkpoints", best_checkpoint_name)
     last_val = {"loss": float("nan"), "mse": float("nan"), "normalized_mse": float("nan"), "nll": float("nan")}
     for local_step in range(1, max_steps + 1):
         if optimizer is None:
@@ -485,16 +512,24 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
             loss_mode=loss_mode,
             aux_weights=aux_weights,
         )
+        if not bool(torch.isfinite(loss).detach().cpu()):
+            nonfinite_detected = True
+            final_loss = float(loss.detach().cpu())
+            break
         loss.backward()
         grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
         optimizer.step()
+        if scheduler is not None:
+            scheduler.step()
         final_loss = float(loss.detach().cpu())
         global_step = start_step + local_step
+        completed_steps = local_step
         row = {
             "step": global_step,
             "train_loss": final_loss,
             "train_mse": train_metrics["one_step_mse"],
             "grad_norm": float(grad_norm.detach().cpu() if hasattr(grad_norm, "detach") else grad_norm),
+            "lr": float(optimizer.param_groups[0]["lr"]),
         }
         if local_step == max_steps or local_step % eval_interval == 0:
             last_val = _evaluate_one_step(
@@ -514,8 +549,28 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
                     "val_nll": last_val["nll"],
                 }
             )
+            if np.isfinite(last_val["loss"]) and last_val["loss"] < best_val_loss - min_delta:
+                best_val_loss = float(last_val["loss"])
+                best_step = global_step
+                stale_evals = 0
+                _save_training_checkpoint(
+                    torch,
+                    best_checkpoint_path,
+                    model,
+                    optimizer,
+                    torch_cfg,
+                    global_step,
+                    {"best_val_loss": best_val_loss, "best_step": best_step},
+                )
+            else:
+                stale_evals += 1
+                if early_stopping_patience > 0 and stale_evals >= early_stopping_patience:
+                    stopped_early = True
+                    row["stopped_early"] = True
         with open(history_path, "a", encoding="utf-8") as handle:
             handle.write(json.dumps(row, sort_keys=True) + "\n")
+        if stopped_early:
+            break
 
     if final_loss is None:
         final_eval = _evaluate_one_step(
@@ -546,6 +601,18 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
         loss_mode=loss_mode,
         aux_weights=aux_weights,
     )
+    if not np.isfinite(best_val_loss) and np.isfinite(last_val["loss"]):
+        best_val_loss = float(last_val["loss"])
+        best_step = start_step + completed_steps
+        _save_training_checkpoint(
+            torch,
+            best_checkpoint_path,
+            model,
+            optimizer,
+            torch_cfg,
+            best_step,
+            {"best_val_loss": best_val_loss, "best_step": best_step},
+        )
     train_loss_ratio = final_train_eval["loss"] / max(initial_train_eval["loss"], 1.0e-12)
     checkpoint_name = torch_cfg.get("checkpoint_name", "model.pt")
     checkpoint_path = os.path.join(out_dir, "checkpoints", checkpoint_name)
@@ -557,8 +624,16 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
         "torch_one_step_training_val_mse": float(last_val["mse"]),
         "torch_one_step_training_val_normalized_mse": float(last_val["normalized_mse"]),
         "torch_one_step_training_steps": max_steps,
+        "torch_one_step_training_completed_steps": completed_steps,
         "torch_one_step_training_start_step": start_step,
-        "torch_one_step_training_end_step": start_step + max_steps,
+        "torch_one_step_training_end_step": start_step + completed_steps,
+        "torch_one_step_training_best_step": best_step,
+        "torch_one_step_training_best_val_loss": float(best_val_loss),
+        "torch_one_step_training_stopped_early": int(stopped_early),
+        "torch_one_step_training_nonfinite_detected": int(nonfinite_detected),
+        "torch_one_step_training_final_lr": float(
+            optimizer.param_groups[0]["lr"] if optimizer is not None else 0.0
+        ),
         "torch_one_step_training_sample_count": len(train_loader.dataset),
         "torch_one_step_validation_sample_count": len(val_loader.dataset),
         "torch_one_step_training_trainable_parameter_count": int(
@@ -579,10 +654,11 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
         model,
         optimizer,
         torch_cfg,
-        start_step + max_steps,
+        start_step + completed_steps,
         metrics,
     )
     metrics["torch_one_step_training_checkpoint_exists"] = int(os.path.exists(checkpoint_path))
+    metrics["torch_one_step_training_best_checkpoint_exists"] = int(os.path.exists(best_checkpoint_path))
     metric_name = (
         "torch_black_box_training_passed"
         if torch_cfg.get("model_type") == "direct_tcn"
@@ -591,6 +667,7 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
     passed = (
         np.isfinite(final_loss)
         and np.isfinite(last_val["mse"])
+        and not nonfinite_detected
         and train_loss_ratio <= float(torch_cfg.get("success_loss_ratio", 1.0))
         and os.path.exists(checkpoint_path)
     )
@@ -815,15 +892,29 @@ def _rollout_eval_from_checkpoint(
     rollout_steps = int(torch_cfg.get("rollout_steps", 16))
     max_episodes = int(torch_cfg.get("max_episodes", 4))
     split_role = torch_cfg.get("split_role", "validation")
-    from student_model.data import load_manifest
+    from student_model.data import _manifest_item_matches, load_manifest
 
+    manifest_items = load_manifest(dataset_dir).get("episodes", [])
     items = [
         (idx, item)
-        for idx, item in enumerate(load_manifest(dataset_dir).get("episodes", []))
-        if item.get("split_role") == split_role
+        for idx, item in enumerate(manifest_items)
+        if _manifest_item_matches(
+            item,
+            split_role,
+            torch_cfg.get("fine_tune_buckets"),
+            torch_cfg.get("target_window_role"),
+            torch_cfg.get("scenario_groups"),
+            torch_cfg.get("vehicle_config_ids"),
+        )
     ]
     if not items:
-        items = [(idx, item) for idx, item in enumerate(load_manifest(dataset_dir).get("episodes", []))]
+        items = [
+            (idx, item)
+            for idx, item in enumerate(manifest_items)
+            if not split_role or item.get("split_role") == split_role
+        ]
+    if not items:
+        items = list(enumerate(manifest_items))
     rows = []
     all_sqerr = []
     all_channel_sqerr = []

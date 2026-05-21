@@ -1,6 +1,6 @@
 # PyTorch Implementation Status
 
-**Date**: 2026-05-21 19:33 CST
+**Date**: 2026-05-21 20:01 CST
 
 ## Scope
 
@@ -17,6 +17,7 @@ P5: R105 GPU smoke passed
 P6: R106 GPU backward/optimizer smoke passed
 P7: R107-R111 training loop development passed
 P8: R112-R115 fair comparison, variant, fine-tune, and ensemble development passed
+P9: experiment queue, matrix report, real-data adapter, and training governance completed
 ```
 
 ## P1 Canonical Data
@@ -103,7 +104,11 @@ Implemented files:
 | `configs/runs/R115.yaml` | U1 K=3 deep ensemble smoke. |
 | `experiments/torch_config_matrix.py` | Generates full PyTorch ablation and fine-tune config matrix under `configs/torch_matrix/`. |
 | `experiments/torch_dev_report.py` | Aggregates R112-R115 results into `reports/PYTORCH_DEV_REPORT.md/json`. |
+| `experiments/experiment_queue.py` | Local queue runner for direct config lists or `configs/torch_matrix/MANIFEST.json`, with dry-run, retry, skip-success, queue state, logs, and optional post-rollout eval. |
+| `experiments/matrix_report.py` | Aggregates matrix status, validation metrics, and post-rollout metrics into `reports/PYTORCH_MATRIX_REPORT.md/json`. |
+| `experiments/real_data_adapter.py` | Converts CSV real-vehicle episodes into canonical datasets with manifest, episode arrays, sidecars, and validator summary. |
 | `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
+| `tests/test_experiment_engineering.py` | Regression tests for queue state writing, skip-success rollout path, matrix manifest aggregation, and CSV adapter output. |
 | `AGENTS.md` | Local run-experiment environment notes, GPU status, and smoke run commands. |
 
 The new runner branch supports:
@@ -113,6 +118,74 @@ dataset_source: existing
 ```
 
 This lets R100-R104 reuse `data/ds1_v1` instead of regenerating DS1 every time.
+
+## P9 Experiment Engineering
+
+Training governance added to `experiments/torch_training.py`:
+
+```text
+best checkpoint saving
+early_stopping_patience / early_stopping_min_delta
+lr_scheduler: none / cosine / step
+lr_step_size / lr_gamma
+nonfinite loss detection
+completed-step and final-LR metrics
+rollout eval filters for fine_tune_buckets, target_window_role, scenario_groups, vehicle_config_ids
+```
+
+Queue smoke command:
+
+```bash
+conda run -n deep-sim python -m experiments.experiment_queue \
+  --configs configs/runs/R111.yaml \
+  --limit 1 \
+  --max-retries 0 \
+  --skip-success \
+  --rollout-eval \
+  --rollout-steps 8 \
+  --rollout-max-episodes 2 \
+  --state-path runs/queue_state_smoke.json \
+  --log-dir runs/_queue_logs_smoke
+```
+
+Queue smoke result:
+
+```text
+R111 post-rollout via queue: pass
+rollout RMSE = 5.861144
+episodes = 2
+steps = 8
+constraint violation rate = 0.0
+```
+
+Matrix report command:
+
+```bash
+conda run -n deep-sim python -m experiments.matrix_report
+```
+
+Current matrix report:
+
+```text
+reports/PYTORCH_MATRIX_REPORT.md
+reports/PYTORCH_MATRIX_REPORT.json
+status_counts.pending = 52
+R200-R216: pending
+R300-R334: pending
+```
+
+Real-data adapter entry point:
+
+```bash
+conda run -n deep-sim python -m experiments.real_data_adapter \
+  --input-csv path/to/episode.csv \
+  --output-dir data/real_v0 \
+  --dataset-id REAL_V0 \
+  --episode-id real_ep_000 \
+  --fixed-context-json path/to/fixed_context.json \
+  --nominal-prior-json path/to/nominal_prior.json \
+  --field-map-json path/to/field_map.json
+```
 
 ## Verification
 
@@ -141,6 +214,10 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
 conda run -n deep-sim python -m experiments.torch_config_matrix --write
 conda run -n deep-sim python -m experiments.torch_dev_report
+conda run -n deep-sim python -m experiments.experiment_queue --configs configs/runs/R111.yaml --limit 1 --max-retries 0 --skip-success --rollout-eval --rollout-steps 8 --rollout-max-episodes 2 --state-path runs/queue_state_smoke.json --log-dir runs/_queue_logs_smoke
+conda run -n deep-sim python -m experiments.matrix_report
+conda run -n deep-sim python -m compileall experiments student_model tests
+conda run -n deep-sim python -m unittest tests.test_experiment_engineering tests.test_torch_training
 git diff --check
 ```
 
@@ -229,6 +306,8 @@ R112: pass, hybrid raw MSE / best black-box raw MSE = 4.447071, rollout ratio = 
 R113: pass, 14 component/model variants forward on CUDA
 R114: pass, FT0-FT6 trainability and two fine-tune bucket cells validated
 R115: pass, K=3 ensemble MSE = 6.010266, predictive variance = 0.085524
+R111 post-rollout queue smoke: pass, rollout RMSE = 5.861144 over 2 episodes x 8 steps
+matrix report: generated, 52 pending matrix configs
 ```
 
 Local GPU training scaffolding is now ready through one-step training, rollout eval, resume/eval-only, PyTorch black-box baselines, matched fair comparison, model/component variant smoke, fine-tune adapter smoke, and K=3 ensemble training. These are still development-scale gates, not final training-quality results.
@@ -246,3 +325,17 @@ configs/torch_matrix/MANIFEST.json
 17 PyTorch ablation configs: R200-R216
 35 PyTorch fine-tune configs: R300-R334
 ```
+
+Recommended next execution block:
+
+```bash
+conda run -n deep-sim python -m experiments.experiment_queue \
+  --manifest configs/torch_matrix/MANIFEST.json \
+  --run-ids R200 R201 R202 R203 R204 R205 R206 R207 R208 R209 R210 R211 R212 R213 R214 R215 R216 \
+  --max-retries 1 \
+  --skip-success \
+  --rollout-eval \
+  --state-path runs/queue_state_ablation.json
+```
+
+After R200-R216 finishes, regenerate `reports/PYTORCH_MATRIX_REPORT.md/json`, then run R300-R334 fine-tune matrix.
