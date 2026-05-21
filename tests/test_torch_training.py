@@ -41,6 +41,7 @@ class TorchTrainingRunnerTest(unittest.TestCase):
             "R102": "tiny_overfit",
             "R103": "rollout_smoke",
             "R104": "checkpoint_smoke",
+            "R105": "forward_loss_smoke",
         }
         for run_id, mode in expected_modes.items():
             with self.subTest(run_id=run_id):
@@ -49,6 +50,9 @@ class TorchTrainingRunnerTest(unittest.TestCase):
                 self.assertEqual(cfg["data"]["dataset_path"], "data/ds1_v1")
                 self.assertEqual(cfg["torch_training"]["mode"], mode)
                 self.assertEqual(cfg["logging"]["output_dir"].split("/")[1][:4], run_id)
+                if run_id == "R105":
+                    self.assertTrue(cfg["torch_training"]["require_cuda"])
+                    self.assertEqual(cfg["torch_training"]["device"], "cuda")
 
 
 if __name__ == "__main__":

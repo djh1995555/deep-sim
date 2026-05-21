@@ -279,7 +279,7 @@ def _checkpoint_smoke(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], o
         },
         checkpoint_path,
     )
-    loaded = torch.load(checkpoint_path, map_location=device)
+    loaded = torch.load(checkpoint_path, map_location=device, weights_only=True)
     restored = HybridStudentModel(type(config)(**loaded["model_config"])).to(device)
     restored.load_state_dict(loaded["model_state_dict"])
     restored.eval()
@@ -316,6 +316,12 @@ def run_torch_training_suite(
         report["blocked"] = True
         report["blocked_reason"] = import_error
         report["errors"].append(import_error)
+        _write_json(os.path.join(out_dir, "artifacts", "torch_training_report.json"), report)
+        return report
+    if torch_cfg.get("require_cuda") and not torch.cuda.is_available():
+        report["blocked"] = True
+        report["blocked_reason"] = "CUDA is required for this run but torch.cuda.is_available() is False"
+        report["errors"].append(report["blocked_reason"])
         _write_json(os.path.join(out_dir, "artifacts", "torch_training_report.json"), report)
         return report
 

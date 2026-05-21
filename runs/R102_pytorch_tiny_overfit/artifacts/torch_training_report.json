@@ -4,9 +4,9 @@
   "errors": [],
   "metrics": {
     "torch_device": "cpu",
-    "torch_tiny_overfit_final_loss": 0.13126973807811737,
+    "torch_tiny_overfit_final_loss": 0.13126975297927856,
     "torch_tiny_overfit_initial_loss": 0.1542799174785614,
-    "torch_tiny_overfit_loss_ratio": 0.8508543446450735,
+    "torch_tiny_overfit_loss_ratio": 0.8508544412303026,
     "torch_tiny_overfit_passed": 1,
     "torch_tiny_overfit_steps": 25
   },

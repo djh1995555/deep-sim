@@ -1,6 +1,6 @@
 # PyTorch Implementation Status
 
-**Date**: 2026-05-21 17:25 CST
+**Date**: 2026-05-21 18:05 CST
 
 ## Scope
 
@@ -13,6 +13,7 @@ P1: canonical data entry points
 P2: PyTorch Student Model v0 skeleton
 P3: PyTorch smoke runner scaffold
 P4: R100-R104 CPU smoke passed
+P5: R105 GPU smoke passed
 ```
 
 ## P1 Canonical Data
@@ -79,8 +80,9 @@ Implemented files:
 | `configs/runs/R102.yaml` | Tiny overfit on a small train subset. |
 | `configs/runs/R103.yaml` | Short rollout smoke. |
 | `configs/runs/R104.yaml` | Checkpoint save/load smoke. |
+| `configs/runs/R105.yaml` | CUDA-required one-step forward/loss smoke. |
 | `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
-| `AGENTS.md` | Local run-experiment environment notes and GPU blocker status. |
+| `AGENTS.md` | Local run-experiment environment notes, GPU status, and smoke run commands. |
 
 The new runner branch supports:
 
@@ -104,6 +106,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R101.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R102.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
 git diff --check
 ```
 
@@ -114,7 +117,8 @@ canonical data test: pass
 student model smoke test: pass
 torch training runner tests: pass
 compileall: pass
-R100-R104 runner invocations: pass on CPU
+R100-R104 runner invocations: pass
+R105 runner invocation: pass on CUDA
 diff check: pass
 ```
 
@@ -122,23 +126,28 @@ diff check: pass
 
 `environment.yml` and `requirements.txt` now declare PyTorch.
 
-Current local `deep-sim` environment now has PyTorch installed through:
+Current local `deep-sim` environment now has CUDA-enabled PyTorch installed through:
 
 ```bash
-mamba env update -n deep-sim -f environment.yml
+mamba install -n deep-sim -c pytorch -c nvidia -c conda-forge 'pytorch::pytorch=2.5.1' pytorch-cuda=12.1 -y
 ```
 
 Observed PyTorch status:
 
 ```text
-torch.__version__ = 2.10.0
-torch.cuda.is_available() = False
+torch.__version__ = 2.5.1
+torch.version.cuda = 12.1
+torch.cuda.is_available() = True
+torch.cuda.device_count() = 1
+torch.cuda.get_device_name(0) = NVIDIA RTX A4500
 ```
 
-Local GPU remains unavailable:
+Observed driver status:
 
 ```text
-nvidia-smi: Failed to initialize NVML: Driver/library version mismatch
+nvidia-smi driver = 535.309.01
+GPU = NVIDIA RTX A4500
+memory = 20470 MiB
 ```
 
 ## Next Runs
@@ -151,6 +160,7 @@ R101: one-step forward/loss smoke
 R102: tiny overfit on 5-10 short episodes
 R103: short rollout smoke
 R104: checkpoint save/load smoke
+R105: CUDA-required forward/loss smoke
 ```
 
 Current local status:
@@ -161,6 +171,7 @@ R101: pass
 R102: pass, tiny-overfit loss ratio = 0.850854
 R103: pass, 8-step rollout finite fraction = 1.0
 R104: pass, checkpoint save/load max abs diff = 0.0
+R105: pass, torch_device = cuda
 ```
 
-CPU smoke is now ready for `/run-experiment`. Training-grade GPU experiments still need either a repaired local CUDA/NVML stack or a configured remote GPU backend in `AGENTS.md`.
+Local GPU smoke is now ready for `/run-experiment`. This is still a smoke-stage gate, not a full training-quality result.

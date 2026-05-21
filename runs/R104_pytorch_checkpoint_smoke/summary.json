@@ -1,7 +1,7 @@
 {
   "config_name": "pytorch_checkpoint_smoke",
   "dataset_id": "DS1_V1",
-  "end_time": "2026-05-21T09:24:48.890014+00:00",
+  "end_time": "2026-05-21T10:05:08.723646+00:00",
   "experiment_block": "P3.5",
   "milestone": "P3",
   "notes": "experiment gate passed for this run",
@@ -9,7 +9,7 @@
   "primary_metric_value": 1,
   "run_id": "R104",
   "seed": 23,
-  "start_time": "2026-05-21T09:24:47.104067+00:00",
+  "start_time": "2026-05-21T10:05:06.733451+00:00",
   "status": "success",
   "success_criteria_met": true,
   "test_split": "test",

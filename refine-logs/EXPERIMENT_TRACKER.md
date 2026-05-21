@@ -54,4 +54,5 @@
 | R102 | P3 | PyTorch tiny overfit smoke | small DS1 train subset with AdamW | MUST | DONE |
 | R103 | P3 | PyTorch rollout smoke | short autoregressive rollout | MUST | DONE |
 | R104 | P3 | PyTorch checkpoint smoke | save/load trained-weight format | MUST | DONE |
+| R105 | P4 | PyTorch GPU forward smoke | CUDA-required E2+T1+F1+S1+M0+V2+U0 one-step loss | MUST | DONE |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |

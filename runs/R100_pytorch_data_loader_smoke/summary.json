@@ -1,7 +1,7 @@
 {
   "config_name": "pytorch_data_loader_smoke",
   "dataset_id": "DS1_V1",
-  "end_time": "2026-05-21T09:21:10.527911+00:00",
+  "end_time": "2026-05-21T10:04:29.685694+00:00",
   "experiment_block": "P3.1",
   "milestone": "P3",
   "notes": "experiment gate passed for this run",
@@ -9,7 +9,7 @@
   "primary_metric_value": 1,
   "run_id": "R100",
   "seed": 23,
-  "start_time": "2026-05-21T09:21:08.725182+00:00",
+  "start_time": "2026-05-21T10:04:27.721726+00:00",
   "status": "success",
   "success_criteria_met": true,
   "test_split": "test",

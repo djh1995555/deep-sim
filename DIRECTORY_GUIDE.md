@@ -6,7 +6,7 @@
 
 | 路径 | 类型 | 内容 | 用途 |
 | --- | --- | --- | --- |
-| `AGENTS.md` | 运行环境说明 | `/run-experiment` 可读取的本地 conda 环境、GPU 状态和 smoke run 命令 | 当前声明本地 `deep-sim` CPU smoke 可用，GPU 因 NVML mismatch 不可用。 |
+| `AGENTS.md` | 运行环境说明 | `/run-experiment` 可读取的本地 conda 环境、GPU 状态和 smoke run 命令 | 当前声明本地 `deep-sim` CUDA smoke 可用，GPU 为 NVIDIA RTX A4500。 |
 | `.agents/` | 内部工具 | 本仓库随附的 agent skills 定义 | 给 Codex/ARIS 工作流使用，例如 `experiment-bridge`、`research-wiki`、`experiment-plan`。不是车辆动力学模型源码。 |
 | `.git/` | Git 元数据 | 提交历史、对象库、分支引用 | Git 内部目录，不需要手动修改。 |
 | `configs/` | 实验配置 | Teacher 数据集配置和每个 run 的 YAML 配置 | 定义实验入口参数，是复现实验的主要配置来源。 |
@@ -55,7 +55,7 @@ Teacher 数据集生成配置。
 | `R034-R036` | B5 跨车 / 跨配置泛化 scaffold。 |
 | `R037` | M8 final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | B6 target fine-tune 数据效率 scaffold。 |
-| `R100-R104` | PyTorch training smoke：data loader、forward/loss、tiny overfit、rollout、checkpoint save/load。当前已在 CPU 上通过。 |
+| `R100-R105` | PyTorch training smoke：data loader、forward/loss、tiny overfit、rollout、checkpoint save/load、CUDA-required forward/loss。当前已通过。 |
 
 运行方式统一使用 Miniforge/conda 环境：
 
@@ -76,7 +76,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `baselines.py` | physics-only baseline 和 black-box baseline scaffold 逻辑。 |
 | `hybrid.py` | base hybrid、组件 ablation、评估指标和 residual 审计的 scaffold 实现。 |
 | `ablation_report.py` | 汇总 R015-R033 组件 ablation 结果，生成 markdown/JSON 报告。 |
-| `torch_training.py` | PyTorch smoke runner，覆盖 R100-R104 的 data loader、loss、tiny overfit、rollout、checkpoint 检查。 |
+| `torch_training.py` | PyTorch smoke runner，覆盖 R100-R105 的 data loader、loss、tiny overfit、rollout、checkpoint 和 CUDA 检查。 |
 | `__init__.py` | Python package 标记。 |
 
 `experiments/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
@@ -91,7 +91,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `data.py` | canonical dataset 读取、episode array 解析、context vector 编码、可选 Torch dataset wrapper。 |
 | `torch_model.py` | 当前 final single skeleton：`E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0`。 |
 
-当前限制：这里只实现了 forward-pass skeleton。训练 loss、optimizer、rollout、checkpoint save/load 的 smoke 入口已经在 `experiments/torch_training.py` 中接入，并且 R100-R104 已在 CPU 上通过；正式 GPU 训练仍等待本地 CUDA/NVML 修复或远程 GPU 配置。
+当前限制：这里只实现了 forward-pass skeleton。训练 loss、optimizer、rollout、checkpoint save/load 的 smoke 入口已经在 `experiments/torch_training.py` 中接入，并且 R100-R105 已通过，其中 R105 已验证 CUDA forward/loss。
 
 ## Teacher Simulator 目录
 
@@ -227,6 +227,7 @@ Teacher simulator 的物理/工程子模块。
 | `R038-R045` | target fine-tune data-efficiency scaffold。 |
 | `R100` | PyTorch data loader smoke；当前已通过。 |
 | `R101-R104` | PyTorch forward/loss、tiny overfit、rollout、checkpoint smoke；当前已通过。 |
+| `R105` | PyTorch CUDA-required forward/loss smoke；当前已通过。 |
 
 注意：`runs/` 是运行结果目录，不是手写源码。重新运行实验可能覆盖或新增其中的文件。
 
@@ -260,7 +261,7 @@ conda run -n deep-sim python -m unittest
 | `DIRECTORY_GUIDE.md` | 当前文件，按目录解释仓库结构和用途。 |
 | `AGENTS.md` | `/run-experiment` 环境配置说明，记录本地 `deep-sim`、GPU blocker 和 smoke 命令。 |
 | `environment.yml` | Miniforge/conda 环境定义。实验活动应使用 `deep-sim` 环境。 |
-| `requirements.txt` | Python 依赖的轻量记录。包含当前训练 smoke 所需的 PyTorch 依赖声明。 |
+| `requirements.txt` | Python 依赖的轻量记录。PyTorch CUDA build 由 `environment.yml` 通过 conda 管理。 |
 | `.gitignore` | Git 忽略规则。 |
 
 ## 哪些目录应该重点维护

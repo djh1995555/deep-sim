@@ -363,6 +363,11 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
             "torch_checkpoint_smoke_passed",
             0,
         )
+    if run_id == "R105":
+        return "torch_forward_loss_smoke_passed", metrics.get(
+            "torch_forward_loss_smoke_passed",
+            0,
+        )
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -472,6 +477,8 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("torch_rollout_smoke_passed", 0) == 1
     if run_id == "R104":
         return metrics.get("torch_checkpoint_smoke_passed", 0) == 1
+    if run_id == "R105":
+        return metrics.get("torch_forward_loss_smoke_passed", 0) == 1
     return report["passed"]
 
 

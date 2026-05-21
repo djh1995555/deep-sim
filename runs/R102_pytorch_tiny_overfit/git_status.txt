@@ -1,11 +1,16 @@
- M configs/runs/R102.yaml
+ M AGENTS.md
+ M environment.yml
+ M experiments/run.py
  M experiments/torch_training.py
- M runs/R100_pytorch_data_loader_smoke/artifacts/torch_training_report.json
- M runs/R100_pytorch_data_loader_smoke/artifacts/validation_report.json
+ M requirements.txt
  M runs/R100_pytorch_data_loader_smoke/env.txt
  M runs/R100_pytorch_data_loader_smoke/git_status.txt
  M runs/R100_pytorch_data_loader_smoke/metrics.jsonl
  M runs/R100_pytorch_data_loader_smoke/summary.json
- M student_model/torch_model.py
-?? runs/R101_pytorch_forward_loss_smoke/
-?? runs/R102_pytorch_tiny_overfit/
+ M runs/R101_pytorch_forward_loss_smoke/env.txt
+ M runs/R101_pytorch_forward_loss_smoke/git_status.txt
+ M runs/R101_pytorch_forward_loss_smoke/metrics.jsonl
+ M runs/R101_pytorch_forward_loss_smoke/summary.json
+ M runs/R102_pytorch_tiny_overfit/env.txt
+?? configs/runs/R105.yaml
+?? runs/R105_pytorch_gpu_forward_smoke/
