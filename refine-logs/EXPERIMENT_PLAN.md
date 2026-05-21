@@ -115,11 +115,28 @@ physics-only:
   只使用 student 物理 backbone，不启用神经 residual / adapter
 
 black-box baseline:
-  使用相同 observable 输入训练 TCN/GRU/MLP 直接预测状态或状态增量
+  使用相同 student-visible 输入训练 TCN/GRU/MLP/N-BEATSx 直接预测状态、状态增量或未来 H 步轨迹
   不使用显式车辆/轮胎物理结构
 ```
 
 black-box baseline 的作用是判断 hybrid route 是否真的优于纯数据驱动模型；它不是最终部署候选。
+
+black-box baseline 至少包含：
+
+```text
+BB-GRU:
+  observable / control history -> direct state increment or autoregressive rollout
+
+BB-TCN:
+  causal TCN over observable / control history -> direct state increment or autoregressive rollout
+
+BB-NBEATSx:
+  N-BEATS style MLP block stack with exogenous variables
+  input: observable / control history + fixed_vehicle_context + nominal_physics_prior
+  output: direct multi-horizon state or state-increment forecast
+```
+
+`BB-NBEATSx` 只作为 black-box direct forecasting baseline；不输出 `Fz_i / μ_i / tire force` 等物理中间量，不参与 residual module 设计。
 
 ### 4.2 Base Hybrid 系统
 
@@ -359,7 +376,7 @@ held-out road 或 held-out vehicle/config 不明显退化
   - 测试集必须单独报告 seen vehicle/config、held-out road μ、held-out vehicle/config。
 - **系统**：
   - physics-only baseline；
-  - black-box TCN/GRU/MLP baseline；
+  - black-box TCN/GRU/MLP/N-BEATSx baseline；
   - `Base = E1 + T1 + F1 + S1 + M1a + V1 + U0`。
 - **base 组成**：
   - `E1`：small GRU shared encoder；
@@ -371,6 +388,7 @@ held-out road 或 held-out vehicle/config 不明显退化
   - `U0`：single model heteroscedastic uncertainty。
 - **设置**：
   - B3 不做多项 ablation，只验证 base 闭环可训练、可 rollout、优于 baseline；
+  - black-box baseline 同时报告 one-step/autoregressive predictor 和 direct multi-horizon predictor；`BB-NBEATSx` 归入 direct multi-horizon predictor；
   - 所有单项替换放到 B4。
 - **成功标准**：
   - 在 seen vehicle/config、held-out road μ、held-out vehicle/config 上分别报告 `1s/5s/10s` rollout RMSE；
@@ -610,7 +628,7 @@ held-out road 或 held-out vehicle/config 不明显退化
   - 测试集拆分报告 seen vehicle/config、held-out road μ、held-out vehicle/config、held-out vehicle + held-out road μ。
 - **系统**：
   - physics-only baseline；
-  - black-box baseline；
+  - black-box baseline，包含 B3 中表现最好的 TCN/GRU/MLP/N-BEATSx 纯数据驱动模型；
   - `Base = E1 + T1 + F1 + S1 + M1a + V1 + U0`；
   - B4 后冻结的 final single model。
 - **指标**：
@@ -877,7 +895,7 @@ MoE vs single-expert tire residual gap
 3. 做 B1：schema、teacher-only leakage、时间对齐、物理符号 sanity。
 4. 做 B2：sim-to-real proxy stress test。
 5. 实现 physics-only baseline。
-6. 实现 black-box baseline。
+6. 实现 black-box baseline：TCN/GRU/MLP direct predictor 和 N-BEATSx direct multi-horizon predictor。
 7. 实现 base：`E1 + T1 + F1 + S1 + M1a + V1 + U0`。
 8. 执行 B4 组件级 ablation：`E1/E2/E3`、`T0/T1/T1-no-proj/T2`、`F0/F1/F2`、`S0/S1`、`M0-fixed/M1a/M1b/M2-oracle`、`V0/V1/V1-large/V2-small`、`U0/U1`。
 9. 执行 B5：cross-vehicle / cross-config 泛化验证。
@@ -920,7 +938,7 @@ MoE vs single-expert tire residual gap
 - **单项 ablation 不可归因**
   - 固定 `Base = E1 + T1 + F1 + S1 + M1a + V1 + U0`，每次只替换 E/T/F/S/M/V/U 中的一个模块；共享同一个 base tire model、训练数据和模型容量，并从头训练各配置。
 - **black-box baseline 不公平**
-  - 保证输入信息一致；报告参数量、训练预算和 rollout horizon。
+  - 保证输入信息一致；报告参数量、训练预算和 rollout horizon；N-BEATSx 这类 direct multi-horizon baseline 需要与 autoregressive black-box 分开报告，避免把预测形式差异误认为模型结构收益。
 - **sim-to-real gap 未验证**
   - 第一版用 B2 分布扰动作为 proxy；有实车数据后必须增加 M11 real vehicle validation，不能只用仿真结果声称真实车落地。
 

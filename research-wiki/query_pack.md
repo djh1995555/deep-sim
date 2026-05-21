@@ -90,6 +90,6 @@ double-track 5-DOF body + 4-wheel rotational dynamics
 
 ## Failed / Downgraded Ideas
 
-- idea:006 ELIMINATED AS MAINLINE — End-to-end black-box dynamics. 仅保留为 baseline，不能作为生产主模型。
+- idea:006 ELIMINATED AS MAINLINE — End-to-end black-box dynamics. 仅保留为 baseline，不能作为生产主模型；baseline 包含 TCN/GRU/MLP autoregressive predictor 和 N-BEATSx direct multi-horizon predictor。
 - Direct full `Fz_i` NN output — rejected; use bounded residual + projection.
 - Global deterministic μ — rejected; use wheel-level distribution.

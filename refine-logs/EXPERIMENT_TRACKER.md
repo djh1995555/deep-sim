@@ -25,7 +25,7 @@
 | R004d | M3 | B2.2 proxy target windows | held-out vehicle/config target windows | MUST | TODO |
 | R004e | M3 | B2.3 proxy distribution sanity | perturbed DS1 target windows | MUST | TODO |
 | R005 | M4 | B3.1 physics-only baseline | student physics backbone only | MUST | TODO |
-| R006 | M4 | B3.2 black-box baseline | TCN / GRU / MLP direct predictor | MUST | TODO |
+| R006 | M4 | B3.2 black-box baseline | TCN / GRU / MLP direct predictor + N-BEATSx direct multi-horizon predictor | MUST | TODO |
 | R007 | M4 | B3.3 baseline fairness audit | matched inputs / budget / horizons | MUST | TODO |
 | R008 | M4 | B3.4 baseline rollout report | physics-only vs black-box | MUST | TODO |
 | R009 | M5 | B3.5 base hybrid training | E1 + T1 + F1 + S1 + M1a + V1 + U0 | MUST | TODO |
