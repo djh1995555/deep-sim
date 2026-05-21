@@ -4,23 +4,23 @@
 
 ## 顶层目录总览
 
-| 路径 | 类型 | 内容 | 用途 |
-| --- | --- | --- | --- |
-| `AGENTS.md` | 运行环境说明 | `/run-experiment` 可读取的本地 conda 环境、GPU 状态和 smoke run 命令 | 当前声明本地 `deep-sim` CUDA smoke 可用，GPU 为 NVIDIA RTX A4500。 |
-| `.agents/` | 内部工具 | 本仓库随附的 agent skills 定义 | 给 Codex/ARIS 工作流使用，例如 `experiment-bridge`、`research-wiki`、`experiment-plan`。不是车辆动力学模型源码。 |
-| `.git/` | Git 元数据 | 提交历史、对象库、分支引用 | Git 内部目录，不需要手动修改。 |
-| `EXPERIMENT_USAGE.md` | 手动实验使用指南 | 单 run、队列、矩阵报告、实车 CSV 适配、验证命令 | 给人工手动执行实验时使用，是最直接的操作入口。 |
-| `configs/` | 实验配置 | Teacher 数据集配置和每个 run 的 YAML 配置 | 定义实验入口参数，是复现实验的主要配置来源。 |
-| `data/` | 数据入口 | canonical dataset 真实目录 | 给 PyTorch 训练阶段提供稳定数据路径，当前保留 `ds1_v1` 和 `ds1_proxy_ft_v1` 两个数据集。 |
-| `experiments/` | 实验执行代码 | runner、sanity、baseline、hybrid、PyTorch smoke、ablation 报告代码 | `python -m experiments.run --config ...` 的执行入口和实验逻辑。 |
-| `idea-stage/` | 早期研究资料 | 文献调研、精读、idea 报告、最终设计决策 | 记录从需求到方案形成的早期推理链，偏研究探索。 |
-| `refine-logs/` | 方案与规格文档 | 实验计划、模块设计、数据设计、Teacher 设计、运行规格、结果总结 | 当前方案设计和实验执行状态的权威文档目录。 |
-| `reports/` | 实验报告 | B0/B3/B4 阶段报告、PyTorch 开发报告、矩阵报告和 ablation 汇总 JSON | 面向阅读的实验阶段输出，通常由 run 或汇总脚本生成/更新。 |
-| `research-wiki/` | 研究知识库 | 论文卡片、idea 卡片、claim/gap/query 记录 | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。 |
-| `runs/` | 运行时产物目录 | 当前已彻底删除，重新执行实验时会自动创建 | 只用于保存新 run 的输出；canonical 数据不再放在 `runs/` 下。 |
-| `student_model/` | PyTorch 模型源码 | Student model 的数据接口、常量、E1/E2/E3 encoder、residual heads、adapter trainability | 正式训练阶段的模型实现入口；训练由 `experiments/torch_training.py` 调度。 |
-| `teacher_simulator/` | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现 | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。 |
-| `tests/` | 测试代码 | teacher simulator、canonical data、student model、PyTorch runner 测试 | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。 |
+| 路径                    | 类型                   | 内容                                                                          | 用途                                                                                       |
+| --------------------- | -------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `AGENTS.md`           | 运行环境说明               | `/run-experiment` 可读取的本地 conda 环境、GPU 状态和 smoke run 命令                      | 当前声明本地 `deep-sim` CUDA smoke 可用，GPU 为 NVIDIA RTX A4500。                                  |
+| `.agents/`            | 内部工具                 | 本仓库随附的 agent skills 定义                                                      | 给 Codex/ARIS 工作流使用，例如 `experiment-bridge`、`research-wiki`、`experiment-plan`。不是车辆动力学模型源码。 |
+| `.git/`               | Git 元数据              | 提交历史、对象库、分支引用                                                               | Git 内部目录，不需要手动修改。                                                                        |
+| `EXPERIMENT_USAGE.md` | 手动实验使用指南             | 单 run、队列、矩阵报告、实车 CSV 适配、验证命令                                                | 给人工手动执行实验时使用，是最直接的操作入口。                                                                  |
+| `configs/`            | 实验配置                 | Teacher 数据集配置和每个 run 的 YAML 配置                                              | 定义实验入口参数，是复现实验的主要配置来源。                                                                   |
+| `data/`               | 数据入口                 | canonical dataset 真实目录                                                      | 给 PyTorch 训练阶段提供稳定数据路径，当前保留 `ds1_v1` 和 `ds1_proxy_ft_v1` 两个数据集。                          |
+| `experiments/`        | 实验执行代码               | runner、sanity、baseline、hybrid、PyTorch smoke、ablation 报告代码                   | `python -m experiments.run --config ...` 的执行入口和实验逻辑。                                     |
+| `idea-stage/`         | 早期研究资料               | 文献调研、精读、idea 报告、最终设计决策                                                      | 记录从需求到方案形成的早期推理链，偏研究探索。                                                                  |
+| `refine-logs/`        | 方案与规格文档              | 实验计划、模块设计、数据设计、Teacher 设计、运行规格、结果总结                                         | 当前方案设计和实验执行状态的权威文档目录。                                                                    |
+| `reports/`            | 实验报告                 | B0/B3/B4 阶段报告、PyTorch 开发报告、矩阵报告和 ablation 汇总 JSON                           | 面向阅读的实验阶段输出，通常由 run 或汇总脚本生成/更新。                                                          |
+| `research-wiki/`      | 研究知识库                | 论文卡片、idea 卡片、claim/gap/query 记录                                             | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。                                                              |
+| `runs/`               | 运行时产物目录              | 当前不存在，重新执行实验时由 runner 自动创建                                                     | 只用于保存新 run 的输出；canonical 数据已经迁移到 `data/`。                                               |
+| `student_model/`      | PyTorch 模型源码         | Student model 的数据接口、常量、E1/E2/E3 encoder、residual heads、adapter trainability | 正式训练阶段的模型实现入口；训练由 `experiments/torch_training.py` 调度。                                    |
+| `teacher_simulator/`  | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现                                         | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。                         |
+| `tests/`              | 测试代码                 | teacher simulator、canonical data、student model、PyTorch runner 测试            | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。                                                              |
 
 ## 配置目录
 
@@ -41,7 +41,7 @@ Teacher 数据集生成配置。
 
 ### `configs/runs/`
 
-每个实验 run 的入口配置。命名和 `runs/` 下的输出目录一一对应。
+每个实验 run 的入口配置。配置中的 `logging.output_dir` 通常指向 `runs/Rxxx_...`；`runs/` 当前不在仓库中，执行实验时会自动创建。
 
 当前范围：
 
@@ -58,8 +58,8 @@ Teacher 数据集生成配置。
 | `R037` | M8 final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | B6 target fine-tune 数据效率 scaffold。 |
 | `R046-R047` | DS2 extreme dataset smoke 和 T3-MoE tire residual forward smoke。 |
-| `R100-R115` | PyTorch training smoke/dev runs：data loader、forward/loss、tiny overfit、rollout、checkpoint、CUDA gates、one-step train、resume、black-box baseline、小规模 base train、公平对比、组件变体、fine-tune adapter、K=3 ensemble。当前已通过。 |
-| `configs/torch_matrix/` | 由 `experiments.torch_config_matrix` 生成的完整 PyTorch ablation/fine-tune 配置矩阵：`R200-R216` 和 `R300-R334`。当前已生成，等待队列运行。 |
+| `R100-R115` | PyTorch training smoke/dev runs：data loader、forward/loss、tiny overfit、rollout、checkpoint、CUDA gates、one-step train、resume、black-box baseline、小规模 base train、公平对比、组件变体、fine-tune adapter、K=3 ensemble。历史上已通过，产物已清理。 |
+| `configs/torch_matrix/` | 由 `experiments.torch_config_matrix` 生成的完整 PyTorch ablation/fine-tune 配置矩阵：`R200-R216` 和 `R300-R334`。配置已生成，等待队列运行。 |
 
 运行方式统一使用 Miniforge/conda 环境：
 
@@ -68,6 +68,37 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 ```
 
 完整手动操作流程见根目录 `EXPERIMENT_USAGE.md`。
+
+## 数据目录
+
+### `data/`
+
+canonical 数据集入口。这里保存训练和测试直接读取的数据，不再通过软链接指向 `runs/`。
+
+| 路径 | 内容 | 用途 |
+| --- | --- | --- |
+| `data/README.md` | 数据入口说明和验证命令 | 说明当前 canonical dataset 的来源和使用方式。 |
+| `data/ds1_v1/` | DS1 scaffold 数据集，120 个 episode | base training、held-out road / vehicle eval、PyTorch smoke/dev run 的默认数据源。 |
+| `data/ds1_proxy_ft_v1/` | DS1 proxy fine-tune 数据集，135 个 episode | FT0-FT6 target time-window / data-efficiency fine-tune 实验的数据源。 |
+
+每个数据集目录通常包含：
+
+| 文件/目录 | 用途 |
+| --- | --- |
+| `manifest.json` | 数据集索引，列出 episode 文件和 metadata。 |
+| `split_manifest.json` | train / validation / test / held-out / fine-tune 等 split 定义。 |
+| `episodes/*.npz` | 数值数组，供训练和评估读取。 |
+| `episodes/*.json` | episode sidecar metadata。 |
+| `scenario_matrix.json` | 生成该数据集使用的工况组合。 |
+| `dataset_qa_report.json`、`scenario_coverage_report.json` | 数据质量和覆盖率报告。 |
+
+验证当前数据是否可读：
+
+```bash
+conda run -n deep-sim python -m experiments.materialize_data
+```
+
+注意：`data/` 是稳定输入目录；新实验的输出不要写进这里，应写入 `runs/`。
 
 ## 实验代码目录
 
@@ -102,7 +133,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `data.py` | canonical dataset 读取、episode array 解析、context vector 编码、可选 Torch dataset wrapper。 |
 | `torch_model.py` | 当前 final single skeleton：`E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0`。 |
 
-当前限制：这里仍是小规模训练开发链路，不是完整训练结论。训练 loss、optimizer、scheduler、early stopping、best checkpoint、rollout、checkpoint save/load、resume、direct black-box baseline、fair comparison、fine-tune adapter 和 ensemble 已在 `experiments/torch_training.py` 中接入，并且 R100-R115 已通过。
+当前限制：这里仍是小规模训练开发链路，不是完整训练结论。训练 loss、optimizer、scheduler、early stopping、best checkpoint、rollout、checkpoint save/load、resume、direct black-box baseline、fair comparison、fine-tune adapter 和 ensemble 已在 `experiments/torch_training.py` 中接入；R100-R115 历史上已通过，但运行产物已清理，需要时按配置重新执行。
 
 ## Teacher Simulator 目录
 
@@ -215,7 +246,7 @@ Teacher simulator 的物理/工程子模块。
 | `B6_fine_tune_summary.json` | B6 汇总的机器可读 JSON。 |
 | `B7_extreme_moe.md` | DS2 extreme 数据和 T3-MoE tire residual 开发 smoke 报告。 |
 | `PYTORCH_DEV_REPORT.md/json` | R112-R115 PyTorch 开发 gate 汇总。 |
-| `PYTORCH_MATRIX_REPORT.md/json` | R200-R216 ablation 和 R300-R334 fine-tune 矩阵状态/结果汇总。当前矩阵 run 仍是 pending。 |
+| `PYTORCH_MATRIX_REPORT.md/json` | R200-R216 ablation 和 R300-R334 fine-tune 矩阵状态/结果汇总。矩阵 run 当前仍是 pending。 |
 
 ### `runs/`
 
@@ -252,13 +283,13 @@ canonical 数据已经移动到 `data/` 下，不再通过 symlink 指向 `runs/
 | `R034-R036` | cross-vehicle / cross-config generalization scaffold。 |
 | `R037` | final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | target fine-tune data-efficiency scaffold。 |
-| `R046-R047` | DS2 extreme dataset smoke 和 T3-MoE tire residual forward smoke；当前已通过。 |
-| `R100` | PyTorch data loader smoke；当前已通过。 |
-| `R101-R104` | PyTorch forward/loss、tiny overfit、rollout、checkpoint smoke；当前已通过。 |
-| `R105` | PyTorch CUDA-required forward/loss smoke；当前已通过。 |
-| `R106` | PyTorch CUDA-required tiny-overfit smoke；当前已通过。 |
-| `R107-R111` | PyTorch 小规模训练、rollout eval、resume/eval-only、black-box baseline 和 base hybrid small training；当前已通过。R111 已通过队列触发的 post-rollout smoke。 |
-| `R112-R115` | PyTorch fair comparison、组件变体、fine-tune adapter 和 K=3 ensemble 开发 gate；当前已通过。 |
+| `R046-R047` | DS2 extreme dataset smoke 和 T3-MoE tire residual forward smoke；历史上已通过，产物已清理。 |
+| `R100` | PyTorch data loader smoke；历史上已通过，产物已清理。 |
+| `R101-R104` | PyTorch forward/loss、tiny overfit、rollout、checkpoint smoke；历史上已通过，产物已清理。 |
+| `R105` | PyTorch CUDA-required forward/loss smoke；历史上已通过，产物已清理。 |
+| `R106` | PyTorch CUDA-required tiny-overfit smoke；历史上已通过，产物已清理。 |
+| `R107-R111` | PyTorch 小规模训练、rollout eval、resume/eval-only、black-box baseline 和 base hybrid small training；历史上已通过，产物已清理。 |
+| `R112-R115` | PyTorch fair comparison、组件变体、fine-tune adapter 和 K=3 ensemble 开发 gate；历史上已通过，产物已清理。 |
 | `R200-R216` | 真实可训练 PyTorch 单因素 ablation 矩阵；配置已生成，运行状态 pending。 |
 | `R300-R334` | FT0-FT6 × FTD1-FTD5 fine-tune 数据效率矩阵；配置已生成，运行状态 pending。 |
 
