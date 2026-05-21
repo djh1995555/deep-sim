@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "held_out_vehicle_config_present": true,
+    "perturbation_profiles_present": true,
+    "target_roles_present": true,
+    "target_windows_unique": true
+  },
+  "held_out_vehicle_config_count": 1,
+  "passed": true,
+  "perturbation_profile_counts": {
+    "proxy_profile_00": 27,
+    "proxy_profile_01": 27,
+    "proxy_profile_02": 27
+  },
+  "target_window_count": 81,
+  "target_window_overlap_count": 0,
+  "target_window_role_counts": {
+    "target_test": 27,
+    "target_train": 27,
+    "target_validation": 27
+  }
+}

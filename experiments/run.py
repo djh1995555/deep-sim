@@ -246,6 +246,12 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "tiny_learnability_passed", metrics.get("tiny_learnability_passed", 0)
     if run_id == "R004b":
         return "physics_rollout_smoke_passed", metrics.get("physics_rollout_smoke_passed", 0)
+    if run_id == "R004c":
+        return "proxy_profiles_passed", metrics.get("proxy_profiles_passed", 0)
+    if run_id == "R004d":
+        return "proxy_target_windows_passed", metrics.get("proxy_target_windows_passed", 0)
+    if run_id == "R004e":
+        return "proxy_distribution_passed", metrics.get("proxy_distribution_passed", 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -294,6 +300,22 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("tiny_learnability_passed", 0) == 1
     if run_id == "R004b":
         return metrics.get("physics_rollout_smoke_passed", 0) == 1
+    if run_id == "R004c":
+        return (
+            metrics.get("proxy_profiles_passed", 0) == 1
+            and metrics.get("proxy_profile_count", 0) >= 3
+        )
+    if run_id == "R004d":
+        return (
+            metrics.get("proxy_target_windows_passed", 0) == 1
+            and metrics.get("proxy_target_window_count", 0) >= 20
+            and metrics.get("proxy_target_window_overlap_count", 1) == 0
+        )
+    if run_id == "R004e":
+        return (
+            metrics.get("proxy_distribution_passed", 0) == 1
+            and metrics.get("proxy_distribution_shift_score", 0.0) >= 0.015
+        )
     return report["passed"]
 
 
@@ -315,6 +337,49 @@ def _augment_report_metrics(dataset_dir: str, report: Dict[str, Any]) -> None:
         report["metrics"]["dataset_qa_passed"] = int(bool(qa.get("passed")))
         report["metrics"]["qa_vehicle_config_count"] = qa.get("vehicle_config_count", 0)
         report["metrics"]["qa_target_window_count"] = qa.get("target_window_count", 0)
+    profile_path = os.path.join(dataset_dir, "perturbation_profiles.json")
+    if os.path.exists(profile_path):
+        with open(profile_path, "r", encoding="utf-8") as handle:
+            profiles = json.load(handle)
+        mins = [profile.get("min_abs_magnitude", 0.0) for profile in profiles]
+        maxs = [profile.get("max_abs_magnitude", 0.0) for profile in profiles]
+        report["metrics"]["proxy_profile_count"] = len(profiles)
+        report["metrics"]["proxy_profile_min_abs_magnitude"] = min(mins) if mins else 0.0
+        report["metrics"]["proxy_profile_max_abs_magnitude"] = max(maxs) if maxs else 0.0
+        report["metrics"]["proxy_profiles_passed"] = int(
+            bool(profiles)
+            and min(mins) >= 0.05 - 1e-9
+            and max(maxs) <= 0.15 + 1e-9
+        )
+    target_path = os.path.join(dataset_dir, "proxy_target_windows.json")
+    if os.path.exists(target_path):
+        with open(target_path, "r", encoding="utf-8") as handle:
+            target_report = json.load(handle)
+        report["metrics"]["proxy_target_windows_passed"] = int(
+            bool(target_report.get("passed"))
+        )
+        report["metrics"]["proxy_target_window_count"] = target_report.get(
+            "target_window_count", 0
+        )
+        report["metrics"]["proxy_target_window_overlap_count"] = target_report.get(
+            "target_window_overlap_count", 0
+        )
+        report["metrics"]["proxy_held_out_vehicle_config_count"] = target_report.get(
+            "held_out_vehicle_config_count", 0
+        )
+    distribution_path = os.path.join(dataset_dir, "proxy_distribution_report.json")
+    if os.path.exists(distribution_path):
+        with open(distribution_path, "r", encoding="utf-8") as handle:
+            distribution = json.load(handle)
+        report["metrics"]["proxy_distribution_passed"] = int(
+            bool(distribution.get("passed"))
+        )
+        report["metrics"]["proxy_distribution_shift_score"] = distribution.get(
+            "proxy_distribution_shift_score", 0.0
+        )
+        report["metrics"]["proxy_distribution_paired_episode_count"] = distribution.get(
+            "paired_episode_count", 0
+        )
 
 
 def _write_stage_a_report() -> None:
@@ -335,6 +400,9 @@ def _write_stage_a_report() -> None:
         "runs/R004_derived_physical_quantities",
         "runs/R004a_tiny_learnability",
         "runs/R004b_physics_rollout_smoke",
+        "runs/R004c_proxy_perturbation_profiles",
+        "runs/R004d_proxy_target_windows",
+        "runs/R004e_proxy_distribution_sanity",
     ]
     rows = []
     for run_dir in run_dirs:

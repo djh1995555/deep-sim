@@ -320,6 +320,8 @@ class TeacherSimulator:
             "target_window_id": scenario.split_metadata.target_window_id,
             "fine_tune_data_bucket": scenario.split_metadata.fine_tune_data_bucket,
             "validation_case": scenario.validation_case,
+            "perturbation_profile_id": scenario.perturbation_profile_id,
+            "target_window_role": scenario.target_window_role,
         }
 
     @staticmethod

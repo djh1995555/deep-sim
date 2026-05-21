@@ -1,0 +1,30 @@
+{
+  "covers_cg_single": true,
+  "covers_cg_split": true,
+  "covers_cg_transition": true,
+  "full_group_counts": {
+    "CG-SINGLE": 100,
+    "CG-SPLIT": 300,
+    "CG-TRANSITION": 300
+  },
+  "full_matrix_count": 700,
+  "sampled_episode_count": 81,
+  "sampled_group_counts": {
+    "CG-SINGLE": 27,
+    "CG-SPLIT": 27,
+    "CG-TRANSITION": 27
+  },
+  "sampled_lateral_factor_counts": {
+    "Y0": 14,
+    "Y1": 16,
+    "Y2": 23,
+    "Y3": 13,
+    "Y4": 15
+  },
+  "sampled_longitudinal_factor_counts": {
+    "L0": 27,
+    "L1": 27,
+    "L2": 27
+  },
+  "sampled_road_factor_count": 25
+}

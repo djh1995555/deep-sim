@@ -339,6 +339,20 @@ class TeacherEpisodeValidator:
                 if ep["metadata"].get("fine_tune_data_bucket")
             )
         )
+        perturbation_profiles = sorted(
+            set(
+                ep["metadata"].get("perturbation_profile_id")
+                for ep in episodes
+                if ep["metadata"].get("perturbation_profile_id")
+            )
+        )
+        target_window_roles = sorted(
+            set(
+                ep["metadata"].get("target_window_role")
+                for ep in episodes
+                if ep["metadata"].get("target_window_role")
+            )
+        )
         return {
             "road_types": road_types,
             "validation_cases": cases,
@@ -363,6 +377,12 @@ class TeacherEpisodeValidator:
             "has_test_window": int("test-window" in split_roles),
             "has_fine_tune_windows": int(len(target_windows) > 0),
             "fine_tune_bucket_count": len(fine_tune_buckets),
+            "perturbation_profile_count": len(perturbation_profiles),
+            "target_window_roles": target_window_roles,
+            "target_window_role_count": len(target_window_roles),
+            "has_proxy_target_train": int("target_train" in target_window_roles),
+            "has_proxy_target_validation": int("target_validation" in target_window_roles),
+            "has_proxy_target_test": int("target_test" in target_window_roles),
         }
 
 

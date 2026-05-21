@@ -17,3 +17,6 @@
 | R004 | success | derived_quantities_passed | 1 | True | experiment gate passed for this run |
 | R004a | success | tiny_learnability_passed | 1 | True | experiment gate passed for this run |
 | R004b | success | physics_rollout_smoke_passed | 1 | True | experiment gate passed for this run |
+| R004c | success | proxy_profiles_passed | 1 | True | experiment gate passed for this run |
+| R004d | success | proxy_target_windows_passed | 1 | True | experiment gate passed for this run |
+| R004e | success | proxy_distribution_passed | 1 | True | experiment gate passed for this run |

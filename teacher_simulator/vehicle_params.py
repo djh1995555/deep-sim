@@ -110,6 +110,8 @@ def default_vehicle_config() -> VehicleConfig:
         "max_drive_torque_per_wheel": 1450.0,
         "max_brake_torque_per_wheel": 3400.0,
         "brake_bias_front": 0.62,
+        "suspension_longitudinal_transfer_scale": 1.0,
+        "suspension_lateral_transfer_scale": 1.0,
         "sensor_bias": {
             "vx": 0.02,
             "vy": -0.01,

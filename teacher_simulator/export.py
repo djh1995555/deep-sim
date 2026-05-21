@@ -70,6 +70,8 @@ def export_dataset(
                 ],
                 "target_window_id": metadata.get("target_window_id"),
                 "fine_tune_data_bucket": metadata.get("fine_tune_data_bucket"),
+                "perturbation_profile_id": metadata.get("perturbation_profile_id"),
+                "target_window_role": metadata.get("target_window_role"),
                 "validation_case": metadata.get("validation_case"),
                 "road_type": metadata.get("road_type"),
             }

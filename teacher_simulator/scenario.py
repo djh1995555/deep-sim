@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -141,6 +142,8 @@ class ScenarioConfig:
     longitudinal_factor_id: str = ""
     lateral_factor_id: str = ""
     full_matrix_index: Optional[int] = None
+    perturbation_profile_id: Optional[str] = None
+    target_window_role: Optional[str] = None
 
 
 def _scenario(
@@ -352,6 +355,145 @@ def make_ds1_scenarios(
     return scenarios
 
 
+def make_proxy_perturbation_profiles(
+    seed: int = 23,
+    profile_count: int = 3,
+    min_magnitude: float = 0.05,
+    max_magnitude: float = 0.15,
+) -> List[Dict[str, Any]]:
+    rng = np.random.default_rng(seed + 7919)
+    knobs = [
+        "mass",
+        "inertia",
+        "cg",
+        "tire",
+        "suspension",
+        "sensor",
+        "actuator",
+    ]
+    profiles: List[Dict[str, Any]] = []
+    for profile_idx in range(profile_count):
+        magnitudes: Dict[str, float] = {}
+        scales: Dict[str, float] = {}
+        signs: Dict[str, int] = {}
+        for knob in knobs:
+            magnitude = float(rng.uniform(min_magnitude, max_magnitude))
+            sign = -1 if float(rng.random()) < 0.5 else 1
+            magnitudes[knob] = magnitude
+            signs[knob] = sign
+            scales[knob] = 1.0 + sign * magnitude
+        profiles.append(
+            {
+                "profile_id": "proxy_profile_%02d" % profile_idx,
+                "seed": int(seed + profile_idx),
+                "min_requested_magnitude": float(min_magnitude),
+                "max_requested_magnitude": float(max_magnitude),
+                "magnitudes": magnitudes,
+                "signs": signs,
+                "scales": scales,
+                "max_abs_magnitude": max(magnitudes.values()),
+                "min_abs_magnitude": min(magnitudes.values()),
+                "description": "teacher-only sim-to-real proxy offsets",
+            }
+        )
+    return profiles
+
+
+def make_ds1_proxy_scenarios(
+    seed: int = 23,
+    vehicle_count: int = 4,
+    profile_count: int = 3,
+    samples_per_group_per_role: int = 3,
+    min_magnitude: float = 0.05,
+    max_magnitude: float = 0.15,
+    perturb: bool = True,
+) -> List[ScenarioConfig]:
+    profiles = make_proxy_perturbation_profiles(
+        seed=seed,
+        profile_count=profile_count,
+        min_magnitude=min_magnitude,
+        max_magnitude=max_magnitude,
+    )
+    return make_ds1_proxy_scenarios_from_profiles(
+        profiles=profiles,
+        seed=seed,
+        vehicle_count=vehicle_count,
+        samples_per_group_per_role=samples_per_group_per_role,
+        perturb=perturb,
+    )
+
+
+def make_ds1_proxy_scenarios_from_profiles(
+    profiles: List[Dict[str, Any]],
+    seed: int = 23,
+    vehicle_count: int = 4,
+    samples_per_group_per_role: int = 3,
+    perturb: bool = True,
+) -> List[ScenarioConfig]:
+    matrix = make_ds1_scenario_matrix()
+    target_vehicle = make_vehicle_config_variants(vehicle_count)[-1]
+    by_group: Dict[str, List[Tuple[int, Dict[str, str]]]] = {}
+    for idx, item in enumerate(matrix):
+        by_group.setdefault(item["scenario_group"], []).append((idx, item))
+
+    roles = [
+        ("target_train", "fine-tune"),
+        ("target_validation", "validation"),
+        ("target_test", "test-window"),
+    ]
+    scenarios: List[ScenarioConfig] = []
+    for profile_idx, profile in enumerate(profiles):
+        vehicle = (
+            _apply_proxy_perturbation(target_vehicle, profile)
+            if perturb
+            else deepcopy(target_vehicle)
+        )
+        for role_idx, (target_role, split_role) in enumerate(roles):
+            for group_idx, (group, group_items) in enumerate(sorted(by_group.items())):
+                selected = _balanced_group_sample(
+                    group_items,
+                    samples_per_group_per_role,
+                    seed
+                    + profile_idx * 10000
+                    + role_idx * 1000
+                    + group_idx * 100,
+                )
+                for local_idx, (matrix_idx, item) in enumerate(selected):
+                    target_window_id = "tw_%s_%s_%s_%s_%02d" % (
+                        vehicle.vehicle_config_id,
+                        profile["profile_id"],
+                        target_role,
+                        group.lower().replace("-", "_"),
+                        local_idx,
+                    )
+                    fine_tune_bucket = (
+                        _fine_tune_bucket(local_idx)
+                        if target_role == "target_train"
+                        else None
+                    )
+                    scenario = _ds1_scenario_from_matrix_item(
+                        item,
+                        vehicle,
+                        split_role,
+                        target_window_id,
+                        fine_tune_bucket,
+                        seed + matrix_idx + profile_idx * 10000 + role_idx * 1000,
+                        matrix_idx,
+                        perturbation_profile_id=profile["profile_id"],
+                        target_window_role=target_role,
+                    )
+                    scenario.teacher_feature_flags.update(
+                        {
+                            "sim_to_real_proxy": True,
+                            "perturbation_profile_id": profile["profile_id"],
+                            "target_window_role": target_role,
+                            "proxy_perturbed": perturb,
+                        }
+                    )
+                    scenarios.append(scenario)
+    return scenarios
+
+
 def _balanced_group_sample(
     group_items: List[Tuple[int, Dict[str, str]]],
     count: int,
@@ -395,6 +537,8 @@ def _ds1_scenario_from_matrix_item(
     fine_tune_bucket: Optional[str],
     seed: int,
     matrix_idx: int,
+    perturbation_profile_id: Optional[str] = None,
+    target_window_role: Optional[str] = None,
 ) -> ScenarioConfig:
     road_id = item["road_factor_id"]
     if item["scenario_group"] == "CG-SINGLE":
@@ -458,7 +602,50 @@ def _ds1_scenario_from_matrix_item(
         longitudinal_factor_id=item["longitudinal_factor_id"],
         lateral_factor_id=item["lateral_factor_id"],
         full_matrix_index=matrix_idx,
+        perturbation_profile_id=perturbation_profile_id,
+        target_window_role=target_window_role,
     )
+
+
+def _apply_proxy_perturbation(
+    vehicle: VehicleConfig,
+    profile: Dict[str, Any],
+) -> VehicleConfig:
+    perturbed = deepcopy(vehicle)
+    hidden = perturbed.hidden_params
+    scales = profile["scales"]
+    signs = profile["signs"]
+    magnitudes = profile["magnitudes"]
+
+    hidden["mass_true"] *= scales["mass"]
+    for key in ["Ix_true", "Iy_true", "Iz_true"]:
+        hidden[key] *= scales["inertia"]
+    hidden["cg_x_true"] *= scales["cg"]
+    hidden["cg_z_true"] *= 1.0 + signs["cg"] * min(magnitudes["cg"], 0.10)
+
+    hidden["cornering_stiffness_front"] *= scales["tire"]
+    hidden["cornering_stiffness_rear"] *= scales["tire"]
+    hidden["suspension_longitudinal_transfer_scale"] = scales["suspension"]
+    hidden["suspension_lateral_transfer_scale"] = scales["suspension"]
+
+    hidden["steering_tau_true"] *= scales["actuator"]
+    hidden["drive_tau_true"] *= scales["actuator"]
+    hidden["brake_tau_true"] *= scales["actuator"]
+
+    hidden["sensor_bias"] = {
+        key: float(value) * scales["sensor"]
+        for key, value in hidden["sensor_bias"].items()
+    }
+    hidden["sensor_noise_std"] = {
+        key: float(value) * (1.0 + 0.5 * signs["sensor"] * magnitudes["sensor"])
+        for key, value in hidden["sensor_noise_std"].items()
+    }
+    hidden["proxy_perturbation_profile"] = profile
+    hidden["proxy_base_vehicle_config_id"] = vehicle.vehicle_config_id
+    hidden["proxy_base_vehicle_id"] = vehicle.vehicle_id
+    perturbed.vehicle_id = "%s_%s" % (vehicle.vehicle_id, profile["profile_id"])
+    perturbed.vehicle_config_id = vehicle.vehicle_config_id
+    return perturbed
 
 
 def _validation_case(item: Dict[str, str]) -> str:

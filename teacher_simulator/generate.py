@@ -3,12 +3,16 @@ import json
 import os
 from typing import Any, Dict, List
 
+import numpy as np
+
 from teacher_simulator.config import load_teacher_config, load_yaml
 from teacher_simulator.export import export_dataset
 from teacher_simulator.scenario import (
     make_ds0_scenarios,
+    make_ds1_proxy_scenarios_from_profiles,
     make_ds1_scenario_matrix,
     make_ds1_scenarios,
+    make_proxy_perturbation_profiles,
 )
 from teacher_simulator.simulator import TeacherSimulator
 
@@ -31,9 +35,39 @@ def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:
                 ds1_cfg.get("samples_per_group_per_vehicle", 10)
             ),
         )
+    elif scenario_set == "ds1_proxy":
+        matrix = make_ds1_scenario_matrix()
+        proxy_cfg = raw.get("proxy", {})
+        profiles = make_proxy_perturbation_profiles(
+            seed=cfg.seed,
+            profile_count=int(proxy_cfg.get("profile_count", 3)),
+            min_magnitude=float(proxy_cfg.get("min_magnitude", 0.05)),
+            max_magnitude=float(proxy_cfg.get("max_magnitude", 0.15)),
+        )
+        scenarios = make_ds1_proxy_scenarios_from_profiles(
+            profiles=profiles,
+            seed=cfg.seed,
+            vehicle_count=int(ds1_cfg.get("vehicle_count", 4)),
+            samples_per_group_per_role=int(
+                proxy_cfg.get("samples_per_group_per_role", 3)
+            ),
+            perturb=True,
+        )
+        reference_scenarios = make_ds1_proxy_scenarios_from_profiles(
+            profiles=profiles,
+            seed=cfg.seed,
+            vehicle_count=int(ds1_cfg.get("vehicle_count", 4)),
+            samples_per_group_per_role=int(
+                proxy_cfg.get("samples_per_group_per_role", 3)
+            ),
+            perturb=False,
+        )
     else:
         raise ValueError("unsupported scenario_set=%s" % scenario_set)
     episodes = [sim.run_episode(scenario) for scenario in scenarios]
+    reference_episodes = []
+    if scenario_set == "ds1_proxy":
+        reference_episodes = [sim.run_episode(scenario) for scenario in reference_scenarios]
     manifest = export_dataset(
         episodes,
         out_dir,
@@ -41,7 +75,7 @@ def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:
         schema_version=cfg.schema_version,
         teacher_model_version=cfg.teacher_model_version,
     )
-    if scenario_set == "ds1":
+    if scenario_set in ["ds1", "ds1_proxy"]:
         _write_json(os.path.join(out_dir, "scenario_matrix.json"), matrix)
         _write_json(os.path.join(out_dir, "split_manifest.json"), _split_manifest(manifest))
         _write_json(
@@ -51,6 +85,16 @@ def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:
         _write_json(
             os.path.join(out_dir, "dataset_qa_report.json"),
             _dataset_qa_report(matrix, manifest),
+        )
+    if scenario_set == "ds1_proxy":
+        _write_json(os.path.join(out_dir, "perturbation_profiles.json"), profiles)
+        _write_json(
+            os.path.join(out_dir, "proxy_target_windows.json"),
+            _proxy_target_window_report(manifest),
+        )
+        _write_json(
+            os.path.join(out_dir, "proxy_distribution_report.json"),
+            _proxy_distribution_report(profiles, episodes, reference_episodes),
         )
     with open(os.path.join(out_dir, "generation_summary.json"), "w", encoding="utf-8") as handle:
         json.dump(
@@ -158,6 +202,109 @@ def _dataset_qa_report(
         "split_roles": split_roles,
         "target_window_count": len(target_windows),
         "fine_tune_buckets": fine_tune_buckets,
+    }
+
+
+def _proxy_target_window_report(manifest: Dict[str, Any]) -> Dict[str, Any]:
+    by_window: Dict[str, Dict[str, Any]] = {}
+    by_profile: Dict[str, int] = {}
+    by_role: Dict[str, int] = {}
+    held_out_configs = set()
+    for item in manifest["episodes"]:
+        profile_id = item.get("perturbation_profile_id")
+        target_role = item.get("target_window_role")
+        target_window = item.get("target_window_id")
+        if profile_id:
+            by_profile[profile_id] = by_profile.get(profile_id, 0) + 1
+        if target_role:
+            by_role[target_role] = by_role.get(target_role, 0) + 1
+        if item.get("split_role") in ["fine-tune", "validation", "test-window"]:
+            held_out_configs.add(item.get("vehicle_config_id"))
+        if target_window:
+            by_window.setdefault(
+                target_window,
+                {
+                    "episode_ids": [],
+                    "roles": set(),
+                    "split_roles": set(),
+                    "profile_ids": set(),
+                },
+            )
+            by_window[target_window]["episode_ids"].append(item["episode_id"])
+            by_window[target_window]["roles"].add(target_role)
+            by_window[target_window]["split_roles"].add(item.get("split_role"))
+            by_window[target_window]["profile_ids"].add(profile_id)
+
+    overlapping_windows = {
+        window_id: data
+        for window_id, data in by_window.items()
+        if len(data["roles"]) > 1 or len(data["split_roles"]) > 1
+    }
+    required_roles = {"target_train", "target_validation", "target_test"}
+    checks = {
+        "target_roles_present": required_roles.issubset(set(by_role.keys())),
+        "target_windows_unique": len(overlapping_windows) == 0,
+        "perturbation_profiles_present": len(by_profile) >= 1,
+        "held_out_vehicle_config_present": len(held_out_configs) >= 1,
+    }
+    return {
+        "passed": all(checks.values()),
+        "checks": checks,
+        "target_window_count": len(by_window),
+        "target_window_role_counts": by_role,
+        "perturbation_profile_counts": by_profile,
+        "held_out_vehicle_config_count": len(held_out_configs),
+        "target_window_overlap_count": len(overlapping_windows),
+    }
+
+
+def _proxy_distribution_report(
+    profiles: List[Dict[str, Any]],
+    episodes: List[Dict[str, Any]],
+    reference_episodes: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    channels = ["vx", "vy", "r", "roll", "pitch", "omega_fl", "omega_fr", "omega_rl", "omega_rr"]
+    shift_scores = []
+    by_profile: Dict[str, List[float]] = {}
+    for episode, reference in zip(episodes, reference_episodes):
+        score_parts = []
+        for channel in channels:
+            obs = np.asarray(episode["time_series_observable"][channel], dtype=np.float64)
+            ref = np.asarray(reference["time_series_observable"][channel], dtype=np.float64)
+            denom = float(np.std(ref) + 0.05 * abs(np.mean(ref)) + 1e-3)
+            score_parts.append(float(np.mean(np.abs(obs - ref)) / denom))
+        score = float(np.mean(score_parts))
+        shift_scores.append(score)
+        profile_id = episode["metadata"].get("perturbation_profile_id") or "none"
+        by_profile.setdefault(profile_id, []).append(score)
+
+    profile_mins = [float(profile["min_abs_magnitude"]) for profile in profiles]
+    profile_maxs = [float(profile["max_abs_magnitude"]) for profile in profiles]
+    mean_shift = float(np.mean(shift_scores)) if shift_scores else 0.0
+    by_profile_mean = {
+        profile_id: float(np.mean(values))
+        for profile_id, values in sorted(by_profile.items())
+    }
+    checks = {
+        "profile_count_positive": len(profiles) >= 1,
+        "profile_magnitudes_within_5_to_15_percent": (
+            bool(profile_mins)
+            and min(profile_mins) >= 0.05 - 1e-9
+            and max(profile_maxs) <= 0.15 + 1e-9
+        ),
+        "paired_reference_count_matches": len(episodes) == len(reference_episodes),
+        "observable_shift_measurable": mean_shift >= 0.015,
+        "observable_shift_not_explosive": mean_shift <= 5.0,
+    }
+    return {
+        "passed": all(checks.values()),
+        "checks": checks,
+        "profile_count": len(profiles),
+        "profile_min_abs_magnitude": min(profile_mins) if profile_mins else 0.0,
+        "profile_max_abs_magnitude": max(profile_maxs) if profile_maxs else 0.0,
+        "proxy_distribution_shift_score": mean_shift,
+        "proxy_distribution_shift_by_profile": by_profile_mean,
+        "paired_episode_count": min(len(episodes), len(reference_episodes)),
     }
 
 

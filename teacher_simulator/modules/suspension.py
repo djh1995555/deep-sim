@@ -32,6 +32,7 @@ class SuspensionModel:
         )
 
         d_long = -mass * ax * cg_z / wheelbase
+        d_long *= float(vehicle.hidden_params.get("suspension_longitudinal_transfer_scale", 1.0))
         fz[0:2] += d_long / 2.0
         fz[2:4] -= d_long / 2.0
 
@@ -39,6 +40,9 @@ class SuspensionModel:
         track_rear = vehicle.track_rear
         d_lat_front = mass * ay * cg_z * 0.55 / max(track_front, 1e-6)
         d_lat_rear = mass * ay * cg_z * 0.45 / max(track_rear, 1e-6)
+        lat_scale = float(vehicle.hidden_params.get("suspension_lateral_transfer_scale", 1.0))
+        d_lat_front *= lat_scale
+        d_lat_rear *= lat_scale
         fz[0] -= d_lat_front / 2.0
         fz[1] += d_lat_front / 2.0
         fz[2] -= d_lat_rear / 2.0

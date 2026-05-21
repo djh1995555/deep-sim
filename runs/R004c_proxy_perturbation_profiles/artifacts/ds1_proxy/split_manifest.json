@@ -1,0 +1,337 @@
+{
+  "dataset_id": "DS1_PROXY_V1",
+  "split_roles": {
+    "fine-tune": [
+      "ep_R02-L0-Y0_seed_81",
+      "ep_R03-L1-Y3_seed_114",
+      "ep_R01-L2-Y4_seed_70",
+      "ep_SP05-L0-Y2_seed_258",
+      "ep_SP07-L1-Y3_seed_314",
+      "ep_SP03-L2-Y3_seed_219",
+      "ep_TR02-L0-Y2_seed_483",
+      "ep_TR06-L1-Y2_seed_588",
+      "ep_TR01-L2-Y1_seed_467",
+      "ep_R00-L0-Y2_seed_10033",
+      "ep_R00-L1-Y0_seed_10036",
+      "ep_R00-L2-Y1_seed_10042",
+      "ep_SP03-L0-Y0_seed_10206",
+      "ep_SP06-L1-Y1_seed_10287",
+      "ep_SP08-L2-Y0_seed_10341",
+      "ep_TR07-L0-Y2_seed_10608",
+      "ep_TR11-L1-Y0_seed_10711",
+      "ep_TR10-L2-Y1_seed_10692",
+      "ep_R02-L0-Y3_seed_20084",
+      "ep_R03-L1-Y0_seed_20111",
+      "ep_R00-L2-Y4_seed_20045",
+      "ep_SP03-L0-Y2_seed_20208",
+      "ep_SP03-L1-Y0_seed_20211",
+      "ep_SP07-L2-Y2_seed_20318",
+      "ep_TR00-L0-Y3_seed_20434",
+      "ep_TR08-L1-Y0_seed_20636",
+      "ep_TR02-L2-Y2_seed_20493"
+    ],
+    "test-window": [
+      "ep_R02-L0-Y2_seed_2083",
+      "ep_R01-L1-Y2_seed_2063",
+      "ep_R01-L2-Y1_seed_2067",
+      "ep_SP04-L0-Y4_seed_2235",
+      "ep_SP00-L1-Y2_seed_2138",
+      "ep_SP06-L2-Y2_seed_2293",
+      "ep_TR05-L0-Y4_seed_2560",
+      "ep_TR10-L1-Y3_seed_2689",
+      "ep_TR05-L2-Y3_seed_2569",
+      "ep_R02-L0-Y1_seed_12082",
+      "ep_R01-L1-Y2_seed_12063",
+      "ep_R03-L2-Y2_seed_12118",
+      "ep_SP07-L0-Y1_seed_12307",
+      "ep_SP08-L1-Y3_seed_12339",
+      "ep_SP07-L2-Y1_seed_12317",
+      "ep_TR08-L0-Y4_seed_12635",
+      "ep_TR01-L1-Y2_seed_12463",
+      "ep_TR07-L2-Y1_seed_12617",
+      "ep_R02-L0-Y1_seed_22082",
+      "ep_R03-L1-Y4_seed_22115",
+      "ep_R02-L2-Y1_seed_22092",
+      "ep_SP10-L0-Y3_seed_22384",
+      "ep_SP09-L1-Y0_seed_22361",
+      "ep_SP11-L2-Y4_seed_22420",
+      "ep_TR08-L0-Y1_seed_22632",
+      "ep_TR04-L1-Y4_seed_22540",
+      "ep_TR10-L2-Y3_seed_22694"
+    ],
+    "validation": [
+      "ep_R03-L0-Y2_seed_1108",
+      "ep_R02-L1-Y3_seed_1089",
+      "ep_R03-L2-Y2_seed_1118",
+      "ep_SP04-L0-Y2_seed_1233",
+      "ep_SP07-L1-Y3_seed_1314",
+      "ep_SP02-L2-Y4_seed_1195",
+      "ep_TR05-L0-Y0_seed_1556",
+      "ep_TR11-L1-Y4_seed_1715",
+      "ep_TR01-L2-Y2_seed_1468",
+      "ep_R03-L0-Y3_seed_11109",
+      "ep_R02-L1-Y0_seed_11086",
+      "ep_R01-L2-Y0_seed_11066",
+      "ep_SP02-L0-Y1_seed_11182",
+      "ep_SP02-L1-Y0_seed_11186",
+      "ep_SP09-L2-Y2_seed_11368",
+      "ep_TR01-L0-Y0_seed_11456",
+      "ep_TR04-L1-Y2_seed_11538",
+      "ep_TR04-L2-Y4_seed_11545",
+      "ep_R02-L0-Y1_seed_21082",
+      "ep_R00-L1-Y2_seed_21038",
+      "ep_R02-L2-Y1_seed_21092",
+      "ep_SP04-L0-Y4_seed_21235",
+      "ep_SP09-L1-Y4_seed_21365",
+      "ep_SP02-L2-Y2_seed_21193",
+      "ep_TR11-L0-Y1_seed_21707",
+      "ep_TR05-L1-Y4_seed_21565",
+      "ep_TR10-L2-Y4_seed_21695"
+    ]
+  },
+  "target_windows": {
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_single_00": [
+      "ep_R02-L0-Y2_seed_2083"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_single_01": [
+      "ep_R01-L1-Y2_seed_2063"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_single_02": [
+      "ep_R01-L2-Y1_seed_2067"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_split_00": [
+      "ep_SP04-L0-Y4_seed_2235"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_split_01": [
+      "ep_SP00-L1-Y2_seed_2138"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_split_02": [
+      "ep_SP06-L2-Y2_seed_2293"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_transition_00": [
+      "ep_TR05-L0-Y4_seed_2560"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_transition_01": [
+      "ep_TR10-L1-Y3_seed_2689"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_test_cg_transition_02": [
+      "ep_TR05-L2-Y3_seed_2569"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_single_00": [
+      "ep_R02-L0-Y0_seed_81"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_single_01": [
+      "ep_R03-L1-Y3_seed_114"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_single_02": [
+      "ep_R01-L2-Y4_seed_70"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_split_00": [
+      "ep_SP05-L0-Y2_seed_258"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_split_01": [
+      "ep_SP07-L1-Y3_seed_314"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_split_02": [
+      "ep_SP03-L2-Y3_seed_219"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_transition_00": [
+      "ep_TR02-L0-Y2_seed_483"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_transition_01": [
+      "ep_TR06-L1-Y2_seed_588"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_train_cg_transition_02": [
+      "ep_TR01-L2-Y1_seed_467"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_single_00": [
+      "ep_R03-L0-Y2_seed_1108"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_single_01": [
+      "ep_R02-L1-Y3_seed_1089"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_single_02": [
+      "ep_R03-L2-Y2_seed_1118"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_split_00": [
+      "ep_SP04-L0-Y2_seed_1233"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_split_01": [
+      "ep_SP07-L1-Y3_seed_1314"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_split_02": [
+      "ep_SP02-L2-Y4_seed_1195"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_transition_00": [
+      "ep_TR05-L0-Y0_seed_1556"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_transition_01": [
+      "ep_TR11-L1-Y4_seed_1715"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_00_target_validation_cg_transition_02": [
+      "ep_TR01-L2-Y2_seed_1468"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_single_00": [
+      "ep_R02-L0-Y1_seed_12082"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_single_01": [
+      "ep_R01-L1-Y2_seed_12063"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_single_02": [
+      "ep_R03-L2-Y2_seed_12118"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_split_00": [
+      "ep_SP07-L0-Y1_seed_12307"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_split_01": [
+      "ep_SP08-L1-Y3_seed_12339"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_split_02": [
+      "ep_SP07-L2-Y1_seed_12317"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_transition_00": [
+      "ep_TR08-L0-Y4_seed_12635"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_transition_01": [
+      "ep_TR01-L1-Y2_seed_12463"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_test_cg_transition_02": [
+      "ep_TR07-L2-Y1_seed_12617"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_single_00": [
+      "ep_R00-L0-Y2_seed_10033"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_single_01": [
+      "ep_R00-L1-Y0_seed_10036"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_single_02": [
+      "ep_R00-L2-Y1_seed_10042"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_split_00": [
+      "ep_SP03-L0-Y0_seed_10206"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_split_01": [
+      "ep_SP06-L1-Y1_seed_10287"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_split_02": [
+      "ep_SP08-L2-Y0_seed_10341"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_transition_00": [
+      "ep_TR07-L0-Y2_seed_10608"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_transition_01": [
+      "ep_TR11-L1-Y0_seed_10711"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_train_cg_transition_02": [
+      "ep_TR10-L2-Y1_seed_10692"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_single_00": [
+      "ep_R03-L0-Y3_seed_11109"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_single_01": [
+      "ep_R02-L1-Y0_seed_11086"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_single_02": [
+      "ep_R01-L2-Y0_seed_11066"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_split_00": [
+      "ep_SP02-L0-Y1_seed_11182"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_split_01": [
+      "ep_SP02-L1-Y0_seed_11186"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_split_02": [
+      "ep_SP09-L2-Y2_seed_11368"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_transition_00": [
+      "ep_TR01-L0-Y0_seed_11456"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_transition_01": [
+      "ep_TR04-L1-Y2_seed_11538"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_01_target_validation_cg_transition_02": [
+      "ep_TR04-L2-Y4_seed_11545"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_single_00": [
+      "ep_R02-L0-Y1_seed_22082"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_single_01": [
+      "ep_R03-L1-Y4_seed_22115"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_single_02": [
+      "ep_R02-L2-Y1_seed_22092"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_split_00": [
+      "ep_SP10-L0-Y3_seed_22384"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_split_01": [
+      "ep_SP09-L1-Y0_seed_22361"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_split_02": [
+      "ep_SP11-L2-Y4_seed_22420"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_transition_00": [
+      "ep_TR08-L0-Y1_seed_22632"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_transition_01": [
+      "ep_TR04-L1-Y4_seed_22540"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_test_cg_transition_02": [
+      "ep_TR10-L2-Y3_seed_22694"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_single_00": [
+      "ep_R02-L0-Y3_seed_20084"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_single_01": [
+      "ep_R03-L1-Y0_seed_20111"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_single_02": [
+      "ep_R00-L2-Y4_seed_20045"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_split_00": [
+      "ep_SP03-L0-Y2_seed_20208"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_split_01": [
+      "ep_SP03-L1-Y0_seed_20211"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_split_02": [
+      "ep_SP07-L2-Y2_seed_20318"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_transition_00": [
+      "ep_TR00-L0-Y3_seed_20434"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_transition_01": [
+      "ep_TR08-L1-Y0_seed_20636"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_train_cg_transition_02": [
+      "ep_TR02-L2-Y2_seed_20493"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_single_00": [
+      "ep_R02-L0-Y1_seed_21082"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_single_01": [
+      "ep_R00-L1-Y2_seed_21038"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_single_02": [
+      "ep_R02-L2-Y1_seed_21092"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_split_00": [
+      "ep_SP04-L0-Y4_seed_21235"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_split_01": [
+      "ep_SP09-L1-Y4_seed_21365"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_split_02": [
+      "ep_SP02-L2-Y2_seed_21193"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_transition_00": [
+      "ep_TR11-L0-Y1_seed_21707"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_transition_01": [
+      "ep_TR05-L1-Y4_seed_21565"
+    ],
+    "tw_vehicle_C_drive_layout_variant_proxy_profile_02_target_validation_cg_transition_02": [
+      "ep_TR10-L2-Y4_seed_21695"
+    ]
+  }
+}

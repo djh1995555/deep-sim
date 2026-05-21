@@ -1,0 +1,44 @@
+teacher:
+  dataset_id: DS1_PROXY_V1
+  schema_version: v0
+  teacher_model_version: teacher_simulator_v0_ds1_proxy_scaffold
+  dt_internal: 0.02
+  dt_export: 0.04
+  duration_s: 4.0
+  integrator: semi_implicit_euler
+  gravity: 9.81
+  coordinate_convention: body_x_forward_y_left_z_up
+  seed: 31
+  default_feature_flags:
+    tire_relaxation: true
+    tire_thermal_wear_pressure: true
+    suspension_unsprung: true
+    steering_lag_compliance_backlash_hysteresis: true
+    drive_brake_lag_saturation_abs: true
+    aero_wind: true
+    sensor_noise_delay_filter_quantization: true
+    sim_to_real_proxy: true
+    generator_version: teacher_simulator_v0_ds1_proxy_scaffold
+    disabled_features: []
+    downgrade_reason: ""
+  numerical_limits:
+    min_speed_for_slip: 0.5
+    min_fz: 50.0
+    max_abs_state:
+      vx: 90.0
+      vy: 40.0
+      roll: 1.2
+      pitch: 1.2
+      r: 5.0
+  export:
+    include_teacher_aux_labels: true
+    include_metadata: true
+    resample_policy: hold_last
+scenario_set: ds1_proxy
+ds1:
+  vehicle_count: 4
+proxy:
+  profile_count: 3
+  samples_per_group_per_role: 3
+  min_magnitude: 0.05
+  max_magnitude: 0.15
