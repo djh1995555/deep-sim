@@ -664,11 +664,7 @@ grade_true / bank_true
 sensor true states（传感器对应真值状态）
 sensor bias / delay / quantization / dropout / timestamp jitter states（传感器偏置 / 延迟 / 量化 / 丢样 / 时间戳抖动状态）
 aero force / moment diagnostics（气动力 / 气动力矩 diagnostics）
-真实 mass / inertia / cg / suspension / tire 参数或 hash
-vehicle_internal_params_hash
-teacher_feature_flags
-vehicle_internal_params_hash_algo
-torque_observability_mode
+真实 mass / inertia / cg / suspension / tire 参数
 ```
 
 使用规则：
@@ -679,6 +675,19 @@ torque_observability_mode
 允许用于 oracle upper bound
 允许用于绘图 / debugging
 禁止进入 student input
+```
+
+以下字段必须作为 episode metadata 导出，不属于 teacher-only label，也不进入 student input：
+
+```text
+scenario_id
+vehicle_internal_params_hash
+vehicle_internal_params_hash_algo
+teacher_feature_flags
+torque_observability_mode
+split_role
+target_window_id
+fine_tune_data_bucket
 ```
 
 ## 8. 数值积分与采样

@@ -14,7 +14,7 @@
 |---|---|---|
 | Teacher simulator 动力学、自由度、内部真值、sanity gate | `refine-logs/TEACHER_SIMULATOR_DESIGN.md` | B0 / B1 / B2 的实验目标和验收标准 |
 | 数据集、工况、字段 schema、`fixed_vehicle_context`、`nominal_physics_prior`、teacher-only 字段、split | `refine-logs/DATA_DESIGN.md` | DS0/DS1/DS2 的实验用途和必须支持的划分 |
-| Student model、physics backbone、Steering、VehicleParamAdapter、FzResidualNN、MuHead、TireResidualNN、VehicleResidualNN、Uncertainty、模块边界与训练 schedule | `refine-logs/MODULE_DESIGN.md` | 实验中使用的系统编号和 ablation 关系 |
+| Student model、physics backbone、Steering、VehicleParamAdapter、FzResidualNN、MuHead、TireResidualNN、VehicleResidualNN、Uncertainty、模块边界与模块启用顺序 | `refine-logs/MODULE_DESIGN.md` | 实验中使用的系统编号和 ablation 关系 |
 | 具体 run id、状态、优先级 | `refine-logs/EXPERIMENT_TRACKER.md` | 里程碑和运行顺序摘要 |
 
 维护规则：
@@ -755,7 +755,7 @@ FT0-FT6 × FTD0-FTD5 fine-tune data amount splits
 低附着 dry/wet/snow/ice
 Split-μ
 路面 μ transition
-patchy μ / wheel-level μ map
+patchy μ / wheel-level μ map（DS2-only）
 加速、制动、转向、制动加转向
 执行器 delay / saturation
 传感器 noise / bias / filtering
@@ -914,8 +914,8 @@ MoE vs single-expert tire residual gap
 | M3 | Sim-to-real proxy | R004c-R004e | 分布扰动下 fine-tune 恢复能力可解释 |
 | M4 | baseline | R005-R008 | physics-only 与 black-box 可训练可评估 |
 | M5 | Base | R009-R014 | base 优于 physics-only 和 black-box，residual 受控 |
-| M6 | Component ablation suite | R015-R032 | E/T/F/S/M/V/U 单项 ablation 完成，第一版组件选择明确 |
-| M7 | Cross-vehicle/config generalization | R033-R036 | held-out vehicle/config 泛化结果明确 |
+| M6 | Component ablation suite | R015-R033 | E/T/F/S/M/V/U 单项 ablation 完成，第一版组件选择明确 |
+| M7 | Cross-vehicle/config generalization | R034-R036 | held-out vehicle/config 泛化结果明确 |
 | M8 | Final single model | R037 | 第一版单模型结构冻结 |
 | M9 | B6 adaptation | R038-R045 | FT0-FT6 × FTD0-FTD5 数据效率曲线完成 |
 | M10 | B7 extreme + MoE | R046+ | large-slip 明显收益且不伤害常规工况 |

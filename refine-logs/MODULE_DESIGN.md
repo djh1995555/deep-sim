@@ -218,6 +218,19 @@ bound_delta: 1-3 deg in radians
 regularization: Δdelta magnitude + temporal smoothness
 ```
 
+S1 residual 的输入有两个实现变体：
+
+```text
+S1-min:
+  z_shared + delta_cmd + delta_eff_S0
+
+S1-skip:
+  z_shared + delta_cmd + delta_eff_S0 + current_state_skip
+  current_state_skip = vx, yaw rate r
+```
+
+`vx/r` 是 student-visible direct skip input，不是 teacher leakage。它们理论上也包含在 `z_shared` 中，但 direct skip 保留当前帧精确状态，降低 small steering residual head 的学习难度。Base 默认使用 `S1-skip`；若 steering residual 出现过拟合或贡献不稳定，再用 `S1-min` 做实现级对照。`S1-min/S1-skip` 不新增顶层实验编号，仍归入 `S1`。
+
 ### 3.2 Structure Flow
 
 ```mermaid
@@ -945,6 +958,8 @@ UncertaintyWrapper 只包裹最终预测分布，不改变 dynamics mean
 
 ## 12. Training Schedule
 
+训练协议、loss 组成、ablation 从头训练规则和 fine-tune checkpoint 规则以 `EXPERIMENT_PLAN.md` 第 9 章为准。本节只说明模块启用顺序和实现时的初始 loss 权重量级。
+
 推荐顺序：
 
 ```text
@@ -986,6 +1001,8 @@ Stage 5:
 ```
 
 ## 13. Ablation Implementation Notes
+
+本节是 `EXPERIMENT_PLAN.md` 中 ablation 训练协议的实现清单。若两者冲突，以 `EXPERIMENT_PLAN.md` 为准。
 
 每个 ablation 配置必须明确记录：
 

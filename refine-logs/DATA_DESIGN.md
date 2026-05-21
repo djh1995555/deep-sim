@@ -316,12 +316,7 @@ road_height_true_i / road_normal_true_i
 grade_true / bank_true
 sensor bias / delay / quantization / dropout / timestamp jitter states
 aero force / moment diagnostics
-scenario_id
 真实 mass/inertia/cg/suspension/tire 参数
-vehicle_internal_params_hash
-vehicle_internal_params_hash_algo
-teacher_feature_flags
-torque_observability_mode
 ```
 
 使用规则：
@@ -332,6 +327,19 @@ torque_observability_mode
 允许用于 plotting / analysis
 禁止进入 student input
 必须做 dataloader 级 leakage test
+```
+
+Episode metadata 不属于 teacher-only label，也不属于 student input。metadata 必须保留给 split、audit、diagnostics 和结果追踪，但 dataloader 不得把它拼入模型输入：
+
+```text
+scenario_id
+vehicle_internal_params_hash
+vehicle_internal_params_hash_algo
+teacher_feature_flags
+torque_observability_mode
+split_role
+target_window_id
+fine_tune_data_bucket
 ```
 
 ## 6. 工况矩阵
@@ -757,6 +765,7 @@ teacher_feature_flags 记录 full-fidelity profile 的 enabled_features、disabl
 torque_observability_mode 记录 `tau_drv_obs_* / tau_brk_obs_*` 的来源，可取 `true_per_wheel_sensor`、`actuator_estimate`、`command_only_projection`
 split_role 明确 train/val/test/held-out/fine-tune/test-window
 fine_tune_data_bucket 对应 FTD0-FTD5
+metadata 字段用于数据管理和审计，不进入 `time_series_observable`、`fixed_vehicle_context` 或 `nominal_physics_prior`
 ```
 
 ## 10. 数据质量检查
