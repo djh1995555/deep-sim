@@ -1,0 +1,69 @@
+run:
+  id: R008
+  name: baseline_rollout_report
+  milestone: M4
+  experiment_block: B3.4
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: test
+model:
+  system_name: baseline_rollout_report
+  student_config: null
+  baseline_config: physics_and_black_box_report
+training:
+  optimizer: ridge_regression
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 100
+  max_steps: 1
+  early_stopping_metric: null
+  early_stopping_patience: 0
+evaluation:
+  horizons:
+  - 1s
+  - 2s
+  - 4s
+  metrics:
+  - baseline_report_passed
+  - rollout_rmse
+  - yaw_drift
+  - constraint_violation
+  report_splits:
+  - train
+  - validation
+  - test
+  - held-out
+  - test-window
+logging:
+  output_dir: runs/R008_baseline_rollout_report
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_v1.yaml
+artifact_dataset_subdir: ds1
+primary_metric: baseline_report_passed
+baseline:
+  systems:
+  - physics-only
+  - BB-MLP
+  - BB-GRU
+  - BB-TCN
+  - BB-NBEATSx
+  report_splits:
+  - train
+  - validation
+  - test
+  - held-out
+  - test-window
+  horizon_steps:
+  - 25
+  - 50
+  - 100
+  history_len: 4
+  ridge_lambda: 0.01
+  write_markdown_report: true

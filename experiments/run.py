@@ -8,10 +8,11 @@ import sys
 from datetime import datetime, timezone
 from typing import Any, Dict, List
 
+from experiments.baselines import baseline_metrics_for_runner, run_baseline_suite
+from experiments.sanity import run_sanity_check
 from teacher_simulator.config import load_yaml, write_yaml
 from teacher_simulator.generate import generate_dataset
 from teacher_simulator.validators import TeacherEpisodeValidator, write_validation_report
-from experiments.sanity import run_sanity_check
 
 
 def _now() -> str:
@@ -163,6 +164,13 @@ def run_config(config_path: str) -> int:
             if not sanity_report.get("passed", False):
                 report_dict["passed"] = False
                 report_dict["errors"].extend(sanity_report.get("errors", []))
+        baseline_cfg = cfg.get("baseline")
+        if baseline_cfg:
+            baseline_report = run_baseline_suite(dataset_dir, baseline_cfg, out_dir)
+            report_dict["metrics"].update(baseline_metrics_for_runner(baseline_report))
+            if not baseline_report.get("passed", False):
+                report_dict["passed"] = False
+                report_dict["errors"].append("baseline suite failed")
         report_path = os.path.join(out_dir, "artifacts", "validation_report.json")
         _write_json(report_path, report_dict)
         primary_metric, primary_value = _primary_metric(run_id, report_dict)
@@ -252,6 +260,14 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "proxy_target_windows_passed", metrics.get("proxy_target_windows_passed", 0)
     if run_id == "R004e":
         return "proxy_distribution_passed", metrics.get("proxy_distribution_passed", 0)
+    if run_id == "R005":
+        return "physics_only_baseline_passed", metrics.get("physics_only_baseline_passed", 0)
+    if run_id == "R006":
+        return "black_box_baseline_passed", metrics.get("black_box_baseline_passed", 0)
+    if run_id == "R007":
+        return "baseline_fairness_passed", metrics.get("baseline_fairness_passed", 0)
+    if run_id == "R008":
+        return "baseline_report_passed", metrics.get("baseline_report_passed", 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -316,6 +332,17 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
             metrics.get("proxy_distribution_passed", 0) == 1
             and metrics.get("proxy_distribution_shift_score", 0.0) >= 0.015
         )
+    if run_id == "R005":
+        return metrics.get("physics_only_baseline_passed", 0) == 1
+    if run_id == "R006":
+        return (
+            metrics.get("black_box_baseline_passed", 0) == 1
+            and metrics.get("black_box_variant_count", 0) >= 4
+        )
+    if run_id == "R007":
+        return metrics.get("baseline_fairness_passed", 0) == 1
+    if run_id == "R008":
+        return metrics.get("baseline_report_passed", 0) == 1
     return report["passed"]
 
 
@@ -403,6 +430,10 @@ def _write_stage_a_report() -> None:
         "runs/R004c_proxy_perturbation_profiles",
         "runs/R004d_proxy_target_windows",
         "runs/R004e_proxy_distribution_sanity",
+        "runs/R005_physics_only_baseline",
+        "runs/R006_black_box_baseline",
+        "runs/R007_baseline_fairness_audit",
+        "runs/R008_baseline_rollout_report",
     ]
     rows = []
     for run_dir in run_dirs:
@@ -413,7 +444,7 @@ def _write_stage_a_report() -> None:
             summary = json.load(handle)
         rows.append(summary)
     lines = [
-        "# Experiment Bridge Data/Physics Sanity Report",
+        "# Experiment Bridge Data/Physics/Baseline Report",
         "",
         "| Run | Status | Primary Metric | Value | Success | Notes |",
         "|---|---|---:|---:|---|---|",

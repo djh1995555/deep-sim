@@ -1,0 +1,18 @@
+{
+  "config_name": "baseline_rollout_report",
+  "dataset_id": "DS1_V1",
+  "end_time": "2026-05-21T06:56:14.385196+00:00",
+  "experiment_block": "B3.4",
+  "milestone": "M4",
+  "notes": "experiment gate passed for this run",
+  "primary_metric": "baseline_report_passed",
+  "primary_metric_value": 1,
+  "run_id": "R008",
+  "seed": 23,
+  "start_time": "2026-05-21T06:56:03.460417+00:00",
+  "status": "success",
+  "success_criteria_met": true,
+  "test_split": "test",
+  "train_split": "ds1_v1_scaffold",
+  "val_split": "validation"
+}

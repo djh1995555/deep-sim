@@ -1,4 +1,4 @@
-# Experiment Bridge Data/Physics Sanity Report
+# Experiment Bridge Data/Physics/Baseline Report
 
 | Run | Status | Primary Metric | Value | Success | Notes |
 |---|---|---:|---:|---|---|
@@ -20,3 +20,7 @@
 | R004c | success | proxy_profiles_passed | 1 | True | experiment gate passed for this run |
 | R004d | success | proxy_target_windows_passed | 1 | True | experiment gate passed for this run |
 | R004e | success | proxy_distribution_passed | 1 | True | experiment gate passed for this run |
+| R005 | success | physics_only_baseline_passed | 1 | True | experiment gate passed for this run |
+| R006 | success | black_box_baseline_passed | 1 | True | experiment gate passed for this run |
+| R007 | success | baseline_fairness_passed | 1 | True | experiment gate passed for this run |
+| R008 | success | baseline_report_passed | 1 | True | experiment gate passed for this run |

@@ -1,0 +1,18 @@
+{
+  "config_name": "black_box_baseline",
+  "dataset_id": "DS1_V1",
+  "end_time": "2026-05-21T06:55:50.984158+00:00",
+  "experiment_block": "B3.2",
+  "milestone": "M4",
+  "notes": "experiment gate passed for this run",
+  "primary_metric": "black_box_baseline_passed",
+  "primary_metric_value": 1,
+  "run_id": "R006",
+  "seed": 23,
+  "start_time": "2026-05-21T06:55:40.377618+00:00",
+  "status": "success",
+  "success_criteria_met": true,
+  "test_split": "test",
+  "train_split": "ds1_v1_scaffold",
+  "val_split": "validation"
+}
