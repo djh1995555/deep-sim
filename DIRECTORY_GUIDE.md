@@ -9,16 +9,16 @@
 | `.agents/` | 内部工具 | 本仓库随附的 agent skills 定义 | 给 Codex/ARIS 工作流使用，例如 `experiment-bridge`、`research-wiki`、`experiment-plan`。不是车辆动力学模型源码。 |
 | `.git/` | Git 元数据 | 提交历史、对象库、分支引用 | Git 内部目录，不需要手动修改。 |
 | `configs/` | 实验配置 | Teacher 数据集配置和每个 run 的 YAML 配置 | 定义实验入口参数，是复现实验的主要配置来源。 |
-| `data/` | 数据占位 | 当前为空 | 预留给后续持久化数据集或外部数据。当前 scaffold 数据主要写入 `runs/*/artifacts/`。 |
-| `experiments/` | 实验执行代码 | runner、sanity、baseline、hybrid、ablation 报告代码 | `python -m experiments.run --config ...` 的执行入口和实验逻辑。 |
+| `data/` | 数据入口 | canonical dataset symlink / copy 入口 | 给 PyTorch 训练阶段提供稳定数据路径，当前 `data/ds1_v1` 指向已生成的 DS1 scaffold 数据。 |
+| `experiments/` | 实验执行代码 | runner、sanity、baseline、hybrid、PyTorch smoke、ablation 报告代码 | `python -m experiments.run --config ...` 的执行入口和实验逻辑。 |
 | `idea-stage/` | 早期研究资料 | 文献调研、精读、idea 报告、最终设计决策 | 记录从需求到方案形成的早期推理链，偏研究探索。 |
 | `refine-logs/` | 方案与规格文档 | 实验计划、模块设计、数据设计、Teacher 设计、运行规格、结果总结 | 当前方案设计和实验执行状态的权威文档目录。 |
 | `reports/` | 实验报告 | B0/B3/B4 阶段报告和 ablation 汇总 JSON | 面向阅读的实验阶段输出，通常由 run 或汇总脚本生成/更新。 |
 | `research-wiki/` | 研究知识库 | 论文卡片、idea 卡片、claim/gap/query 记录 | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。 |
-| `runs/` | 实验运行产物 | R000-R045 的 artifacts、logs、checkpoints | 每次实验运行的输出目录。当前主要是 scaffold 数据、指标和报告中间产物。 |
-| `student_model/` | PyTorch 模型源码 | Student model v0 的数据接口、常量和模型 forward skeleton | 正式训练阶段的模型实现入口。当前是 forward-pass skeleton，还没有训练 loop。 |
+| `runs/` | 实验运行产物 | R000-R045 scaffold 产物以及 R100+ PyTorch smoke 产物 | 每次实验运行的输出目录。当前主要是 scaffold 数据、指标、报告中间产物和 PyTorch blocked/smoke 输出。 |
+| `student_model/` | PyTorch 模型源码 | Student model v0 的数据接口、常量和模型 forward skeleton | 正式训练阶段的模型实现入口。当前有 forward skeleton，训练 smoke 由 `experiments/torch_training.py` 调度。 |
 | `teacher_simulator/` | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现 | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。 |
-| `tests/` | 测试代码 | teacher simulator 单元测试 | 验证数据生成、采样和基础物理逻辑没有被破坏。 |
+| `tests/` | 测试代码 | teacher simulator、canonical data、student model、PyTorch runner 测试 | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。 |
 
 ## 配置目录
 
@@ -54,6 +54,7 @@ Teacher 数据集生成配置。
 | `R034-R036` | B5 跨车 / 跨配置泛化 scaffold。 |
 | `R037` | M8 final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | B6 target fine-tune 数据效率 scaffold。 |
+| `R100-R104` | PyTorch training smoke：data loader、forward/loss、tiny overfit、rollout、checkpoint save/load。当前需要先安装 PyTorch。 |
 
 运行方式统一使用 Miniforge/conda 环境：
 
@@ -74,6 +75,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `baselines.py` | physics-only baseline 和 black-box baseline scaffold 逻辑。 |
 | `hybrid.py` | base hybrid、组件 ablation、评估指标和 residual 审计的 scaffold 实现。 |
 | `ablation_report.py` | 汇总 R015-R033 组件 ablation 结果，生成 markdown/JSON 报告。 |
+| `torch_training.py` | PyTorch smoke runner，覆盖 R100-R104 的 data loader、loss、tiny overfit、rollout、checkpoint 检查。 |
 | `__init__.py` | Python package 标记。 |
 
 `experiments/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
@@ -88,7 +90,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R009.yaml
 | `data.py` | canonical dataset 读取、episode array 解析、context vector 编码、可选 Torch dataset wrapper。 |
 | `torch_model.py` | 当前 final single skeleton：`E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0`。 |
 
-当前限制：这里只实现了 forward-pass skeleton，尚未实现训练 loop、loss、checkpoint save/load 或正式 PyTorch 实验 run。
+当前限制：这里只实现了 forward-pass skeleton。训练 loss、optimizer、rollout、checkpoint save/load 的 smoke 入口已经在 `experiments/torch_training.py` 中接入，但当前本地 `deep-sim` 环境缺少 PyTorch，尚未跑通 passing 的 R100-R104。
 
 ## Teacher Simulator 目录
 
@@ -222,6 +224,8 @@ Teacher simulator 的物理/工程子模块。
 | `R034-R036` | cross-vehicle / cross-config generalization scaffold。 |
 | `R037` | final single model scaffold checkpoint descriptor。 |
 | `R038-R045` | target fine-tune data-efficiency scaffold。 |
+| `R100` | PyTorch data loader smoke；当前在缺少 PyTorch 时写入 blocked summary。 |
+| `R101-R104` | PyTorch forward/loss、tiny overfit、rollout、checkpoint smoke；安装 PyTorch 后运行。 |
 
 注意：`runs/` 是运行结果目录，不是手写源码。重新运行实验可能覆盖或新增其中的文件。
 
@@ -234,12 +238,15 @@ Teacher simulator 的物理/工程子模块。
 | 文件 | 用途 |
 | --- | --- |
 | `test_teacher_simulator.py` | Teacher simulator 相关单元测试和回归测试。 |
+| `test_canonical_data.py` | canonical dataset 入口和 student-visible array/context 读取测试。 |
+| `test_student_model.py` | PyTorch student model forward smoke；缺少 PyTorch 时自动 skip。 |
+| `test_torch_training.py` | PyTorch smoke runner/config 测试；缺少 PyTorch 时验证 blocked 路径。 |
 | `__init__.py` | Python package 标记。 |
 
 运行方式：
 
 ```bash
-conda run -n deep-sim python -m unittest tests.test_teacher_simulator
+conda run -n deep-sim python -m unittest
 ```
 
 `tests/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
@@ -251,7 +258,7 @@ conda run -n deep-sim python -m unittest tests.test_teacher_simulator
 | `MANIFEST.md` | 自动维护的产物清单，按时间记录技能、文件、阶段和说明。 |
 | `DIRECTORY_GUIDE.md` | 当前文件，按目录解释仓库结构和用途。 |
 | `environment.yml` | Miniforge/conda 环境定义。实验活动应使用 `deep-sim` 环境。 |
-| `requirements.txt` | Python 依赖的轻量记录。当前主要依赖 `numpy`。 |
+| `requirements.txt` | Python 依赖的轻量记录。包含当前训练 smoke 所需的 PyTorch 依赖声明。 |
 | `.gitignore` | Git 忽略规则。 |
 
 ## 哪些目录应该重点维护

@@ -12,6 +12,7 @@ from experiments.baselines import baseline_metrics_for_runner, run_baseline_suit
 from experiments.fine_tune import fine_tune_metrics_for_runner, run_fine_tune_suite
 from experiments.hybrid import base_hybrid_metrics_for_runner, run_base_hybrid_suite
 from experiments.sanity import run_sanity_check
+from experiments.torch_training import run_torch_training_suite
 from teacher_simulator.config import load_yaml, write_yaml
 from teacher_simulator.generate import generate_dataset
 from teacher_simulator.validators import TeacherEpisodeValidator, write_validation_report
@@ -120,6 +121,7 @@ def run_config(config_path: str) -> int:
     status = "success"
     notes = ""
     success = False
+    blocked_reason = ""
     env_error = _env_error()
     if env_error:
         summary = {
@@ -145,7 +147,21 @@ def run_config(config_path: str) -> int:
         return 1
 
     try:
-        generate_dataset(cfg["teacher_config"], dataset_dir)
+        dataset_source = cfg.get("dataset_source", "generate")
+        if dataset_source == "existing":
+            dataset_dir = cfg["data"]["dataset_path"]
+            if not os.path.exists(dataset_dir):
+                raise FileNotFoundError("dataset_path does not exist: %s" % dataset_dir)
+            _write_json(
+                os.path.join(out_dir, "artifacts", "dataset_pointer.json"),
+                {
+                    "dataset_source": "existing",
+                    "dataset_path": dataset_dir,
+                    "artifact_dataset_subdir": dataset_subdir,
+                },
+            )
+        else:
+            generate_dataset(cfg["teacher_config"], dataset_dir)
         validator = TeacherEpisodeValidator()
         report = validator.validate_dataset(dataset_dir)
         report_dict = report.to_dict()
@@ -191,6 +207,22 @@ def run_config(config_path: str) -> int:
             if not fine_tune_report.get("passed", False):
                 report_dict["passed"] = False
                 report_dict["errors"].append("fine-tune suite failed")
+        torch_training_cfg = cfg.get("torch_training")
+        if torch_training_cfg:
+            torch_training_report = run_torch_training_suite(
+                dataset_dir,
+                torch_training_cfg,
+                out_dir,
+            )
+            report_dict["metrics"].update(torch_training_report.get("metrics", {}))
+            if torch_training_report.get("blocked"):
+                blocked_reason = torch_training_report.get("blocked_reason", "")
+            if not torch_training_report.get("passed", False):
+                report_dict["passed"] = False
+                report_dict["errors"].append(
+                    torch_training_report.get("blocked_reason")
+                    or "torch training suite failed"
+                )
         report_path = os.path.join(out_dir, "artifacts", "validation_report.json")
         _write_json(report_path, report_dict)
         primary_metric, primary_value = _primary_metric(run_id, report_dict)
@@ -200,7 +232,7 @@ def run_config(config_path: str) -> int:
         _append_metric(metrics_path, run_id, primary_metric, primary_value)
         success = bool(report_dict["passed"] and _primary_success(run_id, report_dict))
         if not report_dict["passed"]:
-            status = "failed"
+            status = "blocked" if blocked_reason else "failed"
             notes = "; ".join(report_dict["errors"])
         elif not success:
             status = "failed"
@@ -312,6 +344,25 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "fine_tune_run_passed", metrics.get("fine_tune_run_passed", 0)
     if run_id == "R045":
         return "fine_tune_summary_passed", metrics.get("fine_tune_summary_passed", 0)
+    if run_id == "R100":
+        return "torch_data_loader_smoke_passed", metrics.get(
+            "torch_data_loader_smoke_passed",
+            0,
+        )
+    if run_id == "R101":
+        return "torch_forward_loss_smoke_passed", metrics.get(
+            "torch_forward_loss_smoke_passed",
+            0,
+        )
+    if run_id == "R102":
+        return "torch_tiny_overfit_passed", metrics.get("torch_tiny_overfit_passed", 0)
+    if run_id == "R103":
+        return "torch_rollout_smoke_passed", metrics.get("torch_rollout_smoke_passed", 0)
+    if run_id == "R104":
+        return "torch_checkpoint_smoke_passed", metrics.get(
+            "torch_checkpoint_smoke_passed",
+            0,
+        )
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -411,6 +462,16 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("fine_tune_run_passed", 0) == 1
     if run_id == "R045":
         return metrics.get("fine_tune_summary_passed", 0) == 1
+    if run_id == "R100":
+        return metrics.get("torch_data_loader_smoke_passed", 0) == 1
+    if run_id == "R101":
+        return metrics.get("torch_forward_loss_smoke_passed", 0) == 1
+    if run_id == "R102":
+        return metrics.get("torch_tiny_overfit_passed", 0) == 1
+    if run_id == "R103":
+        return metrics.get("torch_rollout_smoke_passed", 0) == 1
+    if run_id == "R104":
+        return metrics.get("torch_checkpoint_smoke_passed", 0) == 1
     return report["passed"]
 
 

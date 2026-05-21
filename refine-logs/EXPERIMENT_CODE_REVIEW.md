@@ -235,6 +235,45 @@ The implemented scope is intentionally minimal and covers DS0/DS1/proxy scaffold
 | R038-R045 evaluate against target test windows, not target train windows | pass |
 | B5 and B6 aggregate markdown and JSON reports are generated from run artifacts | pass |
 
+## P3 PyTorch Smoke Addendum
+
+**Date**: 2026-05-21 17:06 CST
+**Scope**: R100-R104 PyTorch smoke runner scaffold
+**Mode**: local-only fallback; secondary delegated review not used because the current task did not explicitly request sub-agent delegation.
+
+Reviewed files:
+
+```text
+experiments/torch_training.py
+experiments/run.py
+configs/runs/R100.yaml
+configs/runs/R101.yaml
+configs/runs/R102.yaml
+configs/runs/R103.yaml
+configs/runs/R104.yaml
+tests/test_torch_training.py
+refine-logs/PYTORCH_IMPLEMENTATION_STATUS.md
+```
+
+Checklist:
+
+| Check | Verdict |
+|---|---|
+| R100-R104 use canonical `data/ds1_v1` through `dataset_source: existing` | pass |
+| PyTorch import is lazy and runner remains import-safe without torch installed | pass |
+| Missing PyTorch produces explicit `blocked` summary instead of fake success | pass |
+| Smoke reports are written to `artifacts/torch_training_report.json` | pass |
+| Metrics are appended to `metrics.jsonl` and primary metric gates are wired in `run.py` | pass |
+| Data loader / forward / tiny overfit / rollout / checkpoint modes have separate run configs | pass |
+| Evaluation compares model output against dataset ground truth, not another model output | pass for R101-R103 smoke design |
+| Current local environment can complete passing R100-R104 | blocked: PyTorch missing |
+
+Residual risk:
+
+```text
+R100-R104 are scaffolded and blocked cleanly locally. They still need to be re-run after installing PyTorch in deep-sim before any training-grade claims can start.
+```
+
 ## Verification Commands
 
 ```bash

@@ -11,6 +11,7 @@ Current completed step:
 ```text
 P1: canonical data entry points
 P2: PyTorch Student Model v0 skeleton
+P3: PyTorch smoke runner scaffold
 ```
 
 ## P1 Canonical Data
@@ -65,12 +66,27 @@ V2-small Δx after integration residual
 U0 single-model log variance head
 ```
 
-Important limitation:
+## P3 PyTorch Smoke Runner Scaffold
+
+Implemented files:
+
+| File | Purpose |
+| --- | --- |
+| `experiments/torch_training.py` | Import-safe PyTorch smoke runner for data loader, forward/loss, tiny overfit, rollout, and checkpoint save/load checks. |
+| `configs/runs/R100.yaml` | Data loader smoke on canonical DS1. |
+| `configs/runs/R101.yaml` | One-step forward/loss smoke. |
+| `configs/runs/R102.yaml` | Tiny overfit on a small train subset. |
+| `configs/runs/R103.yaml` | Short rollout smoke. |
+| `configs/runs/R104.yaml` | Checkpoint save/load smoke. |
+| `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
+
+The new runner branch supports:
 
 ```text
-This is only a forward-pass skeleton.
-Training loss, optimizer, rollout training, checkpoint save/load, and report-compatible training runs are not implemented yet.
+dataset_source: existing
 ```
+
+This lets R100-R104 reuse `data/ds1_v1` instead of regenerating DS1 every time.
 
 ## Verification
 
@@ -80,6 +96,8 @@ Commands run:
 conda run -n deep-sim python -m experiments.materialize_data --mode symlink
 conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_canonical_data tests.test_student_model
+conda run -n deep-sim python -m unittest
+conda run -n deep-sim python -m experiments.run --config configs/runs/R100.yaml
 git diff --check
 ```
 
@@ -88,7 +106,9 @@ Result:
 ```text
 canonical data test: pass
 student model smoke test: skipped because PyTorch is not installed in the current deep-sim environment
+torch training runner tests: pass, blocked-path behavior covered
 compileall: pass
+R100 runner invocation: blocked as expected because PyTorch is not installed
 diff check: pass
 ```
 
@@ -96,7 +116,7 @@ diff check: pass
 
 `environment.yml` and `requirements.txt` now declare PyTorch.
 
-Current local `deep-sim` environment does not yet have PyTorch installed. Before running R100 training smoke tests, update the environment:
+Current local `deep-sim` environment does not yet have PyTorch installed. Before running R100-R104 as passing smoke tests, update the environment:
 
 ```bash
 conda env update -n deep-sim -f environment.yml
@@ -107,7 +127,7 @@ or install the project-preferred CUDA/CPU PyTorch build manually.
 
 ## Next Runs
 
-Recommended next run family:
+Current next run family:
 
 ```text
 R100: PyTorch data loader smoke
@@ -115,6 +135,13 @@ R101: one-step forward/loss smoke
 R102: tiny overfit on 5-10 short episodes
 R103: short rollout smoke
 R104: checkpoint save/load smoke
+```
+
+Current local status:
+
+```text
+R100: blocked, PyTorch missing from deep-sim
+R101-R104: ready to run after PyTorch install
 ```
 
 Only after R100-R104 pass should training-grade B3/B4/B5/B6 experiments start.

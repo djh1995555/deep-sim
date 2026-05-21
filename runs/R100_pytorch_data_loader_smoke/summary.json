@@ -1,0 +1,18 @@
+{
+  "config_name": "pytorch_data_loader_smoke",
+  "dataset_id": "DS1_V1",
+  "end_time": "2026-05-21T09:06:37.320396+00:00",
+  "experiment_block": "P3.1",
+  "milestone": "P3",
+  "notes": "PyTorch is not installed in the current environment",
+  "primary_metric": "torch_data_loader_smoke_passed",
+  "primary_metric_value": 0,
+  "run_id": "R100",
+  "seed": 23,
+  "start_time": "2026-05-21T09:06:36.485261+00:00",
+  "status": "blocked",
+  "success_criteria_met": false,
+  "test_split": "test",
+  "train_split": "ds1_v1_scaffold",
+  "val_split": "validation"
+}
