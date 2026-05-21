@@ -1,0 +1,12 @@
+{
+  "errors": [],
+  "metrics": {
+    "dt_alignment_passed": 1,
+    "max_median_dt_error_s": 5.500000000014521e-05,
+    "non_monotonic_episode_count": 0,
+    "p95_max_dt_error_s": 0.0007309999999999164,
+    "sample_count_error_count": 0
+  },
+  "passed": true,
+  "warnings": []
+}

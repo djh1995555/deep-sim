@@ -59,10 +59,17 @@ def export_dataset(
                 "sidecar": json_rel,
                 "split_role": metadata["split_role"],
                 "scenario_id": metadata["scenario_id"],
+                "scenario_group": metadata.get("scenario_group"),
+                "road_factor_id": metadata.get("road_factor_id"),
+                "longitudinal_factor_id": metadata.get("longitudinal_factor_id"),
+                "lateral_factor_id": metadata.get("lateral_factor_id"),
                 "vehicle_config_id": metadata["vehicle_config_id"],
+                "vehicle_family": metadata.get("vehicle_family"),
                 "vehicle_internal_params_hash": metadata[
                     "vehicle_internal_params_hash"
                 ],
+                "target_window_id": metadata.get("target_window_id"),
+                "fine_tune_data_bucket": metadata.get("fine_tune_data_bucket"),
                 "validation_case": metadata.get("validation_case"),
                 "road_type": metadata.get("road_type"),
             }

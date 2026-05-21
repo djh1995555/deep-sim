@@ -24,6 +24,8 @@ The external review tool was invoked, but it returned tool-call text rather than
 
 None for treating `R000-R000d` as passed.
 
+None for treating `R000e-R000h` as passed as DS1 scaffold / M1 data-generation runs.
+
 The implemented scope is intentionally minimal and only covers DS0 smoke generation plus validation gates. Student model training, DS1 full scenario generation, and GPU deployment are not included in this pass.
 
 ## NON-BLOCKING Issues Before DS1
@@ -32,6 +34,7 @@ The implemented scope is intentionally minimal and only covers DS0 smoke generat
 2. `R000-R000d` currently regenerate DS0 independently per run. This is acceptable for sanity but DS1 should use dataset manifests as immutable inputs to downstream runs.
 3. The validator checks only representative sign gates, not full physical consistency envelopes. DS1 should add range checks for energy, wheel lock behavior, tire saturation statistics, rough-road contact flags, and actuator/sensor delay diagnostics.
 4. DS1 should add a stronger environment lock, for example pinned dependency versions and optional CI smoke commands. The current pass records the Miniforge environment contract in `environment.yml` plus minimal Python dependencies in `requirements.txt`.
+5. `R000e-R000h` generate a DS1 scaffold: full 700-scenario matrix plus 120 sampled episodes. This is enough for M1 wiring and QA, but it is not yet the full training-scale DS1 dataset described in `DATA_DESIGN.md`.
 
 ## Checklist
 
@@ -51,6 +54,11 @@ The implemented scope is intentionally minimal and only covers DS0 smoke generat
 | Split-μ braking yaw sign | pass |
 | Run directory contract outputs | pass |
 | Parseable `metrics.jsonl` and `summary.json` | pass |
+| DS1 full 700-scenario matrix emitted | pass |
+| DS1 sampled episodes cover CG-SINGLE / CG-SPLIT / CG-TRANSITION | pass |
+| DS1 vehicle/config randomization present | pass |
+| DS1 split manifest includes train/validation/test/held-out/fine-tune/test-window | pass |
+| DS1 FTD1-FTD5 target buckets present | pass |
 
 ## Verification Commands
 
@@ -58,5 +66,6 @@ The implemented scope is intentionally minimal and only covers DS0 smoke generat
 conda run -n deep-sim python -m compileall teacher_simulator experiments tests
 conda run -n deep-sim python -m unittest tests.test_teacher_simulator
 for cfg in configs/runs/R000.yaml configs/runs/R000a.yaml configs/runs/R000b.yaml configs/runs/R000c.yaml configs/runs/R000d.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/runs/R000e.yaml configs/runs/R000f.yaml configs/runs/R000g.yaml configs/runs/R000h.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
 git diff --check
 ```

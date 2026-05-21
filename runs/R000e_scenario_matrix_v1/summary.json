@@ -1,0 +1,18 @@
+{
+  "config_name": "scenario_matrix_v1",
+  "dataset_id": "DS1_V1",
+  "end_time": "2026-05-21T06:10:25.726460+00:00",
+  "experiment_block": "B0.6",
+  "milestone": "M1",
+  "notes": "experiment gate passed for this run",
+  "primary_metric": "full_matrix_count",
+  "primary_metric_value": 700,
+  "run_id": "R000e",
+  "seed": 23,
+  "start_time": "2026-05-21T06:10:20.133720+00:00",
+  "status": "success",
+  "success_criteria_met": true,
+  "test_split": null,
+  "train_split": "ds1_v1_scaffold",
+  "val_split": null
+}

@@ -1,0 +1,11 @@
+{
+  "errors": [],
+  "metrics": {
+    "physics_rollout_diverged_count": 0,
+    "physics_rollout_max_abs_state": 688.854269687727,
+    "physics_rollout_rmse_mean": 0.16392754777645913,
+    "physics_rollout_smoke_passed": 1
+  },
+  "passed": true,
+  "warnings": []
+}

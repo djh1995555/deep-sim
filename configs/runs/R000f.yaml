@@ -1,0 +1,37 @@
+run:
+  id: R000f
+  name: vehicle_parameter_randomization
+  milestone: M1
+  experiment_block: B0.7
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: null
+  val_filter: null
+  test_filter: null
+model:
+  system_name: teacher_simulator_vehicle_variants
+  student_config: null
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 0
+  max_steps: 0
+  early_stopping_metric: null
+  early_stopping_patience: 0
+evaluation:
+  horizons: []
+  metrics: [vehicle_config_count, vehicle_family_count]
+  report_splits: [train, validation, test, held-out, fine-tune, test-window]
+logging:
+  output_dir: runs/R000f_vehicle_parameter_randomization
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_v1.yaml
+artifact_dataset_subdir: ds1
+primary_metric: vehicle_config_count

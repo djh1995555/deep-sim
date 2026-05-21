@@ -1,0 +1,14 @@
+{
+  "errors": [],
+  "metrics": {
+    "tiny_base_train_rmse": 0.0,
+    "tiny_black_box_train_rmse": 0.0,
+    "tiny_learnability_passed": 1,
+    "tiny_target_rms": 0.6700224826187349,
+    "tiny_transition_sample_count": 192
+  },
+  "passed": true,
+  "warnings": [
+    "tiny learnability is a data-pipeline overfit proxy, not final student training"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "errors": [],
+  "metrics": {
+    "derived_quantities_passed": 1,
+    "slip_angle_sign_agreement": 0.877918376080814,
+    "slip_ratio_sign_agreement": 0.9929923624766254,
+    "steering_sign_agreement": 0.9914814814814815,
+    "wheel_accel_sign_agreement": 0.6447372794067412
+  },
+  "passed": true,
+  "warnings": []
+}

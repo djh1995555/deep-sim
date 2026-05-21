@@ -11,6 +11,7 @@ from typing import Any, Dict, List
 from teacher_simulator.config import load_yaml, write_yaml
 from teacher_simulator.generate import generate_dataset
 from teacher_simulator.validators import TeacherEpisodeValidator, write_validation_report
+from experiments.sanity import run_sanity_check
 
 
 def _now() -> str:
@@ -81,8 +82,8 @@ def _append_metric(path: str, run_id: str, metric_name: str, value: Any) -> None
         "metric_name": metric_name,
         "value": value,
         "state_channel": "none",
-        "scenario_group": "DS0",
-        "vehicle_group": "vehicle_A_debug",
+        "scenario_group": "stage_a",
+        "vehicle_group": "mixed",
         "seed": None,
         "timestamp": _now(),
         "run_id": run_id,
@@ -109,7 +110,10 @@ def run_config(config_path: str) -> int:
     )
     _write_text(os.path.join(out_dir, "git_status.txt"), _run_shell(["git", "status", "--short"]))
 
-    dataset_dir = os.path.join(out_dir, "artifacts", "ds0")
+    dataset_subdir = cfg.get("artifact_dataset_subdir")
+    if not dataset_subdir:
+        dataset_subdir = "ds1" if cfg["data"]["dataset_id"].startswith("DS1") else "ds0"
+    dataset_dir = os.path.join(out_dir, "artifacts", dataset_subdir)
     status = "success"
     notes = ""
     success = False
@@ -141,22 +145,40 @@ def run_config(config_path: str) -> int:
         generate_dataset(cfg["teacher_config"], dataset_dir)
         validator = TeacherEpisodeValidator()
         report = validator.validate_dataset(dataset_dir)
+        report_dict = report.to_dict()
+        _augment_report_metrics(dataset_dir, report_dict)
+        sanity_cfg = cfg.get("sanity_check")
+        if sanity_cfg:
+            sanity_report = run_sanity_check(
+                dataset_dir,
+                sanity_cfg["name"],
+                sanity_cfg,
+            )
+            _write_json(
+                os.path.join(out_dir, "artifacts", "sanity_report.json"),
+                sanity_report,
+            )
+            report_dict["metrics"].update(sanity_report.get("metrics", {}))
+            report_dict["warnings"].extend(sanity_report.get("warnings", []))
+            if not sanity_report.get("passed", False):
+                report_dict["passed"] = False
+                report_dict["errors"].extend(sanity_report.get("errors", []))
         report_path = os.path.join(out_dir, "artifacts", "validation_report.json")
-        write_validation_report(report, report_path)
-        primary_metric, primary_value = _primary_metric(run_id, report.to_dict())
+        _write_json(report_path, report_dict)
+        primary_metric, primary_value = _primary_metric(run_id, report_dict)
         metrics_path = os.path.join(out_dir, "metrics.jsonl")
-        for name, value in report.metrics.items():
+        for name, value in report_dict["metrics"].items():
             _append_metric(metrics_path, run_id, name, value)
         _append_metric(metrics_path, run_id, primary_metric, primary_value)
-        success = bool(report.passed and _primary_success(run_id, report.to_dict()))
-        if not report.passed:
+        success = bool(report_dict["passed"] and _primary_success(run_id, report_dict))
+        if not report_dict["passed"]:
             status = "failed"
-            notes = "; ".join(report.errors)
+            notes = "; ".join(report_dict["errors"])
         elif not success:
             status = "failed"
             notes = "primary success gate failed"
         else:
-            notes = "R000-R000d sanity subset gate passed for this run"
+            notes = "experiment gate passed for this run"
     except Exception as exc:
         status = "failed"
         primary_metric = cfg.get("primary_metric", "run_completed")
@@ -182,7 +204,7 @@ def run_config(config_path: str) -> int:
         "notes": notes,
     }
     _write_json(os.path.join(out_dir, "summary.json"), summary)
-    _write_b0_report()
+    _write_stage_a_report()
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0 if success else 1
 
@@ -204,6 +226,26 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "sensor_actuator_checks_passed", int(report["passed"])
     if run_id == "R000d":
         return "leakage_checks_passed", metrics.get("leakage_checks_passed", 0)
+    if run_id == "R000e":
+        return "full_matrix_count", metrics.get("full_matrix_count", 0)
+    if run_id == "R000f":
+        return "vehicle_config_count", metrics.get("vehicle_config_count", 0)
+    if run_id == "R000g":
+        return "split_roles_covered", metrics.get("split_roles_covered", 0)
+    if run_id == "R000h":
+        return "dataset_qa_passed", metrics.get("dataset_qa_passed", 0)
+    if run_id == "R001":
+        return "role_schema_checks_passed", metrics.get("role_schema_checks_passed", 0)
+    if run_id == "R002":
+        return "physical_consistency_passed", metrics.get("physical_consistency_passed", 0)
+    if run_id == "R003":
+        return "dt_alignment_passed", metrics.get("dt_alignment_passed", 0)
+    if run_id == "R004":
+        return "derived_quantities_passed", metrics.get("derived_quantities_passed", 0)
+    if run_id == "R004a":
+        return "tiny_learnability_passed", metrics.get("tiny_learnability_passed", 0)
+    if run_id == "R004b":
+        return "physics_rollout_smoke_passed", metrics.get("physics_rollout_smoke_passed", 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -223,10 +265,59 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return report["passed"]
     if run_id == "R000d":
         return metrics.get("leakage_checks_passed", 0) == 1
+    if run_id == "R000e":
+        return (
+            metrics.get("full_matrix_count", 0) == 700
+            and metrics.get("has_cg_single", 0) == 1
+            and metrics.get("has_cg_split", 0) == 1
+            and metrics.get("has_cg_transition", 0) == 1
+        )
+    if run_id == "R000f":
+        return metrics.get("vehicle_config_count", 0) >= 3
+    if run_id == "R000g":
+        return (
+            metrics.get("split_roles_covered", 0) >= 5
+            and metrics.get("has_held_out_vehicle_config", 0) == 1
+            and metrics.get("has_fine_tune_windows", 0) == 1
+        )
+    if run_id == "R000h":
+        return metrics.get("dataset_qa_passed", 0) == 1
+    if run_id == "R001":
+        return metrics.get("role_schema_checks_passed", 0) == 1
+    if run_id == "R002":
+        return metrics.get("physical_consistency_passed", 0) == 1
+    if run_id == "R003":
+        return metrics.get("dt_alignment_passed", 0) == 1
+    if run_id == "R004":
+        return metrics.get("derived_quantities_passed", 0) == 1
+    if run_id == "R004a":
+        return metrics.get("tiny_learnability_passed", 0) == 1
+    if run_id == "R004b":
+        return metrics.get("physics_rollout_smoke_passed", 0) == 1
     return report["passed"]
 
 
-def _write_b0_report() -> None:
+def _augment_report_metrics(dataset_dir: str, report: Dict[str, Any]) -> None:
+    coverage_path = os.path.join(dataset_dir, "scenario_coverage_report.json")
+    if os.path.exists(coverage_path):
+        with open(coverage_path, "r", encoding="utf-8") as handle:
+            coverage = json.load(handle)
+        for key in [
+            "full_matrix_count",
+            "sampled_episode_count",
+            "sampled_road_factor_count",
+        ]:
+            report["metrics"][key] = coverage.get(key, 0)
+    qa_path = os.path.join(dataset_dir, "dataset_qa_report.json")
+    if os.path.exists(qa_path):
+        with open(qa_path, "r", encoding="utf-8") as handle:
+            qa = json.load(handle)
+        report["metrics"]["dataset_qa_passed"] = int(bool(qa.get("passed")))
+        report["metrics"]["qa_vehicle_config_count"] = qa.get("vehicle_config_count", 0)
+        report["metrics"]["qa_target_window_count"] = qa.get("target_window_count", 0)
+
+
+def _write_stage_a_report() -> None:
     os.makedirs("reports", exist_ok=True)
     run_dirs = [
         "runs/R000_teacher_simulator_minimal",
@@ -234,6 +325,16 @@ def _write_b0_report() -> None:
         "runs/R000b_road_scenario_generation",
         "runs/R000c_sensor_actuator_realism",
         "runs/R000d_dataset_export_split",
+        "runs/R000e_scenario_matrix_v1",
+        "runs/R000f_vehicle_parameter_randomization",
+        "runs/R000g_dataset_split_generation",
+        "runs/R000h_dataset_qa",
+        "runs/R001_schema_field_role_check",
+        "runs/R002_teacher_physical_consistency",
+        "runs/R003_time_dt_alignment",
+        "runs/R004_derived_physical_quantities",
+        "runs/R004a_tiny_learnability",
+        "runs/R004b_physics_rollout_smoke",
     ]
     rows = []
     for run_dir in run_dirs:
@@ -244,7 +345,7 @@ def _write_b0_report() -> None:
             summary = json.load(handle)
         rows.append(summary)
     lines = [
-        "# B0 Teacher Simulator Sanity Report",
+        "# Experiment Bridge Data/Physics Sanity Report",
         "",
         "| Run | Status | Primary Metric | Value | Success | Notes |",
         "|---|---|---:|---:|---|---|",

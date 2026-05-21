@@ -1,0 +1,39 @@
+run:
+  id: R002
+  name: teacher_physical_consistency
+  milestone: M2
+  experiment_block: B1.2
+  seed: 7
+data:
+  dataset_id: DS0_DEBUG
+  dataset_path: data/ds0_debug
+  schema_version: v0
+  split_id: ds0_debug
+  train_filter: all
+  val_filter: null
+  test_filter: null
+model:
+  system_name: teacher_physics_sanity
+  student_config: null
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 0
+  max_steps: 0
+  early_stopping_metric: null
+  early_stopping_patience: 0
+evaluation:
+  horizons: []
+  metrics: [physical_consistency_passed, sign_checks_passed]
+  report_splits: [all]
+logging:
+  output_dir: runs/R002_teacher_physical_consistency
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds0_minimal.yaml
+artifact_dataset_subdir: ds0
+primary_metric: physical_consistency_passed
+sanity_check:
+  name: teacher_physical_consistency

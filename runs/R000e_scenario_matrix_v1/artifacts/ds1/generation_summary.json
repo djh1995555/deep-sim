@@ -1,0 +1,7 @@
+{
+  "config": "configs/teacher/ds1_v1.yaml",
+  "episode_count": 120,
+  "full_matrix_count": 700,
+  "out_dir": "runs/R000e_scenario_matrix_v1/artifacts/ds1",
+  "scenario_set": "ds1"
+}

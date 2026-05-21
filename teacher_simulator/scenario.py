@@ -3,7 +3,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from teacher_simulator.vehicle_params import VehicleConfig, default_vehicle_config
+from teacher_simulator.vehicle_params import (
+    VehicleConfig,
+    default_vehicle_config,
+    make_vehicle_config_variants,
+)
 
 
 ROAD_MU = {
@@ -28,9 +32,13 @@ class RoadProfile:
     grade_rad: float = 0.0
     bank_rad: float = 0.0
     roughness_amp_m: float = 0.003
+    factor_id_override: Optional[str] = None
+    scenario_group: Optional[str] = None
 
     @property
     def factor_id(self) -> str:
+        if self.factor_id_override:
+            return self.factor_id_override
         if self.road_type == "single":
             return "single_%s" % self.single_surface
         if self.road_type == "split":
@@ -45,6 +53,8 @@ class ControlScript:
     longitudinal: str
     lateral: str
     initial_speed_mps: float = 14.0
+    longitudinal_id: Optional[str] = None
+    lateral_id: Optional[str] = None
 
     @property
     def factor_id(self) -> str:
@@ -126,6 +136,11 @@ class ScenarioConfig:
     split_metadata: SplitMetadata = field(default_factory=SplitMetadata)
     validation_case: str = "general"
     seed: int = 0
+    scenario_group: str = "DS0"
+    road_factor_id: str = ""
+    longitudinal_factor_id: str = ""
+    lateral_factor_id: str = ""
+    full_matrix_index: Optional[int] = None
 
 
 def _scenario(
@@ -215,3 +230,279 @@ def make_ds0_scenarios(seed: int = 7) -> List[ScenarioConfig]:
         ),
     ]
     return [_scenario(*case, seed=seed + idx) for idx, case in enumerate(cases)]
+
+
+LONGITUDINAL_FACTORS = [
+    ("L0", "const_v"),
+    ("L1", "small_acceleration"),
+    ("L2", "large_acceleration"),
+    ("L3", "small_braking"),
+    ("L4", "large_braking"),
+]
+
+LATERAL_FACTORS = [
+    ("Y0", "no_steer"),
+    ("Y1", "small_left_steer"),
+    ("Y2", "small_right_steer"),
+    ("Y3", "large_left_steer"),
+    ("Y4", "large_right_steer"),
+]
+
+SINGLE_ROAD_FACTORS = [
+    ("R00", "dry"),
+    ("R01", "wet"),
+    ("R02", "snow"),
+    ("R03", "ice"),
+]
+
+SPLIT_ROAD_FACTORS = [
+    ("SP00", "dry", "wet"),
+    ("SP01", "dry", "snow"),
+    ("SP02", "dry", "ice"),
+    ("SP03", "wet", "snow"),
+    ("SP04", "wet", "ice"),
+    ("SP05", "snow", "ice"),
+    ("SP06", "wet", "dry"),
+    ("SP07", "snow", "dry"),
+    ("SP08", "ice", "dry"),
+    ("SP09", "snow", "wet"),
+    ("SP10", "ice", "wet"),
+    ("SP11", "ice", "snow"),
+]
+
+TRANSITION_ROAD_FACTORS = [
+    ("TR00", "dry", "wet"),
+    ("TR01", "dry", "snow"),
+    ("TR02", "dry", "ice"),
+    ("TR03", "wet", "dry"),
+    ("TR04", "wet", "snow"),
+    ("TR05", "wet", "ice"),
+    ("TR06", "snow", "dry"),
+    ("TR07", "snow", "wet"),
+    ("TR08", "snow", "ice"),
+    ("TR09", "ice", "dry"),
+    ("TR10", "ice", "wet"),
+    ("TR11", "ice", "snow"),
+]
+
+
+def make_ds1_scenario_matrix() -> List[Dict[str, str]]:
+    matrix: List[Dict[str, str]] = []
+    for group, road_factors in [
+        ("CG-SINGLE", SINGLE_ROAD_FACTORS),
+        ("CG-SPLIT", SPLIT_ROAD_FACTORS),
+        ("CG-TRANSITION", TRANSITION_ROAD_FACTORS),
+    ]:
+        for road_factor in road_factors:
+            road_id = road_factor[0]
+            for long_id, long_name in LONGITUDINAL_FACTORS:
+                for lat_id, lat_name in LATERAL_FACTORS:
+                    scenario_id = "%s-%s-%s" % (road_id, long_id, lat_id)
+                    matrix.append(
+                        {
+                            "scenario_id": scenario_id,
+                            "scenario_group": group,
+                            "road_factor_id": road_id,
+                            "longitudinal_factor_id": long_id,
+                            "lateral_factor_id": lat_id,
+                            "longitudinal": long_name,
+                            "lateral": lat_name,
+                        }
+                    )
+    return matrix
+
+
+def make_ds1_scenarios(
+    seed: int = 7,
+    vehicle_count: int = 4,
+    samples_per_group_per_vehicle: int = 6,
+) -> List[ScenarioConfig]:
+    matrix = make_ds1_scenario_matrix()
+    vehicles = make_vehicle_config_variants(vehicle_count)
+    scenarios: List[ScenarioConfig] = []
+    by_group: Dict[str, List[Tuple[int, Dict[str, str]]]] = {}
+    for idx, item in enumerate(matrix):
+        by_group.setdefault(item["scenario_group"], []).append((idx, item))
+
+    for vehicle_idx, vehicle in enumerate(vehicles):
+        for group, group_items in sorted(by_group.items()):
+            selected = _balanced_group_sample(
+                group_items,
+                samples_per_group_per_vehicle,
+                seed + vehicle_idx * 100 + len(scenarios),
+            )
+            for local_idx, (matrix_idx, item) in enumerate(selected):
+                split_role = _split_role(vehicle_idx, vehicle_count, group, local_idx)
+                target_window_id = None
+                fine_tune_bucket = None
+                if split_role in ["fine-tune", "test-window"]:
+                    target_window_id = "tw_%s_%02d" % (vehicle.vehicle_config_id, local_idx)
+                    fine_tune_bucket = _fine_tune_bucket(local_idx)
+                scenarios.append(
+                    _ds1_scenario_from_matrix_item(
+                        item,
+                        vehicle,
+                        split_role,
+                        target_window_id,
+                        fine_tune_bucket,
+                        seed + matrix_idx + vehicle_idx * 1000,
+                        matrix_idx,
+                    )
+                )
+    return scenarios
+
+
+def _balanced_group_sample(
+    group_items: List[Tuple[int, Dict[str, str]]],
+    count: int,
+    seed: int,
+) -> List[Tuple[int, Dict[str, str]]]:
+    if count >= len(group_items):
+        return group_items
+    rng = np.random.default_rng(seed)
+    chosen: List[Tuple[int, Dict[str, str]]] = []
+    seen = set()
+
+    def add_candidate(candidate: Tuple[int, Dict[str, str]]) -> None:
+        scenario_id = candidate[1]["scenario_id"]
+        if scenario_id not in seen:
+            chosen.append(candidate)
+            seen.add(scenario_id)
+
+    long_ids = [x[0] for x in LONGITUDINAL_FACTORS]
+    lat_ids = [x[0] for x in LATERAL_FACTORS]
+    for long_id in long_ids:
+        candidates = [
+            item for item in group_items if item[1]["longitudinal_factor_id"] == long_id
+        ]
+        add_candidate(candidates[int(rng.integers(0, len(candidates)))])
+    for lat_id in lat_ids:
+        candidates = [
+            item for item in group_items if item[1]["lateral_factor_id"] == lat_id
+        ]
+        add_candidate(candidates[int(rng.integers(0, len(candidates)))])
+    remaining = [item for item in group_items if item[1]["scenario_id"] not in seen]
+    rng.shuffle(remaining)
+    chosen.extend(remaining[: max(0, count - len(chosen))])
+    return chosen[:count]
+
+
+def _ds1_scenario_from_matrix_item(
+    item: Dict[str, str],
+    vehicle: VehicleConfig,
+    split_role: str,
+    target_window_id: Optional[str],
+    fine_tune_bucket: Optional[str],
+    seed: int,
+    matrix_idx: int,
+) -> ScenarioConfig:
+    road_id = item["road_factor_id"]
+    if item["scenario_group"] == "CG-SINGLE":
+        surface = dict(SINGLE_ROAD_FACTORS)[road_id]
+        road = RoadProfile(
+            "single",
+            surface,
+            single_surface=surface,
+            factor_id_override=road_id,
+            scenario_group=item["scenario_group"],
+        )
+    elif item["scenario_group"] == "CG-SPLIT":
+        left, right = {
+            road_id: (left, right)
+            for road_id, left, right in SPLIT_ROAD_FACTORS
+        }[road_id]
+        road = RoadProfile(
+            "split",
+            "split",
+            split_left=left,
+            split_right=right,
+            factor_id_override=road_id,
+            scenario_group=item["scenario_group"],
+        )
+    else:
+        start, end = {
+            road_id: (start, end)
+            for road_id, start, end in TRANSITION_ROAD_FACTORS
+        }[road_id]
+        road = RoadProfile(
+            "transition",
+            "transition",
+            transition_from=start,
+            transition_to=end,
+            transition_start_s=1.5,
+            transition_duration_s=1.5,
+            factor_id_override=road_id,
+            scenario_group=item["scenario_group"],
+        )
+    control = ControlScript(
+        longitudinal=item["longitudinal"],
+        lateral=item["lateral"],
+        initial_speed_mps=12.0 + (seed % 5),
+        longitudinal_id=item["longitudinal_factor_id"],
+        lateral_id=item["lateral_factor_id"],
+    )
+    return ScenarioConfig(
+        scenario_id=item["scenario_id"],
+        vehicle_config=vehicle,
+        road_profile=road,
+        control_script=control,
+        split_metadata=SplitMetadata(
+            split_role=split_role,
+            target_window_id=target_window_id,
+            fine_tune_data_bucket=fine_tune_bucket,
+        ),
+        validation_case=_validation_case(item),
+        seed=seed,
+        scenario_group=item["scenario_group"],
+        road_factor_id=item["road_factor_id"],
+        longitudinal_factor_id=item["longitudinal_factor_id"],
+        lateral_factor_id=item["lateral_factor_id"],
+        full_matrix_index=matrix_idx,
+    )
+
+
+def _validation_case(item: Dict[str, str]) -> str:
+    if item["longitudinal"] == "large_braking" and item["lateral"] == "no_steer":
+        if item["road_factor_id"] == "SP02":
+            return "split_mu_brake_left_high"
+        if item["road_factor_id"] == "SP08":
+            return "split_mu_brake_right_high"
+        if item["road_factor_id"] in ["R00", "R01"]:
+            return "braking"
+    if (
+        item["road_factor_id"] in ["R00", "R01"]
+        and item["longitudinal"] == "const_v"
+        and item["lateral"] in ["small_left_steer", "large_left_steer"]
+    ):
+        return "left_turn"
+    if (
+        item["road_factor_id"] in ["R00", "R01"]
+        and item["longitudinal"] == "const_v"
+        and item["lateral"] in ["small_right_steer", "large_right_steer"]
+    ):
+        return "right_turn"
+    if item["scenario_group"] == "CG-TRANSITION":
+        return "transition_mu"
+    return "general"
+
+
+def _split_role(
+    vehicle_idx: int,
+    vehicle_count: int,
+    group: str,
+    local_idx: int,
+) -> str:
+    if vehicle_idx == vehicle_count - 1:
+        return "held-out" if local_idx % 2 == 0 else "test-window"
+    if group == "CG-TRANSITION" and local_idx % 5 == 0:
+        return "test"
+    if group == "CG-SPLIT" and local_idx % 4 == 0:
+        return "validation"
+    if local_idx % 7 == 0:
+        return "fine-tune"
+    return "train"
+
+
+def _fine_tune_bucket(local_idx: int) -> str:
+    buckets = ["FTD1", "FTD2", "FTD3", "FTD4", "FTD5"]
+    return buckets[local_idx % len(buckets)]

@@ -1,0 +1,7 @@
+{
+  "config": "configs/teacher/ds0_minimal.yaml",
+  "episode_count": 8,
+  "full_matrix_count": 0,
+  "out_dir": "runs/R002_teacher_physical_consistency/artifacts/ds0",
+  "scenario_set": "ds0"
+}

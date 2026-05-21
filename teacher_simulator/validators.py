@@ -312,12 +312,57 @@ class TeacherEpisodeValidator:
     def _coverage_metrics(episodes: List[Dict[str, Any]]) -> Dict[str, Any]:
         road_types = sorted(set(ep["metadata"]["road_type"] for ep in episodes))
         cases = sorted(set(ep["metadata"].get("validation_case", "") for ep in episodes))
+        scenario_groups = sorted(
+            set(ep["metadata"].get("scenario_group", "") for ep in episodes)
+        )
+        split_roles = sorted(set(ep["metadata"].get("split_role", "") for ep in episodes))
+        vehicle_configs = sorted(
+            set(ep["metadata"].get("vehicle_config_id", "") for ep in episodes)
+        )
+        vehicle_families = sorted(
+            set(ep["metadata"].get("vehicle_family", "") for ep in episodes)
+        )
+        road_factors = sorted(
+            set(ep["metadata"].get("road_factor_id", "") for ep in episodes)
+        )
+        target_windows = sorted(
+            set(
+                ep["metadata"].get("target_window_id")
+                for ep in episodes
+                if ep["metadata"].get("target_window_id")
+            )
+        )
+        fine_tune_buckets = sorted(
+            set(
+                ep["metadata"].get("fine_tune_data_bucket")
+                for ep in episodes
+                if ep["metadata"].get("fine_tune_data_bucket")
+            )
+        )
         return {
             "road_types": road_types,
             "validation_cases": cases,
+            "scenario_groups": scenario_groups,
+            "split_roles": split_roles,
+            "vehicle_configs": vehicle_configs,
+            "vehicle_families": vehicle_families,
+            "road_factor_count": len(road_factors),
+            "target_window_count": len(target_windows),
+            "fine_tune_buckets": fine_tune_buckets,
             "has_single_mu": int("single" in road_types),
             "has_split_mu": int("split" in road_types),
             "has_transition_mu": int("transition" in road_types),
+            "has_cg_single": int("CG-SINGLE" in scenario_groups),
+            "has_cg_split": int("CG-SPLIT" in scenario_groups),
+            "has_cg_transition": int("CG-TRANSITION" in scenario_groups),
+            "scenario_groups_covered": len([x for x in scenario_groups if x]),
+            "split_roles_covered": len([x for x in split_roles if x]),
+            "vehicle_config_count": len([x for x in vehicle_configs if x]),
+            "vehicle_family_count": len([x for x in vehicle_families if x]),
+            "has_held_out_vehicle_config": int("held-out" in split_roles),
+            "has_test_window": int("test-window" in split_roles),
+            "has_fine_tune_windows": int(len(target_windows) > 0),
+            "fine_tune_bucket_count": len(fine_tune_buckets),
         }
 
 

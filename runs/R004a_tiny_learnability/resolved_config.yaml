@@ -1,0 +1,46 @@
+run:
+  id: R004a
+  name: tiny_learnability
+  milestone: M2
+  experiment_block: B1.5
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: test
+model:
+  system_name: tiny_black_box_and_tiny_base_overfit_proxy
+  student_config: null
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 0
+  max_steps: 0
+  early_stopping_metric: null
+  early_stopping_patience: 0
+evaluation:
+  horizons:
+  - one_step
+  metrics:
+  - tiny_learnability_passed
+  - tiny_black_box_train_rmse
+  - tiny_base_train_rmse
+  report_splits:
+  - train
+logging:
+  output_dir: runs/R004a_tiny_learnability
+  save_checkpoints: false
+  save_diagnostics: true
+teacher_config: configs/teacher/ds1_v1.yaml
+artifact_dataset_subdir: ds1
+primary_metric: tiny_learnability_passed
+sanity_check:
+  name: tiny_learnability
+  max_episodes: 8
+  max_steps_per_episode: 24

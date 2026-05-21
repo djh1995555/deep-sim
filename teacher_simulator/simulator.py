@@ -273,6 +273,13 @@ class TeacherSimulator:
             "vehicle_family": vehicle.vehicle_family,
             "vehicle_config_id": vehicle.vehicle_config_id,
             "scenario_id": scenario.scenario_id,
+            "scenario_group": scenario.scenario_group,
+            "road_factor_id": scenario.road_factor_id or road.factor_id,
+            "longitudinal_factor_id": scenario.longitudinal_factor_id
+            or scenario.control_script.longitudinal_id,
+            "lateral_factor_id": scenario.lateral_factor_id
+            or scenario.control_script.lateral_id,
+            "full_matrix_index": scenario.full_matrix_index,
             "road_type": road.road_type,
             "mu_pattern": road.mu_pattern,
             "split_mu_type": (
@@ -288,6 +295,8 @@ class TeacherSimulator:
             "control_script": {
                 "longitudinal": scenario.control_script.longitudinal,
                 "lateral": scenario.control_script.lateral,
+                "longitudinal_factor_id": scenario.control_script.longitudinal_id,
+                "lateral_factor_id": scenario.control_script.lateral_id,
                 "initial_speed_mps": scenario.control_script.initial_speed_mps,
             },
             "seed": int(scenario.seed),
