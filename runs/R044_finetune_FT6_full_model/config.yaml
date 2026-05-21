@@ -1,0 +1,10 @@
+run: {id: R044, name: finetune_FT6_full_model, milestone: M9, experiment_block: B6.7, seed: 41}
+data: {dataset_id: DS1_PROXY_FT_V1, dataset_path: data/ds1_proxy_ft_v1, schema_version: v0, split_id: ds1_proxy_ft_scaffold, train_filter: fine-tune, val_filter: validation, test_filter: test-window}
+model: {system_name: FT6_full_model, student_config: fine_tune_scaffold, baseline_config: null}
+training: {optimizer: ridge_adapter_full, learning_rate: 0.0, batch_size: 0, rollout_horizon: 100, max_steps: 1, early_stopping_metric: fine_tune_run_passed, early_stopping_patience: 0}
+evaluation: {horizons: [4s], metrics: [fine_tune_run_passed, target_window_rmse], report_splits: [validation, test-window]}
+logging: {output_dir: runs/R044_finetune_FT6_full_model, save_checkpoints: false, save_diagnostics: true}
+teacher_config: configs/teacher/ds1_proxy_ft_v1.yaml
+artifact_dataset_subdir: ds1_proxy
+primary_metric: fine_tune_run_passed
+fine_tune: {mode: single, ft_variant: FT6, source_teacher_config: configs/teacher/ds1_v1.yaml, history_len: 4, horizon_steps: [100], ridge_lambda: 10000.0, adapter_ridge_lambda: 1500.0, final_variant: {encoder: E2, tire: T1, fz: F1, steering: S1, mu: M0-fixed, vehicle: V2-small, uncertainty: U0}}

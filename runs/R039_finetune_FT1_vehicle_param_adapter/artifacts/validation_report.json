@@ -1,0 +1,96 @@
+{
+  "errors": [],
+  "metrics": {
+    "dataset_qa_passed": 0,
+    "episode_count": 135,
+    "fine_tune_best_adapter_to_base_ratio": 0.20781624912563118,
+    "fine_tune_best_constraint_violation_rate": 0.0,
+    "fine_tune_best_relative_to_ft0": 0.9557441690724516,
+    "fine_tune_best_test_rmse": 0.5720108575424183,
+    "fine_tune_bucket_count": 5,
+    "fine_tune_buckets": [
+      "FTD1",
+      "FTD2",
+      "FTD3",
+      "FTD4",
+      "FTD5"
+    ],
+    "fine_tune_ft0_test_rmse": 0.598497878462135,
+    "fine_tune_run_passed": 1,
+    "fine_tune_suite_passed": 1,
+    "fine_tune_variant_count": 1,
+    "full_matrix_count": 700,
+    "has_cg_single": 1,
+    "has_cg_split": 1,
+    "has_cg_transition": 1,
+    "has_fine_tune_windows": 1,
+    "has_held_out_vehicle_config": 0,
+    "has_proxy_target_test": 1,
+    "has_proxy_target_train": 1,
+    "has_proxy_target_validation": 1,
+    "has_single_mu": 1,
+    "has_split_mu": 1,
+    "has_test_window": 1,
+    "has_transition_mu": 1,
+    "leakage_checks_passed": 1,
+    "perturbation_profile_count": 3,
+    "proxy_distribution_paired_episode_count": 135,
+    "proxy_distribution_passed": 1,
+    "proxy_distribution_shift_score": 0.12076352687321266,
+    "proxy_held_out_vehicle_config_count": 1,
+    "proxy_profile_count": 3,
+    "proxy_profile_max_abs_magnitude": 0.14055489279663452,
+    "proxy_profile_min_abs_magnitude": 0.05951774616114959,
+    "proxy_profiles_passed": 1,
+    "proxy_target_window_count": 135,
+    "proxy_target_window_overlap_count": 0,
+    "proxy_target_windows_passed": 1,
+    "qa_target_window_count": 135,
+    "qa_vehicle_config_count": 1,
+    "road_factor_count": 28,
+    "road_types": [
+      "single",
+      "split",
+      "transition"
+    ],
+    "sampled_episode_count": 135,
+    "sampled_road_factor_count": 28,
+    "scenario_groups": [
+      "CG-SINGLE",
+      "CG-SPLIT",
+      "CG-TRANSITION"
+    ],
+    "scenario_groups_covered": 3,
+    "schema_checks_passed": 1,
+    "sign_checks_passed": 1,
+    "split_roles": [
+      "fine-tune",
+      "test-window",
+      "validation"
+    ],
+    "split_roles_covered": 3,
+    "target_window_count": 135,
+    "target_window_role_count": 3,
+    "target_window_roles": [
+      "target_test",
+      "target_train",
+      "target_validation"
+    ],
+    "validation_cases": [
+      "general",
+      "left_turn",
+      "right_turn",
+      "transition_mu"
+    ],
+    "vehicle_config_count": 1,
+    "vehicle_configs": [
+      "vehicle_C_drive_layout_variant"
+    ],
+    "vehicle_families": [
+      "vehicle_C"
+    ],
+    "vehicle_family_count": 1
+  },
+  "passed": true,
+  "warnings": []
+}

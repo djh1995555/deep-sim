@@ -46,7 +46,7 @@
 | R027a-R027c | M6 | shared encoder ablation | E1 / E2 / E3 | MUST | DONE |
 | R028-R031 | M6 | vehicle residual ablation | V0 / V1 / V1-large / V2-small | MUST | DONE |
 | R032-R033 | M6 | uncertainty ablation | U0 / U1 K=3 ensemble | MUST | DONE |
-| R034-R036 | M7 | cross-vehicle/config generalization | final single model vs baselines | MUST | TODO |
-| R037 | M8 | final single model freeze | selected E/T/F/S/M/V/U configuration | MUST | TODO |
-| R038-R045 | M9 | target fine-tune data efficiency | FT0-FT6 × FTD0-FTD5 | MUST | TODO |
+| R034-R036 | M7 | cross-vehicle/config generalization | final single model vs baselines | MUST | DONE |
+| R037 | M8 | final single model freeze | selected E/T/F/S/M/V/U configuration | MUST | DONE |
+| R038-R045 | M9 | target fine-tune data efficiency | FT0-FT6 × FTD0-FTD5 | MUST | DONE |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |

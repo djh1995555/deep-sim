@@ -1,0 +1,110 @@
+[
+  {
+    "description": "teacher-only sim-to-real proxy offsets",
+    "magnitudes": {
+      "actuator": 0.09922359420922028,
+      "cg": 0.13250917934706108,
+      "inertia": 0.12283386843344953,
+      "mass": 0.09862075051521911,
+      "sensor": 0.06438102539925408,
+      "suspension": 0.07678877224834234,
+      "tire": 0.05951774616114959
+    },
+    "max_abs_magnitude": 0.13250917934706108,
+    "max_requested_magnitude": 0.15,
+    "min_abs_magnitude": 0.05951774616114959,
+    "min_requested_magnitude": 0.05,
+    "profile_id": "proxy_profile_00",
+    "scales": {
+      "actuator": 1.0992235942092203,
+      "cg": 0.8674908206529389,
+      "inertia": 1.1228338684334496,
+      "mass": 0.9013792494847809,
+      "sensor": 1.064381025399254,
+      "suspension": 1.0767887722483422,
+      "tire": 0.9404822538388504
+    },
+    "seed": 41,
+    "signs": {
+      "actuator": 1,
+      "cg": -1,
+      "inertia": 1,
+      "mass": -1,
+      "sensor": 1,
+      "suspension": 1,
+      "tire": -1
+    }
+  },
+  {
+    "description": "teacher-only sim-to-real proxy offsets",
+    "magnitudes": {
+      "actuator": 0.07186534261646124,
+      "cg": 0.07829756714957567,
+      "inertia": 0.08793281715468577,
+      "mass": 0.08643898890971001,
+      "sensor": 0.08258634041656124,
+      "suspension": 0.09312070727533472,
+      "tire": 0.1327340503345949
+    },
+    "max_abs_magnitude": 0.1327340503345949,
+    "max_requested_magnitude": 0.15,
+    "min_abs_magnitude": 0.07186534261646124,
+    "min_requested_magnitude": 0.05,
+    "profile_id": "proxy_profile_01",
+    "scales": {
+      "actuator": 1.0718653426164613,
+      "cg": 1.0782975671495756,
+      "inertia": 1.0879328171546858,
+      "mass": 1.08643898890971,
+      "sensor": 0.9174136595834388,
+      "suspension": 1.0931207072753346,
+      "tire": 1.1327340503345948
+    },
+    "seed": 42,
+    "signs": {
+      "actuator": 1,
+      "cg": 1,
+      "inertia": 1,
+      "mass": 1,
+      "sensor": -1,
+      "suspension": 1,
+      "tire": 1
+    }
+  },
+  {
+    "description": "teacher-only sim-to-real proxy offsets",
+    "magnitudes": {
+      "actuator": 0.1033336951341551,
+      "cg": 0.1278477489456431,
+      "inertia": 0.0923957579050935,
+      "mass": 0.10688924050652412,
+      "sensor": 0.11584351825873619,
+      "suspension": 0.14055489279663452,
+      "tire": 0.10068497531261626
+    },
+    "max_abs_magnitude": 0.14055489279663452,
+    "max_requested_magnitude": 0.15,
+    "min_abs_magnitude": 0.0923957579050935,
+    "min_requested_magnitude": 0.05,
+    "profile_id": "proxy_profile_02",
+    "scales": {
+      "actuator": 0.8966663048658449,
+      "cg": 0.8721522510543569,
+      "inertia": 0.9076042420949065,
+      "mass": 0.8931107594934758,
+      "sensor": 1.1158435182587363,
+      "suspension": 1.1405548927966345,
+      "tire": 0.8993150246873838
+    },
+    "seed": 43,
+    "signs": {
+      "actuator": -1,
+      "cg": -1,
+      "inertia": -1,
+      "mass": -1,
+      "sensor": 1,
+      "suspension": 1,
+      "tire": -1
+    }
+  }
+]

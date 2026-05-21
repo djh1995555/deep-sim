@@ -1,0 +1,50 @@
+{
+  "checkpoint_type": "scaffold_final_single_model",
+  "format_version": "v0",
+  "history_len": 4,
+  "horizon_steps": [
+    25,
+    50,
+    100
+  ],
+  "is_training_grade_pytorch_checkpoint": false,
+  "key_metrics": {
+    "base_constraint_violation_rate_mean": 0.0,
+    "base_residual_to_physics_ratio_mean": 0.7859292717098083,
+    "cross_generalization_gap_vehicle_over_seen": 1.120946240857456,
+    "held_out_road_base_vs_physics_ratio_h100_mean": 0.7214529127772072,
+    "held_out_vehicle_base_vs_physics_ratio_h100_mean": 0.6761696524004814,
+    "validation_base_vs_physics_ratio_h100_mean": 0.5916371587616108
+  },
+  "metadata": {
+    "optional_uncertainty_wrapper": "U1",
+    "selection_rule": "scaffold_selected_single_model"
+  },
+  "notes": [
+    "This is a reproducible scaffold checkpoint descriptor, not a neural weight file.",
+    "The PyTorch student model must later use this variant as the first implementation target.",
+    "U1 ensemble remains an optional uncertainty wrapper; this checkpoint records the single-model U0 variant unless configured otherwise."
+  ],
+  "seeds": [
+    23
+  ],
+  "selected_variant": {
+    "encoder": "E2",
+    "fz": "F1",
+    "mu": "M0-fixed",
+    "steering": "S1",
+    "tire": "T1",
+    "uncertainty": "U0",
+    "vehicle": "V2-small"
+  },
+  "selection_basis": [
+    "B4 component ablation scaffold",
+    "B5 cross-vehicle/config generalization scaffold"
+  ],
+  "source_dataset": "runs/R037_final_single_model_freeze/artifacts/ds1",
+  "success_gates": {
+    "cross_generalization_passed": 1,
+    "final_single_model_freeze_passed": 1
+  },
+  "system": "E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0"
+}

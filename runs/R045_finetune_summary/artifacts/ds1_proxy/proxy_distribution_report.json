@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "observable_shift_measurable": true,
+    "observable_shift_not_explosive": true,
+    "paired_reference_count_matches": true,
+    "profile_count_positive": true,
+    "profile_magnitudes_within_5_to_15_percent": true
+  },
+  "paired_episode_count": 135,
+  "passed": true,
+  "profile_count": 3,
+  "profile_max_abs_magnitude": 0.14055489279663452,
+  "profile_min_abs_magnitude": 0.05951774616114959,
+  "proxy_distribution_shift_by_profile": {
+    "proxy_profile_00": 0.099270261304591,
+    "proxy_profile_01": 0.11381741123365469,
+    "proxy_profile_02": 0.14920290808139225
+  },
+  "proxy_distribution_shift_score": 0.12076352687321266
+}

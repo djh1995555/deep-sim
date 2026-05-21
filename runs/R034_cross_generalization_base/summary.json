@@ -1,0 +1,18 @@
+{
+  "config_name": "cross_generalization_base",
+  "dataset_id": "DS1_V1",
+  "end_time": "2026-05-21T08:27:01.977614+00:00",
+  "experiment_block": "B5.1",
+  "milestone": "M7",
+  "notes": "experiment gate passed for this run",
+  "primary_metric": "base_held_out_vehicle_eval_passed",
+  "primary_metric_value": 1,
+  "run_id": "R034",
+  "seed": 23,
+  "start_time": "2026-05-21T08:26:44.387206+00:00",
+  "status": "success",
+  "success_criteria_met": true,
+  "test_split": "held-out",
+  "train_split": "ds1_v1_scaffold",
+  "val_split": "validation"
+}

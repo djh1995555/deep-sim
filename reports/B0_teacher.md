@@ -52,3 +52,15 @@
 | R031 | success | ablation_run_passed | 1 | True | experiment gate passed for this run |
 | R032 | success | ablation_run_passed | 1 | True | experiment gate passed for this run |
 | R033 | success | ablation_run_passed | 1 | True | experiment gate passed for this run |
+| R034 | success | base_held_out_vehicle_eval_passed | 1 | True | experiment gate passed for this run |
+| R035 | success | cross_generalization_passed | 1 | True | experiment gate passed for this run |
+| R036 | success | cross_generalization_passed | 1 | True | experiment gate passed for this run |
+| R037 | success | final_single_model_freeze_passed | 1 | True | experiment gate passed for this run |
+| R038 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R039 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R040 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R041 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R042 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R043 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R044 | success | fine_tune_run_passed | 1 | True | experiment gate passed for this run |
+| R045 | success | fine_tune_summary_passed | 1 | True | experiment gate passed for this run |

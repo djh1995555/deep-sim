@@ -1,0 +1,18 @@
+{
+  "config_name": "finetune_FT5_steering_residual",
+  "dataset_id": "DS1_PROXY_FT_V1",
+  "end_time": "2026-05-21T08:33:42.458792+00:00",
+  "experiment_block": "B6.6",
+  "milestone": "M9",
+  "notes": "experiment gate passed for this run",
+  "primary_metric": "fine_tune_run_passed",
+  "primary_metric_value": 1,
+  "run_id": "R043",
+  "seed": 41,
+  "start_time": "2026-05-21T08:33:11.225001+00:00",
+  "status": "success",
+  "success_criteria_met": true,
+  "test_split": "test-window",
+  "train_split": "ds1_proxy_ft_scaffold",
+  "val_split": "validation"
+}

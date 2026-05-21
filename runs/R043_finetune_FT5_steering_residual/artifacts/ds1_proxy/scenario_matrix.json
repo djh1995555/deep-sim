@@ -1,0 +1,6302 @@
+[
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R00",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R00-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R01",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R01-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R02",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R02-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "R03",
+    "scenario_group": "CG-SINGLE",
+    "scenario_id": "R03-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP00",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP00-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP01",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP01-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP02",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP02-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP03",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP03-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP04",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP04-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP05",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP05-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP06",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP06-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP07",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP07-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP08",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP08-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP09",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP09-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP10",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP10-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "SP11",
+    "scenario_group": "CG-SPLIT",
+    "scenario_id": "SP11-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR00",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR00-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR01",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR01-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR02",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR02-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR03",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR03-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR04",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR04-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR05",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR05-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR06",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR06-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR07",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR07-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR08",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR08-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR09",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR09-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR10",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR10-L4-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L0-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L0-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L0-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L0-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "const_v",
+    "longitudinal_factor_id": "L0",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L0-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L1-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L1-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L1-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L1-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_acceleration",
+    "longitudinal_factor_id": "L1",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L1-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L2-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L2-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L2-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L2-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_acceleration",
+    "longitudinal_factor_id": "L2",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L2-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L3-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L3-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L3-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L3-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "small_braking",
+    "longitudinal_factor_id": "L3",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L3-Y4"
+  },
+  {
+    "lateral": "no_steer",
+    "lateral_factor_id": "Y0",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L4-Y0"
+  },
+  {
+    "lateral": "small_left_steer",
+    "lateral_factor_id": "Y1",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L4-Y1"
+  },
+  {
+    "lateral": "small_right_steer",
+    "lateral_factor_id": "Y2",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L4-Y2"
+  },
+  {
+    "lateral": "large_left_steer",
+    "lateral_factor_id": "Y3",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L4-Y3"
+  },
+  {
+    "lateral": "large_right_steer",
+    "lateral_factor_id": "Y4",
+    "longitudinal": "large_braking",
+    "longitudinal_factor_id": "L4",
+    "road_factor_id": "TR11",
+    "scenario_group": "CG-TRANSITION",
+    "scenario_id": "TR11-L4-Y4"
+  }
+]

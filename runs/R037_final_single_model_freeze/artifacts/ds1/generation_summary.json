@@ -1,0 +1,7 @@
+{
+  "config": "configs/teacher/ds1_v1.yaml",
+  "episode_count": 120,
+  "full_matrix_count": 700,
+  "out_dir": "runs/R037_final_single_model_freeze/artifacts/ds1",
+  "scenario_set": "ds1"
+}

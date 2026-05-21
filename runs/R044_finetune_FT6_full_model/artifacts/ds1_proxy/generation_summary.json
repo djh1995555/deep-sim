@@ -1,0 +1,7 @@
+{
+  "config": "configs/teacher/ds1_proxy_ft_v1.yaml",
+  "episode_count": 135,
+  "full_matrix_count": 700,
+  "out_dir": "runs/R044_finetune_FT6_full_model/artifacts/ds1_proxy",
+  "scenario_set": "ds1_proxy"
+}

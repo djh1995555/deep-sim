@@ -82,6 +82,8 @@ def run_base_hybrid_suite(
         for key in _required_success_keys(hybrid_cfg)
     )
     _write_json(os.path.join(out_dir, "artifacts", "base_hybrid_report.json"), report)
+    if hybrid_cfg.get("write_final_checkpoint", False):
+        _write_final_checkpoint(report, out_dir, hybrid_cfg)
     if hybrid_cfg.get("write_markdown_report", False):
         _write_hybrid_markdown(report, "reports/B3_base_hybrid.md")
     return report
@@ -965,6 +967,36 @@ def _summary_metrics(
         <= float(hybrid_cfg.get("ablation_max_constraint_violation", 0.05))
     )
     metrics.update(_uncertainty_proxy_metrics(seed_reports, hybrid_cfg))
+    seen_ratio = metrics.get("seen_config_combined_base_vs_physics_ratio_h100_mean", 9.0)
+    held_vehicle_ratio = metrics.get("held_out_vehicle_base_vs_physics_ratio_h100_mean", 9.0)
+    held_road_ratio = metrics.get("held_out_road_base_vs_physics_ratio_h100_mean", 9.0)
+    held_vehicle_vs_bb = metrics.get("held_out_vehicle_base_vs_black_box_ratio_h100_mean", 9.0)
+    held_road_vs_bb = metrics.get("held_out_road_base_vs_black_box_ratio_h100_mean", 9.0)
+    metrics["cross_generalization_gap_vehicle_over_seen"] = held_vehicle_ratio / max(
+        seen_ratio, 1e-9
+    )
+    metrics["cross_generalization_claim_supported"] = int(
+        metrics.get("base_train_transition_count", 0) > 0
+        and held_vehicle_ratio < float(hybrid_cfg.get("cross_max_held_out_vehicle_ratio", 0.98))
+        and held_road_ratio < float(hybrid_cfg.get("cross_max_held_out_road_ratio", 1.02))
+        and held_vehicle_vs_bb < float(hybrid_cfg.get("cross_max_vs_black_box_ratio", 1.05))
+        and held_road_vs_bb < float(hybrid_cfg.get("cross_max_vs_black_box_ratio", 1.05))
+        and metrics.get("base_constraint_violation_rate_mean", 1.0) <= 0.01
+    )
+    metrics["cross_generalization_passed"] = int(
+        metrics.get("base_train_transition_count", 0) > 0
+        and np.isfinite(held_vehicle_ratio)
+        and np.isfinite(held_road_ratio)
+        and held_vehicle_ratio < float(hybrid_cfg.get("cross_max_held_out_vehicle_ratio", 0.98))
+        and held_road_ratio < float(hybrid_cfg.get("cross_max_held_out_road_ratio", 1.02))
+        and metrics.get("base_constraint_violation_rate_mean", 1.0) <= 0.01
+    )
+    metrics["final_single_model_freeze_passed"] = int(
+        metrics.get("cross_generalization_passed", 0) == 1
+        and metrics.get("base_residual_to_physics_ratio_mean", 99.0)
+        <= float(hybrid_cfg.get("final_max_residual_to_physics_ratio", 4.0))
+        and metrics.get("base_constraint_violation_rate_mean", 1.0) <= 0.01
+    )
     return metrics
 
 
@@ -978,6 +1010,8 @@ def _required_success_keys(hybrid_cfg: Dict[str, Any]) -> List[str]:
         "residual_constraint_audit": ["base_residual_constraint_audit_passed"],
         "seed_replication": ["base_seed_replication_passed"],
         "ablation": ["ablation_run_passed"],
+        "cross_generalization": ["cross_generalization_passed"],
+        "final_freeze": ["final_single_model_freeze_passed"],
         "full_m5": [
             "base_hybrid_training_passed",
             "base_seen_config_eval_passed",
@@ -1087,6 +1121,69 @@ def _write_json(path: str, data: Dict[str, Any]) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, sort_keys=True)
+
+
+def _write_final_checkpoint(
+    report: Dict[str, Any],
+    out_dir: str,
+    hybrid_cfg: Dict[str, Any],
+) -> None:
+    summary = report.get("summary_metrics", {})
+    checkpoint = {
+        "checkpoint_type": "scaffold_final_single_model",
+        "format_version": "v0",
+        "is_training_grade_pytorch_checkpoint": False,
+        "selected_variant": report.get("variant", {}),
+        "system": report.get("system"),
+        "selection_basis": [
+            "B4 component ablation scaffold",
+            "B5 cross-vehicle/config generalization scaffold",
+        ],
+        "source_dataset": report.get("dataset_dir"),
+        "history_len": report.get("history_len"),
+        "horizon_steps": report.get("horizon_steps"),
+        "seeds": report.get("seeds"),
+        "key_metrics": {
+            "validation_base_vs_physics_ratio_h100_mean": summary.get(
+                "validation_base_vs_physics_ratio_h100_mean", 0.0
+            ),
+            "held_out_road_base_vs_physics_ratio_h100_mean": summary.get(
+                "held_out_road_base_vs_physics_ratio_h100_mean", 0.0
+            ),
+            "held_out_vehicle_base_vs_physics_ratio_h100_mean": summary.get(
+                "held_out_vehicle_base_vs_physics_ratio_h100_mean", 0.0
+            ),
+            "cross_generalization_gap_vehicle_over_seen": summary.get(
+                "cross_generalization_gap_vehicle_over_seen", 0.0
+            ),
+            "base_residual_to_physics_ratio_mean": summary.get(
+                "base_residual_to_physics_ratio_mean", 0.0
+            ),
+            "base_constraint_violation_rate_mean": summary.get(
+                "base_constraint_violation_rate_mean", 0.0
+            ),
+        },
+        "success_gates": {
+            "cross_generalization_passed": summary.get("cross_generalization_passed", 0),
+            "final_single_model_freeze_passed": summary.get(
+                "final_single_model_freeze_passed", 0
+            ),
+        },
+        "notes": [
+            "This is a reproducible scaffold checkpoint descriptor, not a neural weight file.",
+            "The PyTorch student model must later use this variant as the first implementation target.",
+            "U1 ensemble remains an optional uncertainty wrapper; this checkpoint records the single-model U0 variant unless configured otherwise.",
+        ],
+    }
+    extra = hybrid_cfg.get("final_checkpoint_metadata", {})
+    if extra:
+        checkpoint["metadata"] = extra
+    path = os.path.join(out_dir, "checkpoints", "final_single_model_scaffold.json")
+    _write_json(path, checkpoint)
+    _write_json(
+        os.path.join(out_dir, "artifacts", "final_single_model_selection.json"),
+        checkpoint,
+    )
 
 
 def _write_hybrid_markdown(report: Dict[str, Any], path: str) -> None:

@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from experiments.baselines import baseline_metrics_for_runner, run_baseline_suite
+from experiments.fine_tune import fine_tune_metrics_for_runner, run_fine_tune_suite
 from experiments.hybrid import base_hybrid_metrics_for_runner, run_base_hybrid_suite
 from experiments.sanity import run_sanity_check
 from teacher_simulator.config import load_yaml, write_yaml
@@ -181,6 +182,15 @@ def run_config(config_path: str) -> int:
             if not base_hybrid_report.get("passed", False):
                 report_dict["passed"] = False
                 report_dict["errors"].append("base hybrid suite failed")
+        fine_tune_cfg = cfg.get("fine_tune")
+        if fine_tune_cfg:
+            fine_tune_report = run_fine_tune_suite(dataset_dir, fine_tune_cfg, out_dir)
+            report_dict["metrics"].update(
+                fine_tune_metrics_for_runner(fine_tune_report)
+            )
+            if not fine_tune_report.get("passed", False):
+                report_dict["passed"] = False
+                report_dict["errors"].append("fine-tune suite failed")
         report_path = os.path.join(out_dir, "artifacts", "validation_report.json")
         _write_json(report_path, report_dict)
         primary_metric, primary_value = _primary_metric(run_id, report_dict)
@@ -292,6 +302,16 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "base_seed_replication_passed", metrics.get("base_seed_replication_passed", 0)
     if _is_m6_ablation_run(run_id):
         return "ablation_run_passed", metrics.get("ablation_run_passed", 0)
+    if run_id == "R034":
+        return "base_held_out_vehicle_eval_passed", metrics.get("base_held_out_vehicle_eval_passed", 0)
+    if run_id in {"R035", "R036"}:
+        return "cross_generalization_passed", metrics.get("cross_generalization_passed", 0)
+    if run_id == "R037":
+        return "final_single_model_freeze_passed", metrics.get("final_single_model_freeze_passed", 0)
+    if run_id in {"R038", "R039", "R040", "R041", "R042", "R043", "R044"}:
+        return "fine_tune_run_passed", metrics.get("fine_tune_run_passed", 0)
+    if run_id == "R045":
+        return "fine_tune_summary_passed", metrics.get("fine_tune_summary_passed", 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -381,6 +401,16 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("base_seed_replication_passed", 0) == 1
     if _is_m6_ablation_run(run_id):
         return metrics.get("ablation_run_passed", 0) == 1
+    if run_id == "R034":
+        return metrics.get("base_held_out_vehicle_eval_passed", 0) == 1
+    if run_id in {"R035", "R036"}:
+        return metrics.get("cross_generalization_passed", 0) == 1
+    if run_id == "R037":
+        return metrics.get("final_single_model_freeze_passed", 0) == 1
+    if run_id in {"R038", "R039", "R040", "R041", "R042", "R043", "R044"}:
+        return metrics.get("fine_tune_run_passed", 0) == 1
+    if run_id == "R045":
+        return metrics.get("fine_tune_summary_passed", 0) == 1
     return report["passed"]
 
 
@@ -527,6 +557,18 @@ def _write_stage_a_report() -> None:
         "runs/R031_ablation_vehicle_V2_small",
         "runs/R032_ablation_uncertainty_U0",
         "runs/R033_ablation_uncertainty_U1",
+        "runs/R034_cross_generalization_base",
+        "runs/R035_cross_generalization_selected_single",
+        "runs/R036_cross_generalization_selected_ensemble",
+        "runs/R037_final_single_model_freeze",
+        "runs/R038_finetune_FT0",
+        "runs/R039_finetune_FT1_vehicle_param_adapter",
+        "runs/R040_finetune_FT2_mu_head",
+        "runs/R041_finetune_FT3_fz_residual",
+        "runs/R042_finetune_FT4_tire_residual",
+        "runs/R043_finetune_FT5_steering_residual",
+        "runs/R044_finetune_FT6_full_model",
+        "runs/R045_finetune_summary",
     ]
     rows = []
     for run_dir in run_dirs:

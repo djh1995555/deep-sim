@@ -1,0 +1,111 @@
+{
+  "best_row": {
+    "adapter_to_base_ratio": 0.27775341718452334,
+    "bucket": "FTD1",
+    "ft_variant": "FT5",
+    "test_constraint_violation_rate": 0.0,
+    "test_relative_to_ft0": 0.8669265831938702,
+    "test_rmse": 0.5188537208239589,
+    "train_episode_count": 9,
+    "train_transition_count": 900,
+    "validation_rmse": 0.5521717229520635
+  },
+  "dataset_dir": "runs/R043_finetune_FT5_steering_residual/artifacts/ds1_proxy",
+  "final_variant": {
+    "encoder": "E2",
+    "fz": "F1",
+    "mu": "M0-fixed",
+    "steering": "S1",
+    "tire": "T1",
+    "uncertainty": "U0",
+    "vehicle": "V2-small"
+  },
+  "ft0_reference": {
+    "test_constraint_violation_rate": 0.0,
+    "test_rmse": 0.598497878462135,
+    "validation_rmse": 0.6145502816398157
+  },
+  "ft_variant": "FT5",
+  "history_len": 4,
+  "horizon_steps": 100,
+  "passed": true,
+  "rows": [
+    {
+      "adapter_to_base_ratio": 0.27775341718452334,
+      "bucket": "FTD1",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.8669265831938702,
+      "test_rmse": 0.5188537208239589,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 0.5521717229520635
+    },
+    {
+      "adapter_to_base_ratio": 0.2551642840025109,
+      "bucket": "FTD2",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9233333901636145,
+      "test_rmse": 0.552613075126174,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 0.575009485925555
+    },
+    {
+      "adapter_to_base_ratio": 0.22996350518975597,
+      "bucket": "FTD3",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9486217192899987,
+      "test_rmse": 0.5677480864581672,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 0.5922372594961444
+    },
+    {
+      "adapter_to_base_ratio": 0.1965236862609764,
+      "bucket": "FTD4",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.8983138831930825,
+      "test_rmse": 0.537638953284142,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 0.574741787902116
+    },
+    {
+      "adapter_to_base_ratio": 0.1818388972301463,
+      "bucket": "FTD5",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9671474759852688,
+      "test_rmse": 0.578835712537192,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 0.6105005430289872
+    }
+  ],
+  "source_dataset_dir": "runs/R043_finetune_FT5_steering_residual/artifacts/ds1_source",
+  "summary_metrics": {
+    "fine_tune_best_adapter_to_base_ratio": 0.27775341718452334,
+    "fine_tune_best_constraint_violation_rate": 0.0,
+    "fine_tune_best_relative_to_ft0": 0.8669265831938702,
+    "fine_tune_best_test_rmse": 0.5188537208239589,
+    "fine_tune_bucket_count": 5,
+    "fine_tune_ft0_test_rmse": 0.598497878462135,
+    "fine_tune_improved_over_ft0": 1,
+    "fine_tune_run_passed": 1,
+    "fine_tune_variant_count": 1
+  },
+  "system": "fine_tune_scaffold",
+  "target_episode_counts": {
+    "test": 45,
+    "train": 45,
+    "validation": 45
+  },
+  "warnings": [
+    "M9 uses a ridge adapter scaffold over the frozen scaffold-selected hybrid model.",
+    "This validates FT matrix plumbing and target-window split handling before PyTorch fine-tuning."
+  ]
+}

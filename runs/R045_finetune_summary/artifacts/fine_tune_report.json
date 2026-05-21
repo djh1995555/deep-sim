@@ -1,0 +1,391 @@
+{
+  "best_full_model": {
+    "adapter_to_base_ratio": 0.6819569092277443,
+    "bucket": "FTD2",
+    "ft_variant": "FT6",
+    "test_constraint_violation_rate": 0.0,
+    "test_relative_to_ft0": 2.458700190937411,
+    "test_rmse": 1.4715268480504868,
+    "train_episode_count": 18,
+    "train_transition_count": 1800,
+    "validation_rmse": 1.50194687016504
+  },
+  "best_small_module": {
+    "adapter_to_base_ratio": 0.27775341718452334,
+    "bucket": "FTD1",
+    "ft_variant": "FT5",
+    "test_constraint_violation_rate": 0.0,
+    "test_relative_to_ft0": 0.8669265831938702,
+    "test_rmse": 0.5188537208239589,
+    "train_episode_count": 9,
+    "train_transition_count": 900,
+    "validation_rmse": 0.5521717229520635
+  },
+  "passed": true,
+  "reports": [
+    "FT0",
+    "FT1",
+    "FT2",
+    "FT3",
+    "FT4",
+    "FT5",
+    "FT6"
+  ],
+  "rows": [
+    {
+      "adapter_to_base_ratio": 0.0,
+      "bucket": "FTD0",
+      "ft_variant": "FT0",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.0,
+      "test_rmse": 0.598497878462135,
+      "train_episode_count": 0,
+      "train_transition_count": 0,
+      "validation_rmse": 0.6145502816398157
+    },
+    {
+      "adapter_to_base_ratio": 0.22270794889578618,
+      "bucket": "FTD1",
+      "ft_variant": "FT1",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.0503475900272794,
+      "test_rmse": 0.6286308042791431,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 0.6234608713955254
+    },
+    {
+      "adapter_to_base_ratio": 0.2869198915111396,
+      "bucket": "FTD2",
+      "ft_variant": "FT1",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.011848964283393,
+      "test_rmse": 0.6055894584477193,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 0.6109345658284646
+    },
+    {
+      "adapter_to_base_ratio": 0.24452676283442107,
+      "bucket": "FTD3",
+      "ft_variant": "FT1",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9917189517963204,
+      "test_rmse": 0.59354168868079,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 0.625596747483227
+    },
+    {
+      "adapter_to_base_ratio": 0.20781624912563118,
+      "bucket": "FTD4",
+      "ft_variant": "FT1",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9557441690724516,
+      "test_rmse": 0.5720108575424183,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 0.6109094034032821
+    },
+    {
+      "adapter_to_base_ratio": 0.19621423533435936,
+      "bucket": "FTD5",
+      "ft_variant": "FT1",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.96189906218466,
+      "test_rmse": 0.5756945480122363,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 0.6035202746050163
+    },
+    {
+      "adapter_to_base_ratio": 0.5459577335062872,
+      "bucket": "FTD1",
+      "ft_variant": "FT2",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 2.520735698801548,
+      "test_rmse": 1.5086549678964938,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 1.5370679782253966
+    },
+    {
+      "adapter_to_base_ratio": 0.45044245410951955,
+      "bucket": "FTD2",
+      "ft_variant": "FT2",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.4459666176619317,
+      "test_rmse": 0.8654079529977352,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 0.8018733944674447
+    },
+    {
+      "adapter_to_base_ratio": 0.429042054489323,
+      "bucket": "FTD3",
+      "ft_variant": "FT2",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.4531356593846856,
+      "test_rmse": 0.8696986092594099,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 0.8176383139919154
+    },
+    {
+      "adapter_to_base_ratio": 0.3005456504776022,
+      "bucket": "FTD4",
+      "ft_variant": "FT2",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.3260036586452912,
+      "test_rmse": 0.7936103765322359,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 0.8602474247385691
+    },
+    {
+      "adapter_to_base_ratio": 0.2615051313411567,
+      "bucket": "FTD5",
+      "ft_variant": "FT2",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.316655127726153,
+      "test_rmse": 0.7880153006103938,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 0.8152945504058092
+    },
+    {
+      "adapter_to_base_ratio": 0.47586444530853095,
+      "bucket": "FTD1",
+      "ft_variant": "FT3",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 2.2845230807909296,
+      "test_rmse": 1.3672822171511518,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 1.4797613782780386
+    },
+    {
+      "adapter_to_base_ratio": 0.4454587458444201,
+      "bucket": "FTD2",
+      "ft_variant": "FT3",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9260525540329538,
+      "test_rmse": 0.5542404889331645,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 0.5691001429332662
+    },
+    {
+      "adapter_to_base_ratio": 0.3664360526913144,
+      "bucket": "FTD3",
+      "ft_variant": "FT3",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.941546674917922,
+      "test_rmse": 0.5635136874114538,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 0.5854876004202716
+    },
+    {
+      "adapter_to_base_ratio": 0.28762387924801025,
+      "bucket": "FTD4",
+      "ft_variant": "FT3",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.1451611002167255,
+      "test_rmse": 0.6853764889770746,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 0.7440889083758091
+    },
+    {
+      "adapter_to_base_ratio": 0.24557796878587232,
+      "bucket": "FTD5",
+      "ft_variant": "FT3",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.0527603358101636,
+      "test_rmse": 0.6300748275114677,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 0.6767273294156783
+    },
+    {
+      "adapter_to_base_ratio": 0.8006978465112925,
+      "bucket": "FTD1",
+      "ft_variant": "FT4",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 3.169648862570065,
+      "test_rmse": 1.8970281197181034,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 1.967585548675495
+    },
+    {
+      "adapter_to_base_ratio": 0.6675526337075137,
+      "bucket": "FTD2",
+      "ft_variant": "FT4",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.7038504919688602,
+      "test_rmse": 1.0197509046600277,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 0.937694274710474
+    },
+    {
+      "adapter_to_base_ratio": 0.5859497654000391,
+      "bucket": "FTD3",
+      "ft_variant": "FT4",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.987359504515005,
+      "test_rmse": 1.1894304471937902,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 1.088520178607382
+    },
+    {
+      "adapter_to_base_ratio": 0.46869904616770897,
+      "bucket": "FTD4",
+      "ft_variant": "FT4",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.4890526933311827,
+      "test_rmse": 0.891194877877041,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 0.9600992852164989
+    },
+    {
+      "adapter_to_base_ratio": 0.4657784780456272,
+      "bucket": "FTD5",
+      "ft_variant": "FT4",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 1.7613281734230657,
+      "test_rmse": 1.0541511750692922,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 1.0966269134661402
+    },
+    {
+      "adapter_to_base_ratio": 0.27775341718452334,
+      "bucket": "FTD1",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.8669265831938702,
+      "test_rmse": 0.5188537208239589,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 0.5521717229520635
+    },
+    {
+      "adapter_to_base_ratio": 0.2551642840025109,
+      "bucket": "FTD2",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9233333901636145,
+      "test_rmse": 0.552613075126174,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 0.575009485925555
+    },
+    {
+      "adapter_to_base_ratio": 0.22996350518975597,
+      "bucket": "FTD3",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9486217192899987,
+      "test_rmse": 0.5677480864581672,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 0.5922372594961444
+    },
+    {
+      "adapter_to_base_ratio": 0.1965236862609764,
+      "bucket": "FTD4",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.8983138831930825,
+      "test_rmse": 0.537638953284142,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 0.574741787902116
+    },
+    {
+      "adapter_to_base_ratio": 0.1818388972301463,
+      "bucket": "FTD5",
+      "ft_variant": "FT5",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 0.9671474759852688,
+      "test_rmse": 0.578835712537192,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 0.6105005430289872
+    },
+    {
+      "adapter_to_base_ratio": 0.5914810703990281,
+      "bucket": "FTD1",
+      "ft_variant": "FT6",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 6.941443672703444,
+      "test_rmse": 4.154439311577422,
+      "train_episode_count": 9,
+      "train_transition_count": 900,
+      "validation_rmse": 4.242724168326816
+    },
+    {
+      "adapter_to_base_ratio": 0.6819569092277443,
+      "bucket": "FTD2",
+      "ft_variant": "FT6",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 2.458700190937411,
+      "test_rmse": 1.4715268480504868,
+      "train_episode_count": 18,
+      "train_transition_count": 1800,
+      "validation_rmse": 1.50194687016504
+    },
+    {
+      "adapter_to_base_ratio": 0.6129166552180632,
+      "bucket": "FTD3",
+      "ft_variant": "FT6",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 2.792688673119336,
+      "test_rmse": 1.6714182460671572,
+      "train_episode_count": 27,
+      "train_transition_count": 2700,
+      "validation_rmse": 1.7824411671111402
+    },
+    {
+      "adapter_to_base_ratio": 0.5263529923785295,
+      "bucket": "FTD4",
+      "ft_variant": "FT6",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 4.694324420186452,
+      "test_rmse": 2.8095432062945833,
+      "train_episode_count": 36,
+      "train_transition_count": 3600,
+      "validation_rmse": 2.7446048076291967
+    },
+    {
+      "adapter_to_base_ratio": 0.35131402065730066,
+      "bucket": "FTD5",
+      "ft_variant": "FT6",
+      "test_constraint_violation_rate": 0.0,
+      "test_relative_to_ft0": 4.580993657936768,
+      "test_rmse": 2.7417149855236507,
+      "train_episode_count": 45,
+      "train_transition_count": 4500,
+      "validation_rmse": 2.8310060507965913
+    }
+  ],
+  "summary_metrics": {
+    "fine_tune_best_full_relative_to_ft0": 2.458700190937411,
+    "fine_tune_best_small_relative_to_ft0": 0.8669265831938702,
+    "fine_tune_best_small_vs_full_gap": 0.3525954837394563,
+    "fine_tune_completed_cell_count": 31,
+    "fine_tune_completed_variant_count": 7,
+    "fine_tune_ft0_test_rmse": 0.598497878462135,
+    "fine_tune_summary_passed": 1
+  },
+  "system": "fine_tune_aggregate_scaffold",
+  "warnings": [
+    "B6 is still a scaffold adapter experiment over simulator proxy target windows.",
+    "Real vehicle data is required before making deployment claims."
+  ]
+}
