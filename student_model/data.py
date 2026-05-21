@@ -150,3 +150,64 @@ class TorchEpisodeDataset:
             "dt": torch.tensor(float(record.metadata["dt"]), dtype=torch.float32),
             "episode_id": record.episode_id,
         }
+
+
+class TorchTransitionDataset:
+    def __init__(
+        self,
+        dataset_dir: str,
+        history_len: int = 8,
+        split_role: str = "train",
+        stride: int = 1,
+        max_episodes: int = 0,
+        max_samples: int = 0,
+    ):
+        try:
+            import torch  # noqa: F401
+        except ImportError as exc:
+            raise ImportError("TorchTransitionDataset requires PyTorch") from exc
+        self.dataset_dir = dataset_dir
+        self.history_len = int(history_len)
+        self.stride = max(1, int(stride))
+        manifest = load_manifest(dataset_dir)
+        items = [
+            (idx, item)
+            for idx, item in enumerate(manifest.get("episodes", []))
+            if item.get("split_role") == split_role
+        ]
+        if not items:
+            items = list(enumerate(manifest.get("episodes", [])))
+        max_episode_count = int(max_episodes or 0)
+        if max_episode_count > 0:
+            items = items[:max_episode_count]
+        self.indices = []
+        for global_index, _ in items:
+            record = load_episode_record(dataset_dir, global_index)
+            states, _ = episode_arrays(record)
+            for state_index in range(self.history_len, len(states) - 1, self.stride):
+                self.indices.append((global_index, state_index))
+                if max_samples and len(self.indices) >= int(max_samples):
+                    return
+
+    def __len__(self) -> int:
+        return len(self.indices)
+
+    def __getitem__(self, index: int) -> Dict[str, Any]:
+        import torch
+
+        global_index, state_index = self.indices[index]
+        record = load_episode_record(self.dataset_dir, global_index)
+        states, controls = episode_arrays(record)
+        hist = observable_history(states, controls)
+        start = state_index - self.history_len
+        window = hist[start:state_index]
+        return {
+            "observable_history": torch.from_numpy(window),
+            "current_state": torch.from_numpy(states[state_index]),
+            "current_control": torch.from_numpy(controls[state_index]),
+            "target_next_state": torch.from_numpy(states[state_index + 1]),
+            "context": torch.from_numpy(context_vector(record)),
+            "dt": torch.tensor(float(record.metadata["dt"]), dtype=torch.float32),
+            "episode_id": record.episode_id,
+            "state_index": torch.tensor(state_index, dtype=torch.int64),
+        }

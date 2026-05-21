@@ -30,6 +30,12 @@
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml`
 - GPU backward/optimizer smoke run:
   - `conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml`
+- Small training dev runs:
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R107.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml`
 
 ## Ready Smoke Runs
 
@@ -41,6 +47,11 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R107.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
 ```
 
 ## Remote GPU

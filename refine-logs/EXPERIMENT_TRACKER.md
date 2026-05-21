@@ -56,4 +56,9 @@
 | R104 | P3 | PyTorch checkpoint smoke | save/load trained-weight format | MUST | DONE |
 | R105 | P4 | PyTorch GPU forward smoke | CUDA-required E2+T1+F1+S1+M0+V2+U0 one-step loss | MUST | DONE |
 | R106 | P4 | PyTorch GPU tiny overfit | CUDA-required backward + AdamW optimizer loss descent | MUST | DONE |
+| R107 | P5 | PyTorch one-step training | train/validation/checkpoint on CUDA | MUST | DONE |
+| R108 | P5 | PyTorch rollout eval | rollout from R107 checkpoint | MUST | DONE |
+| R109 | P5 | PyTorch resume/eval-only smoke | resume R107 checkpoint and evaluate | MUST | DONE |
+| R110 | P5 | PyTorch black-box baseline | direct TCN train/validation/checkpoint on CUDA | MUST | DONE |
+| R111 | P6 | PyTorch base model small training | final single hybrid small training on CUDA | MUST | DONE |
 | R046+ | M10 | MoE tire residual after extreme data | DS2 MoE tire residual | NICE | TODO |

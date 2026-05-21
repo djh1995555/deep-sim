@@ -370,6 +370,20 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         )
     if run_id == "R106":
         return "torch_tiny_overfit_passed", metrics.get("torch_tiny_overfit_passed", 0)
+    if run_id in {"R107", "R111"}:
+        return "torch_one_step_training_passed", metrics.get(
+            "torch_one_step_training_passed",
+            0,
+        )
+    if run_id == "R108":
+        return "torch_rollout_eval_passed", metrics.get("torch_rollout_eval_passed", 0)
+    if run_id == "R109":
+        return "torch_resume_eval_passed", metrics.get("torch_resume_eval_passed", 0)
+    if run_id == "R110":
+        return "torch_black_box_training_passed", metrics.get(
+            "torch_black_box_training_passed",
+            0,
+        )
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -483,6 +497,14 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("torch_forward_loss_smoke_passed", 0) == 1
     if run_id == "R106":
         return metrics.get("torch_tiny_overfit_passed", 0) == 1
+    if run_id in {"R107", "R111"}:
+        return metrics.get("torch_one_step_training_passed", 0) == 1
+    if run_id == "R108":
+        return metrics.get("torch_rollout_eval_passed", 0) == 1
+    if run_id == "R109":
+        return metrics.get("torch_resume_eval_passed", 0) == 1
+    if run_id == "R110":
+        return metrics.get("torch_black_box_training_passed", 0) == 1
     return report["passed"]
 
 

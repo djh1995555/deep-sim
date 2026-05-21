@@ -1,0 +1,19 @@
+{
+  "blocked": false,
+  "blocked_reason": "",
+  "errors": [],
+  "metrics": {
+    "torch_device": "cuda",
+    "torch_resume_checkpoint_exists": 1,
+    "torch_resume_end_step": 70,
+    "torch_resume_eval_passed": 1,
+    "torch_resume_start_step": 60,
+    "torch_resume_train_loss_ratio": 1.0000129568755827,
+    "torch_resume_val_mse_after": 5.781470535323024,
+    "torch_resume_val_mse_before": 5.879991000518203
+  },
+  "mode": "resume_eval_smoke",
+  "name": "pytorch_resume_eval_smoke",
+  "passed": true,
+  "warnings": []
+}

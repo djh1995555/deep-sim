@@ -9,6 +9,7 @@ import numpy as np
 
 from student_model.data import (
     TorchEpisodeDataset,
+    TorchTransitionDataset,
     context_vector,
     episode_arrays,
     load_episode_record,
@@ -66,6 +67,67 @@ def _build_model(torch_cfg: Dict[str, Any], device: Any) -> Any:
     return model.to(device)
 
 
+def _build_direct_model(torch: Any, torch_cfg: Dict[str, Any], device: Any) -> Any:
+    from torch import nn
+
+    from student_model.constants import CONTROL_KEYS, STATE_KEYS
+    from student_model.torch_model import CausalTCNEncoder, MLPHead, sanitize_state
+
+    class DirectTCNPredictor(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            hidden_dim = int(torch_cfg.get("hidden_dim", 64))
+            state_dim = len(STATE_KEYS)
+            control_dim = len(CONTROL_KEYS)
+            context_dim = int(torch_cfg.get("context_dim", 17))
+            residual_bound = float(torch_cfg.get("direct_residual_bound", 0.6))
+            obs_dim = state_dim + control_dim
+            feature_dim = hidden_dim + state_dim + control_dim + context_dim
+            self.state_dim = state_dim
+            self.context_dim = context_dim
+            self.residual_bound = residual_bound
+            self.encoder = CausalTCNEncoder(obs_dim, hidden_dim)
+            self.head = MLPHead(feature_dim, hidden_dim, state_dim)
+            self.logvar_head = MLPHead(feature_dim, hidden_dim, state_dim)
+
+        def forward(
+            self,
+            observable_history: Any,
+            current_state: Any = None,
+            current_control: Any = None,
+            context: Any = None,
+            dt: Any = None,
+        ) -> Dict[str, Any]:
+            if current_state is None:
+                current_state = observable_history[:, -1, : self.state_dim]
+            if current_control is None:
+                current_control = observable_history[:, -1, self.state_dim :]
+            if context is None:
+                context = observable_history.new_zeros(
+                    observable_history.shape[0],
+                    self.context_dim,
+                )
+            z = self.encoder(observable_history)
+            features = torch.cat([z, current_state, current_control, context], dim=-1)
+            delta_x = torch.tanh(self.head(features)) * self.residual_bound
+            x_next = sanitize_state(current_state + delta_x)
+            logvar = torch.clamp(self.logvar_head(features), min=-8.0, max=5.0)
+            return {
+                "x_next": x_next,
+                "delta_x": delta_x,
+                "logvar": logvar,
+                "z_shared": z,
+            }
+
+    return DirectTCNPredictor().to(device)
+
+
+def _build_model_for_cfg(torch: Any, torch_cfg: Dict[str, Any], device: Any) -> Any:
+    if torch_cfg.get("model_type", "hybrid") == "direct_tcn":
+        return _build_direct_model(torch, torch_cfg.get("baseline_config", {}), device)
+    return _build_model(torch_cfg, device)
+
+
 def _build_loader(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> Any:
     from torch.utils.data import DataLoader, Subset
 
@@ -81,6 +143,31 @@ def _build_loader(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> An
         dataset,
         batch_size=int(torch_cfg.get("batch_size", 4)),
         shuffle=bool(torch_cfg.get("shuffle", False)),
+        drop_last=False,
+    )
+
+
+def _build_transition_loader(
+    torch: Any,
+    dataset_dir: str,
+    torch_cfg: Dict[str, Any],
+    split_role: str,
+    shuffle: bool,
+) -> Any:
+    from torch.utils.data import DataLoader
+
+    dataset = TorchTransitionDataset(
+        dataset_dir,
+        history_len=int(torch_cfg.get("history_len", 8)),
+        split_role=split_role,
+        stride=int(torch_cfg.get("sample_stride", 1)),
+        max_episodes=int(torch_cfg.get("max_episodes", 0) or 0),
+        max_samples=int(torch_cfg.get("max_samples", 0) or 0),
+    )
+    return DataLoader(
+        dataset,
+        batch_size=int(torch_cfg.get("batch_size", 8)),
+        shuffle=shuffle,
         drop_last=False,
     )
 
@@ -103,6 +190,213 @@ def _forward(model: Any, batch: Dict[str, Any]) -> Dict[str, Any]:
         context=batch["context"],
         dt=batch["dt"],
     )
+
+
+def _evaluate_one_step(torch: Any, model: Any, loader: Any, device: Any) -> Dict[str, float]:
+    losses = []
+    mses = []
+    nlls = []
+    model.eval()
+    with torch.no_grad():
+        for batch in loader:
+            batch = _batch_to_device(batch, device)
+            out = _forward(model, batch)
+            loss, metrics = _loss_metrics(torch, out, batch)
+            losses.append(float(loss.detach().cpu()))
+            mses.append(metrics["one_step_mse"])
+            nlls.append(metrics["one_step_nll"])
+    return {
+        "loss": float(np.mean(losses)) if losses else float("nan"),
+        "mse": float(np.mean(mses)) if mses else float("nan"),
+        "nll": float(np.mean(nlls)) if nlls else float("nan"),
+    }
+
+
+def _cycle_batches(loader: Any) -> Any:
+    while True:
+        for batch in loader:
+            yield batch
+
+
+def _checkpoint_payload(
+    model: Any,
+    optimizer: Any,
+    torch_cfg: Dict[str, Any],
+    step: int,
+    metrics: Dict[str, Any],
+) -> Dict[str, Any]:
+    return {
+        "format_version": "pytorch_training_v0",
+        "model_type": torch_cfg.get("model_type", "hybrid"),
+        "model_config": asdict(_model_config(torch_cfg))
+        if torch_cfg.get("model_type", "hybrid") == "hybrid"
+        else dict(torch_cfg.get("baseline_config", {})),
+        "torch_training_config": dict(torch_cfg),
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict() if optimizer is not None else None,
+        "step": int(step),
+        "metrics": metrics,
+    }
+
+
+def _save_training_checkpoint(
+    torch: Any,
+    path: str,
+    model: Any,
+    optimizer: Any,
+    torch_cfg: Dict[str, Any],
+    step: int,
+    metrics: Dict[str, Any],
+) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    torch.save(_checkpoint_payload(model, optimizer, torch_cfg, step, metrics), path)
+
+
+def _load_training_checkpoint(torch: Any, path: str, device: Any) -> Dict[str, Any]:
+    return torch.load(path, map_location=device, weights_only=True)
+
+
+def _restore_model_from_checkpoint(torch: Any, checkpoint: Dict[str, Any], device: Any) -> Any:
+    model_type = checkpoint.get("model_type", "hybrid")
+    if model_type == "direct_tcn":
+        model = _build_direct_model(
+            torch,
+            checkpoint.get("model_config", {}),
+            device,
+        )
+    else:
+        from student_model.torch_model import HybridStudentConfig, HybridStudentModel
+
+        model = HybridStudentModel(HybridStudentConfig(**checkpoint.get("model_config", {}))).to(device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    return model
+
+
+def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out_dir: str) -> Tuple[bool, Dict[str, Any]]:
+    device = _device(torch, torch_cfg)
+    train_loader = _build_transition_loader(
+        torch,
+        dataset_dir,
+        torch_cfg,
+        split_role=torch_cfg.get("split_role", "train"),
+        shuffle=True,
+    )
+    val_cfg = {**torch_cfg, "max_samples": int(torch_cfg.get("max_val_samples", torch_cfg.get("max_samples", 0) or 0))}
+    val_loader = _build_transition_loader(
+        torch,
+        dataset_dir,
+        val_cfg,
+        split_role=torch_cfg.get("val_split_role", "validation"),
+        shuffle=False,
+    )
+    train_eval_cfg = {
+        **torch_cfg,
+        "max_samples": int(torch_cfg.get("max_train_eval_samples", torch_cfg.get("max_samples", 0) or 0)),
+    }
+    train_eval_loader = _build_transition_loader(
+        torch,
+        dataset_dir,
+        train_eval_cfg,
+        split_role=torch_cfg.get("split_role", "train"),
+        shuffle=False,
+    )
+    model = _build_model_for_cfg(torch, torch_cfg, device)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=float(torch_cfg.get("learning_rate", 1.0e-4)),
+        weight_decay=float(torch_cfg.get("weight_decay", 0.0)),
+    )
+    resume_from = torch_cfg.get("resume_from")
+    start_step = 0
+    if resume_from:
+        checkpoint = _load_training_checkpoint(torch, resume_from, device)
+        model.load_state_dict(checkpoint["model_state_dict"])
+        if checkpoint.get("optimizer_state_dict"):
+            optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+        start_step = int(checkpoint.get("step", 0))
+
+    max_steps = int(torch_cfg.get("max_steps", 100))
+    eval_interval = max(1, int(torch_cfg.get("eval_interval", max_steps)))
+    grad_clip = float(torch_cfg.get("grad_clip", 1.0))
+    history_path = os.path.join(out_dir, "artifacts", "training_history.jsonl")
+    os.makedirs(os.path.dirname(history_path), exist_ok=True)
+    iterator = _cycle_batches(train_loader)
+    initial_train_eval = _evaluate_one_step(torch, model, train_eval_loader, device)
+    final_loss = None
+    last_val = {"loss": float("nan"), "mse": float("nan"), "nll": float("nan")}
+    for local_step in range(1, max_steps + 1):
+        model.train()
+        batch = _batch_to_device(next(iterator), device)
+        optimizer.zero_grad(set_to_none=True)
+        out = _forward(model, batch)
+        loss, train_metrics = _loss_metrics(torch, out, batch)
+        loss.backward()
+        grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+        optimizer.step()
+        final_loss = float(loss.detach().cpu())
+        global_step = start_step + local_step
+        row = {
+            "step": global_step,
+            "train_loss": final_loss,
+            "train_mse": train_metrics["one_step_mse"],
+            "grad_norm": float(grad_norm.detach().cpu() if hasattr(grad_norm, "detach") else grad_norm),
+        }
+        if local_step == max_steps or local_step % eval_interval == 0:
+            last_val = _evaluate_one_step(torch, model, val_loader, device)
+            row.update(
+                {
+                    "val_loss": last_val["loss"],
+                    "val_mse": last_val["mse"],
+                    "val_nll": last_val["nll"],
+                }
+            )
+        with open(history_path, "a", encoding="utf-8") as handle:
+            handle.write(json.dumps(row, sort_keys=True) + "\n")
+
+    final_train_eval = _evaluate_one_step(torch, model, train_eval_loader, device)
+    train_loss_ratio = final_train_eval["loss"] / max(initial_train_eval["loss"], 1.0e-12)
+    checkpoint_name = torch_cfg.get("checkpoint_name", "model.pt")
+    checkpoint_path = os.path.join(out_dir, "checkpoints", checkpoint_name)
+    metrics = {
+        "torch_one_step_training_initial_loss": float(initial_train_eval["loss"]),
+        "torch_one_step_training_final_loss": float(final_train_eval["loss"]),
+        "torch_one_step_training_last_batch_loss": float(final_loss),
+        "torch_one_step_training_loss_ratio": float(train_loss_ratio),
+        "torch_one_step_training_val_mse": float(last_val["mse"]),
+        "torch_one_step_training_steps": max_steps,
+        "torch_one_step_training_start_step": start_step,
+        "torch_one_step_training_end_step": start_step + max_steps,
+        "torch_one_step_training_sample_count": len(train_loader.dataset),
+        "torch_one_step_validation_sample_count": len(val_loader.dataset),
+        "torch_device": str(device),
+    }
+    if device.type == "cuda":
+        metrics["torch_cuda_max_memory_allocated_mb"] = float(
+            torch.cuda.max_memory_allocated(device) / (1024.0 * 1024.0)
+        )
+    _save_training_checkpoint(
+        torch,
+        checkpoint_path,
+        model,
+        optimizer,
+        torch_cfg,
+        start_step + max_steps,
+        metrics,
+    )
+    metrics["torch_one_step_training_checkpoint_exists"] = int(os.path.exists(checkpoint_path))
+    metric_name = (
+        "torch_black_box_training_passed"
+        if torch_cfg.get("model_type") == "direct_tcn"
+        else "torch_one_step_training_passed"
+    )
+    passed = (
+        np.isfinite(final_loss)
+        and np.isfinite(last_val["mse"])
+        and train_loss_ratio <= float(torch_cfg.get("success_loss_ratio", 1.0))
+        and os.path.exists(checkpoint_path)
+    )
+    metrics[metric_name] = int(bool(passed))
+    return bool(passed), metrics
 
 
 def _loss_metrics(torch: Any, out: Dict[str, Any], batch: Dict[str, Any]) -> Tuple[Any, Dict[str, float]]:
@@ -254,6 +548,174 @@ def _rollout_smoke(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> T
     return passed, metrics
 
 
+def _rollout_eval_from_checkpoint(
+    torch: Any,
+    dataset_dir: str,
+    torch_cfg: Dict[str, Any],
+    out_dir: str,
+) -> Tuple[bool, Dict[str, Any]]:
+    device = _device(torch, torch_cfg)
+    checkpoint = _load_training_checkpoint(torch, torch_cfg["checkpoint_path"], device)
+    model = _restore_model_from_checkpoint(torch, checkpoint, device)
+    model.eval()
+    manifest = validate_canonical_dataset(dataset_dir)
+    history_len = int(torch_cfg.get("history_len", 8))
+    rollout_steps = int(torch_cfg.get("rollout_steps", 16))
+    max_episodes = int(torch_cfg.get("max_episodes", 4))
+    split_role = torch_cfg.get("split_role", "validation")
+    from student_model.data import load_manifest
+
+    items = [
+        (idx, item)
+        for idx, item in enumerate(load_manifest(dataset_dir).get("episodes", []))
+        if item.get("split_role") == split_role
+    ]
+    if not items:
+        items = [(idx, item) for idx, item in enumerate(load_manifest(dataset_dir).get("episodes", []))]
+    rows = []
+    all_sqerr = []
+    finite_values = []
+    with torch.no_grad():
+        for global_index, item in items[:max_episodes]:
+            record = load_episode_record(dataset_dir, global_index)
+            states, controls = episode_arrays(record)
+            steps = min(rollout_steps, len(states) - history_len - 1)
+            if steps <= 0:
+                continue
+            context = torch.as_tensor(context_vector(record)[None, :], dtype=torch.float32, device=device)
+            dt = torch.tensor([float(record.metadata["dt"])], dtype=torch.float32, device=device)
+            history = np.concatenate([states[:history_len], controls[:history_len]], axis=-1)
+            current = torch.as_tensor(
+                states[history_len - 1 : history_len],
+                dtype=torch.float32,
+                device=device,
+            )
+            preds = []
+            targets = []
+            for step in range(steps):
+                t = history_len - 1 + step
+                obs = torch.as_tensor(history[None, :, :], dtype=torch.float32, device=device)
+                control = torch.as_tensor(controls[t : t + 1], dtype=torch.float32, device=device)
+                out = model(obs, current, control, context, dt)
+                current = out["x_next"]
+                pred = current.detach().cpu().numpy()[0]
+                preds.append(pred)
+                targets.append(states[t + 1])
+                if step + 1 < steps:
+                    history = np.vstack(
+                        [
+                            history[1:],
+                            np.concatenate([pred, controls[t + 1]], axis=-1).astype(np.float32),
+                        ]
+                    )
+            pred_arr = np.asarray(preds, dtype=np.float32)
+            target_arr = np.asarray(targets, dtype=np.float32)
+            sqerr = (pred_arr - target_arr) ** 2
+            all_sqerr.append(sqerr.reshape(-1))
+            finite_fraction = float(np.isfinite(pred_arr).mean()) if pred_arr.size else 0.0
+            finite_values.append(finite_fraction)
+            rows.append(
+                {
+                    "episode_id": item.get("episode_id", record.episode_id),
+                    "split_role": split_role,
+                    "steps": int(steps),
+                    "rmse": float(np.sqrt(np.mean(sqerr))),
+                    "finite_fraction": finite_fraction,
+                }
+            )
+    report_path = os.path.join(out_dir, "artifacts", "rollout_eval.json")
+    _write_json(
+        report_path,
+        {
+            "checkpoint_path": torch_cfg["checkpoint_path"],
+            "dataset_summary": manifest,
+            "episodes": rows,
+        },
+    )
+    rmse = float(np.sqrt(np.mean(np.concatenate(all_sqerr)))) if all_sqerr else float("nan")
+    finite_fraction = float(np.mean(finite_values)) if finite_values else 0.0
+    passed = (
+        bool(rows)
+        and np.isfinite(rmse)
+        and finite_fraction == 1.0
+        and rmse <= float(torch_cfg.get("max_rollout_rmse", 1.0e6))
+    )
+    metrics = {
+        "torch_rollout_eval_passed": int(passed),
+        "torch_rollout_eval_rmse": rmse,
+        "torch_rollout_eval_episode_count": len(rows),
+        "torch_rollout_eval_steps": rollout_steps,
+        "torch_rollout_eval_finite_fraction": finite_fraction,
+        "torch_device": str(device),
+    }
+    return bool(passed), metrics
+
+
+def _resume_eval_smoke(
+    torch: Any,
+    dataset_dir: str,
+    torch_cfg: Dict[str, Any],
+    out_dir: str,
+) -> Tuple[bool, Dict[str, Any]]:
+    device = _device(torch, torch_cfg)
+    checkpoint = _load_training_checkpoint(torch, torch_cfg["checkpoint_path"], device)
+    model = _restore_model_from_checkpoint(torch, checkpoint, device)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=float(torch_cfg.get("learning_rate", 1.0e-4)),
+        weight_decay=float(torch_cfg.get("weight_decay", 0.0)),
+    )
+    if checkpoint.get("optimizer_state_dict"):
+        optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+    val_cfg = {**torch_cfg, "max_samples": int(torch_cfg.get("max_val_samples", 64))}
+    val_loader = _build_transition_loader(
+        torch,
+        dataset_dir,
+        val_cfg,
+        split_role=torch_cfg.get("val_split_role", "validation"),
+        shuffle=False,
+    )
+    before = _evaluate_one_step(torch, model, val_loader, device)
+    train_cfg = {
+        **torch_cfg,
+        "max_steps": int(torch_cfg.get("resume_steps", 10)),
+        "checkpoint_name": torch_cfg.get("checkpoint_name", "resume_model.pt"),
+        "resume_from": torch_cfg["checkpoint_path"],
+    }
+    passed_train, train_metrics = _one_step_train(torch, dataset_dir, train_cfg, out_dir)
+    resumed_path = os.path.join(out_dir, "checkpoints", train_cfg["checkpoint_name"])
+    resumed = _load_training_checkpoint(torch, resumed_path, device)
+    restored = _restore_model_from_checkpoint(torch, resumed, device)
+    after = _evaluate_one_step(torch, restored, val_loader, device)
+    start_step = int(checkpoint.get("step", 0))
+    end_step = int(resumed.get("step", 0))
+    passed = (
+        passed_train
+        and os.path.exists(resumed_path)
+        and end_step > start_step
+        and np.isfinite(before["mse"])
+        and np.isfinite(after["mse"])
+    )
+    metrics = {
+        "torch_resume_eval_passed": int(bool(passed)),
+        "torch_resume_start_step": start_step,
+        "torch_resume_end_step": end_step,
+        "torch_resume_val_mse_before": float(before["mse"]),
+        "torch_resume_val_mse_after": float(after["mse"]),
+        "torch_resume_checkpoint_exists": int(os.path.exists(resumed_path)),
+        "torch_device": str(device),
+    }
+    metrics.update(
+        {
+            "torch_resume_train_loss_ratio": train_metrics.get(
+                "torch_one_step_training_loss_ratio",
+                float("nan"),
+            )
+        }
+    )
+    return bool(passed), metrics
+
+
 def _checkpoint_smoke(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out_dir: str) -> Tuple[bool, Dict[str, Any]]:
     from student_model.torch_model import HybridStudentModel
 
@@ -338,6 +800,17 @@ def run_torch_training_suite(
             passed, metrics = _rollout_smoke(torch, dataset_dir, torch_cfg)
         elif mode == "checkpoint_smoke":
             passed, metrics = _checkpoint_smoke(torch, dataset_dir, torch_cfg, out_dir)
+        elif mode == "one_step_train":
+            passed, metrics = _one_step_train(torch, dataset_dir, torch_cfg, out_dir)
+        elif mode == "rollout_eval":
+            passed, metrics = _rollout_eval_from_checkpoint(
+                torch,
+                dataset_dir,
+                torch_cfg,
+                out_dir,
+            )
+        elif mode == "resume_eval_smoke":
+            passed, metrics = _resume_eval_smoke(torch, dataset_dir, torch_cfg, out_dir)
         else:
             raise ValueError("unknown torch training mode: %s" % mode)
         report["metrics"].update(metrics)

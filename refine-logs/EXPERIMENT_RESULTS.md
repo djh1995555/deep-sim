@@ -103,6 +103,40 @@
 | R044 | FT6 full model fine-tune scaffold | fine_tune_run_passed | 1 | DONE |
 | R045 | B6 fine-tune summary | fine_tune_summary_passed | 1 | DONE |
 
+### P3-P6: PyTorch Training Development Gates
+
+| Run | System | Primary Metric | Value | Status |
+|---|---|---:|---:|---|
+| R100 | PyTorch data loader smoke | torch_data_loader_smoke_passed | 1 | DONE |
+| R101 | PyTorch forward/loss smoke | torch_forward_loss_smoke_passed | 1 | DONE |
+| R102 | PyTorch tiny overfit smoke | torch_tiny_overfit_passed | 1 | DONE |
+| R103 | PyTorch rollout smoke | torch_rollout_smoke_passed | 1 | DONE |
+| R104 | PyTorch checkpoint smoke | torch_checkpoint_smoke_passed | 1 | DONE |
+| R105 | CUDA forward/loss smoke | torch_forward_loss_smoke_passed | 1 | DONE |
+| R106 | CUDA backward/optimizer tiny overfit | torch_tiny_overfit_passed | 1 | DONE |
+| R107 | CUDA one-step train/validation/checkpoint | torch_one_step_training_passed | 1 | DONE |
+| R108 | Rollout eval from R107 checkpoint | torch_rollout_eval_passed | 1 | DONE |
+| R109 | Resume + eval-only smoke | torch_resume_eval_passed | 1 | DONE |
+| R110 | Direct TCN black-box PyTorch baseline | torch_black_box_training_passed | 1 | DONE |
+| R111 | Base hybrid small PyTorch training | torch_one_step_training_passed | 1 | DONE |
+
+Key R107-R111 development metrics:
+
+```text
+R107 hybrid one-step train loss ratio = 0.987559, validation MSE = 5.879991
+R108 rollout RMSE = 9.982708 over 4 validation episodes
+R109 resume step = 60 -> 70, validation MSE = 5.879991 -> 5.781471
+R110 direct TCN black-box loss ratio = 0.934590, validation MSE = 1.482733
+R111 base hybrid small-train loss ratio = 0.984881, validation MSE = 5.890477
+```
+
+Interpretation:
+
+```text
+R107-R111 validate the PyTorch training infrastructure, not final model quality.
+The current small direct TCN black-box baseline is stronger than the small hybrid on one-step validation MSE, so final claims still require full fair training and rollout/cross-split evaluation.
+```
+
 Generated artifacts:
 
 ```text
@@ -168,6 +202,18 @@ runs/R042_finetune_FT4_tire_residual/
 runs/R043_finetune_FT5_steering_residual/
 runs/R044_finetune_FT6_full_model/
 runs/R045_finetune_summary/
+runs/R100_pytorch_data_loader_smoke/
+runs/R101_pytorch_forward_loss_smoke/
+runs/R102_pytorch_tiny_overfit/
+runs/R103_pytorch_rollout_smoke/
+runs/R104_pytorch_checkpoint_smoke/
+runs/R105_pytorch_gpu_forward_smoke/
+runs/R106_pytorch_gpu_tiny_overfit/
+runs/R107_pytorch_one_step_training/
+runs/R108_pytorch_rollout_eval/
+runs/R109_pytorch_resume_eval_smoke/
+runs/R110_pytorch_black_box_tcn_baseline/
+runs/R111_pytorch_base_model_small_training/
 reports/B0_teacher.md
 reports/B3_baselines.md
 reports/B3_base_hybrid.md

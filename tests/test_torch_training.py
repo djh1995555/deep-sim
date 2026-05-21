@@ -3,7 +3,12 @@ import os
 import tempfile
 import unittest
 
-from experiments.torch_training import run_torch_training_suite
+from experiments.torch_training import (
+    _build_direct_model,
+    _checkpoint_payload,
+    _restore_model_from_checkpoint,
+    run_torch_training_suite,
+)
 from teacher_simulator.config import load_yaml
 
 
@@ -43,6 +48,11 @@ class TorchTrainingRunnerTest(unittest.TestCase):
             "R104": "checkpoint_smoke",
             "R105": "forward_loss_smoke",
             "R106": "tiny_overfit",
+            "R107": "one_step_train",
+            "R108": "rollout_eval",
+            "R109": "resume_eval_smoke",
+            "R110": "one_step_train",
+            "R111": "one_step_train",
         }
         for run_id, mode in expected_modes.items():
             with self.subTest(run_id=run_id):
@@ -51,9 +61,30 @@ class TorchTrainingRunnerTest(unittest.TestCase):
                 self.assertEqual(cfg["data"]["dataset_path"], "data/ds1_v1")
                 self.assertEqual(cfg["torch_training"]["mode"], mode)
                 self.assertEqual(cfg["logging"]["output_dir"].split("/")[1][:4], run_id)
-                if run_id in {"R105", "R106"}:
+                if run_id in {"R105", "R106", "R107", "R108", "R109", "R110", "R111"}:
                     self.assertTrue(cfg["torch_training"]["require_cuda"])
                     self.assertEqual(cfg["torch_training"]["device"], "cuda")
+                if run_id == "R110":
+                    self.assertEqual(cfg["torch_training"]["model_type"], "direct_tcn")
+
+    def test_direct_tcn_checkpoint_restores_saved_config(self):
+        if importlib.util.find_spec("torch") is None:
+            self.skipTest("PyTorch is not installed")
+        import torch
+
+        device = torch.device("cpu")
+        cfg = {
+            "model_type": "direct_tcn",
+            "baseline_config": {
+                "hidden_dim": 32,
+                "context_dim": 17,
+                "direct_residual_bound": 0.6,
+            },
+        }
+        model = _build_direct_model(torch, cfg["baseline_config"], device)
+        payload = _checkpoint_payload(model, None, cfg, step=80, metrics={})
+        restored = _restore_model_from_checkpoint(torch, payload, device)
+        self.assertEqual(restored.encoder.input_proj.out_channels, 32)
 
 
 if __name__ == "__main__":

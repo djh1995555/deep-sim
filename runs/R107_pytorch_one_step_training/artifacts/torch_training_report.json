@@ -1,0 +1,25 @@
+{
+  "blocked": false,
+  "blocked_reason": "",
+  "errors": [],
+  "metrics": {
+    "torch_cuda_max_memory_allocated_mb": 20.51953125,
+    "torch_device": "cuda",
+    "torch_one_step_training_checkpoint_exists": 1,
+    "torch_one_step_training_end_step": 60,
+    "torch_one_step_training_final_loss": 46.100466867287956,
+    "torch_one_step_training_initial_loss": 46.68123080333074,
+    "torch_one_step_training_last_batch_loss": 63.32551193237305,
+    "torch_one_step_training_loss_ratio": 0.9875589412265166,
+    "torch_one_step_training_passed": 1,
+    "torch_one_step_training_sample_count": 96,
+    "torch_one_step_training_start_step": 0,
+    "torch_one_step_training_steps": 60,
+    "torch_one_step_training_val_mse": 5.879991000518203,
+    "torch_one_step_validation_sample_count": 64
+  },
+  "mode": "one_step_train",
+  "name": "pytorch_one_step_training",
+  "passed": true,
+  "warnings": []
+}

@@ -1,6 +1,6 @@
 # PyTorch Implementation Status
 
-**Date**: 2026-05-21 18:41 CST
+**Date**: 2026-05-21 19:03 CST
 
 ## Scope
 
@@ -15,6 +15,7 @@ P3: PyTorch smoke runner scaffold
 P4: R100-R104 CPU smoke passed
 P5: R105 GPU smoke passed
 P6: R106 GPU backward/optimizer smoke passed
+P7: R107-R111 training loop development passed
 ```
 
 ## P1 Canonical Data
@@ -83,6 +84,11 @@ Implemented files:
 | `configs/runs/R104.yaml` | Checkpoint save/load smoke. |
 | `configs/runs/R105.yaml` | CUDA-required one-step forward/loss smoke. |
 | `configs/runs/R106.yaml` | CUDA-required tiny-overfit smoke with backward and optimizer steps. |
+| `configs/runs/R107.yaml` | CUDA one-step train/validation/checkpoint run. |
+| `configs/runs/R108.yaml` | Rollout evaluation from the R107 checkpoint. |
+| `configs/runs/R109.yaml` | Checkpoint resume + eval-only smoke. |
+| `configs/runs/R110.yaml` | PyTorch direct TCN black-box baseline small training. |
+| `configs/runs/R111.yaml` | Small base hybrid training run with more samples/steps. |
 | `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
 | `AGENTS.md` | Local run-experiment environment notes, GPU status, and smoke run commands. |
 
@@ -110,6 +116,11 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
 conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R107.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml
+conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
 git diff --check
 ```
 
@@ -123,6 +134,7 @@ compileall: pass
 R100-R104 runner invocations: pass
 R105 runner invocation: pass on CUDA
 R106 runner invocation: pass on CUDA with backward and optimizer steps
+R107-R111 runner invocations: pass on CUDA
 diff check: pass
 ```
 
@@ -166,6 +178,11 @@ R103: short rollout smoke
 R104: checkpoint save/load smoke
 R105: CUDA-required forward/loss smoke
 R106: CUDA-required tiny-overfit smoke
+R107: one-step train/validation/checkpoint
+R108: rollout eval from R107 checkpoint
+R109: checkpoint resume + eval-only smoke
+R110: black-box direct TCN baseline small training
+R111: base hybrid small training
 ```
 
 Current local status:
@@ -178,6 +195,11 @@ R103: pass, 8-step rollout finite fraction = 1.0
 R104: pass, checkpoint save/load max abs diff = 0.0
 R105: pass, torch_device = cuda
 R106: pass, torch_device = cuda, tiny-overfit loss ratio = 0.850852
+R107: pass, train loss ratio = 0.987559, validation MSE = 5.879991
+R108: pass, rollout RMSE = 9.982708 over 4 validation episodes
+R109: pass, resumed step 60 -> 70, validation MSE 5.879991 -> 5.781471
+R110: pass, direct TCN black-box train loss ratio = 0.934590, validation MSE = 1.482733
+R111: pass, base hybrid train loss ratio = 0.984881, validation MSE = 5.890477
 ```
 
-Local GPU smoke is now ready for `/run-experiment`, including a CUDA backward/optimizer gate. This is still a smoke-stage gate, not a full training-quality result.
+Local GPU training scaffolding is now ready through one-step training, rollout eval, resume/eval-only, and a PyTorch black-box baseline. These are small-run development gates, not final training-quality results.

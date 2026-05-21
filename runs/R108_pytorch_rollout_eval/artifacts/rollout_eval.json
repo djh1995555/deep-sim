@@ -1,0 +1,41 @@
+{
+  "checkpoint_path": "runs/R107_pytorch_one_step_training/checkpoints/model.pt",
+  "dataset_summary": {
+    "context_dim": 17,
+    "control_dim": 12,
+    "episode_count": 120,
+    "sequence_len": 101,
+    "split_role_count": 6,
+    "state_dim": 12
+  },
+  "episodes": [
+    {
+      "episode_id": "ep_SP10-L0-Y2_seed_375",
+      "finite_fraction": 1.0,
+      "rmse": 9.507831573486328,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "episode_id": "ep_SP09-L4-Y4_seed_372",
+      "finite_fraction": 1.0,
+      "rmse": 13.036415100097656,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "episode_id": "ep_SP06-L1-Y3_seed_281",
+      "finite_fraction": 1.0,
+      "rmse": 6.055859088897705,
+      "split_role": "validation",
+      "steps": 16
+    },
+    {
+      "episode_id": "ep_SP05-L0-Y1_seed_1249",
+      "finite_fraction": 1.0,
+      "rmse": 10.07955265045166,
+      "split_role": "validation",
+      "steps": 16
+    }
+  ]
+}

@@ -237,8 +237,8 @@ The implemented scope is intentionally minimal and covers DS0/DS1/proxy scaffold
 
 ## P3 PyTorch Smoke Addendum
 
-**Date**: 2026-05-21 18:41 CST
-**Scope**: R100-R106 PyTorch smoke runner scaffold
+**Date**: 2026-05-21 19:03 CST
+**Scope**: R100-R111 PyTorch smoke/training scaffold
 **Mode**: local-only fallback; secondary delegated review not used because the current task did not explicitly request sub-agent delegation.
 
 Reviewed files:
@@ -253,6 +253,11 @@ configs/runs/R103.yaml
 configs/runs/R104.yaml
 configs/runs/R105.yaml
 configs/runs/R106.yaml
+configs/runs/R107.yaml
+configs/runs/R108.yaml
+configs/runs/R109.yaml
+configs/runs/R110.yaml
+configs/runs/R111.yaml
 tests/test_torch_training.py
 refine-logs/PYTORCH_IMPLEMENTATION_STATUS.md
 ```
@@ -264,14 +269,21 @@ Checklist:
 | R100-R104 use canonical `data/ds1_v1` through `dataset_source: existing` | pass |
 | R105 uses canonical `data/ds1_v1` and requires CUDA instead of silently falling back to CPU | pass |
 | R106 uses canonical `data/ds1_v1` and requires CUDA for backward + optimizer tiny-overfit | pass |
+| R107-R111 use canonical `data/ds1_v1` and require CUDA | pass |
 | PyTorch import is lazy and runner remains import-safe without torch installed | pass |
 | Missing PyTorch produces explicit `blocked` summary instead of fake success | pass |
 | Missing CUDA produces explicit `blocked` summary for CUDA-required runs | pass |
 | Smoke reports are written to `artifacts/torch_training_report.json` | pass |
 | Metrics are appended to `metrics.jsonl` and primary metric gates are wired in `run.py` | pass |
 | Data loader / forward / tiny overfit / rollout / checkpoint modes have separate run configs | pass |
+| Transition-level dataset samples multiple windows per episode for R107+ | pass |
+| R107 writes training history and checkpoint artifacts | pass |
+| R108 evaluates rollout predictions against dataset ground truth from checkpoint | pass |
+| R109 loads checkpoint, resumes optimizer/model state, and writes a resumed checkpoint | pass |
+| R110 implements a direct TCN PyTorch black-box baseline path | pass |
+| Direct TCN checkpoint restore uses the saved `model_config` and is covered by a hidden-dim regression test | pass |
 | Evaluation compares model output against dataset ground truth, not another model output | pass for R101-R103 smoke design |
-| Current local environment can complete passing R100-R106 | pass, including R105/R106 on CUDA |
+| Current local environment can complete passing R100-R111 | pass, including R105-R111 on CUDA |
 | `sanitize_state()` avoids in-place mutation on tensors requiring gradients | pass |
 | R102 tiny-overfit compares loss before/after on the same fixed tiny batch | pass |
 | R106 confirms CUDA backward and AdamW optimizer path with loss ratio below gate | pass |
@@ -280,7 +292,7 @@ Checklist:
 Residual risk:
 
 ```text
-R100-R106 pass, including CUDA-required forward/loss and backward/optimizer smoke. This validates environment readiness and runner plumbing, not final training quality.
+R100-R111 pass. These validate environment readiness, runner plumbing, checkpoint/resume, rollout evaluation, and a first PyTorch black-box baseline. They are still small-run development gates, not final model-quality evidence.
 ```
 
 ## Verification Commands
