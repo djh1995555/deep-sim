@@ -117,7 +117,37 @@ EpisodeRecord:
 
 No simulator module may write directly to student model input. Export is mediated by `export.py` and schema validation.
 
-## 3. Teacher State
+## 3. Runtime Environment
+
+Teacher simulator 的所有命令必须在 Miniforge / conda 虚拟环境中执行。默认使用仓库根目录：
+
+```text
+environment.yml
+```
+
+默认环境名：
+
+```text
+deep-sim
+```
+
+创建和激活：
+
+```bash
+conda env create -f environment.yml
+conda activate deep-sim
+python -m pip install -r requirements.txt
+```
+
+自动化执行时必须使用已激活环境，或显式使用：
+
+```bash
+conda run -n deep-sim python -m teacher_simulator.generate --config configs/teacher/ds0.yaml --out data/ds0
+```
+
+如果环境不存在或无法激活，teacher generation / validation run 必须失败或标记为 `blocked`，不能退回系统 Python。
+
+## 4. Teacher State
 
 Teacher internal state is higher-dimensional than student state.
 
@@ -154,9 +184,9 @@ sensor:
 
 Student visible subset is exported only through sensor model outputs defined in `DATA_SCHEMA_SPEC.md`.
 
-## 4. Module Interfaces
+## 5. Module Interfaces
 
-### 4.1 Chassis Dynamics
+### 5.1 Chassis Dynamics
 
 Interface:
 
@@ -179,7 +209,7 @@ roll/pitch dynamics coupled to load transfer
 grade/bank/roughness affect normal force and body acceleration
 ```
 
-### 4.2 Suspension And Load Transfer
+### 5.2 Suspension And Load Transfer
 
 Interface:
 
@@ -210,7 +240,7 @@ front/rear and left/right load transfer signs must pass braking/turning smoke te
 rough-road and contact events must be represented in teacher_aux_labels or diagnostics
 ```
 
-### 4.3 Tire Model
+### 5.3 Tire Model
 
 Interface:
 
@@ -247,7 +277,7 @@ force saturation compatible with μ_i * Fz_i
 tire thermal / wear / pressure feature flags default enabled for full-fidelity profile
 ```
 
-### 4.4 Road Model
+### 5.4 Road Model
 
 Interface:
 
@@ -272,7 +302,7 @@ patchy μ and wheel-level μ map for DS2
 
 Road labels and true μ are teacher auxiliary labels, not student input.
 
-### 4.5 Steering Actuator
+### 5.5 Steering Actuator
 
 Interface:
 
@@ -300,7 +330,7 @@ temperature/aging drift represented via hidden params or profile
 student only sees sensor-corrupted sw_angle / steer_cmd, not delta_eff_i
 ```
 
-### 4.6 Drive And Brake Actuators
+### 5.6 Drive And Brake Actuators
 
 Interface:
 
@@ -332,7 +362,7 @@ actuator_estimate
 command_only_projection
 ```
 
-### 4.7 Aero And Environment
+### 5.7 Aero And Environment
 
 Interface:
 
@@ -352,7 +382,7 @@ wind and crosswind profiles supported
 diagnostics exported as teacher_aux_labels
 ```
 
-### 4.8 Sensor Model
+### 5.8 Sensor Model
 
 Interface:
 
@@ -386,7 +416,7 @@ sensor true states and sensor error states are teacher_aux_labels
 observable values are never aliases of noiseless true variables unless profile explicitly sets zero noise/delay for DS0 debug
 ```
 
-## 5. Simulation Loop
+## 6. Simulation Loop
 
 Required execution order per internal step:
 
@@ -412,7 +442,7 @@ internal dt must be small enough to resolve actuator and tire transient states
 all exported data resampled to dt_export
 ```
 
-## 6. Vehicle Parameter Randomization
+## 7. Vehicle Parameter Randomization
 
 Teacher hidden params must support randomization over:
 
@@ -437,7 +467,7 @@ time_series_observable
 
 Hidden parameters must be hashed into `vehicle_internal_params_hash` for audit and split validation.
 
-## 7. Export Contract
+## 8. Export Contract
 
 `export.py` must produce:
 
@@ -473,7 +503,7 @@ episodes:
     vehicle_internal_params_hash:
 ```
 
-## 8. Scenario Matrix Support
+## 9. Scenario Matrix Support
 
 Teacher must generate:
 
@@ -499,9 +529,9 @@ Scenario IDs must follow:
 {road_factor_id}-{longitudinal_factor_id}-{lateral_factor_id}
 ```
 
-## 9. Validation Gates
+## 10. Validation Gates
 
-### 9.1 Unit Tests
+### 10.1 Unit Tests
 
 Required before DS0:
 
@@ -517,7 +547,7 @@ schema validator blocks teacher_aux_labels from student input
 metadata remains available but excluded from model input
 ```
 
-### 9.2 DS0 Acceptance
+### 10.2 DS0 Acceptance
 
 DS0 must pass:
 
@@ -532,7 +562,7 @@ friction ellipse diagnostics finite
 tiny black-box and tiny hybrid can overfit 5-10 short sequences
 ```
 
-### 9.3 DS1 Acceptance
+### 10.3 DS1 Acceptance
 
 DS1 must pass:
 
@@ -548,15 +578,22 @@ teacher_feature_flags all enabled for full-fidelity unless explicitly downgraded
 torque_observability_mode complete and consistent with torque observable fields
 ```
 
-## 10. Required CLI
+## 11. Required CLI
 
 Implementation should expose:
 
 ```bash
+conda activate deep-sim
 python -m teacher_simulator.generate --config configs/teacher/ds0.yaml --out data/ds0
 python -m teacher_simulator.generate --config configs/teacher/ds1.yaml --out data/ds1
 python -m teacher_simulator.validate --dataset data/ds0 --schema configs/schema_v0.yaml
 python -m teacher_simulator.validate --dataset data/ds1 --schema configs/schema_v0.yaml
+```
+
+Non-interactive execution:
+
+```bash
+conda run -n deep-sim python -m teacher_simulator.generate --config configs/teacher/ds0.yaml --out data/ds0
 ```
 
 Exit codes:
@@ -568,7 +605,7 @@ Exit codes:
 3: numerical integration failure
 ```
 
-## 11. Versioning
+## 12. Versioning
 
 Every exported episode must include:
 

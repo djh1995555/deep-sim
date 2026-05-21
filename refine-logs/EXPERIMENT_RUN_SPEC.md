@@ -27,7 +27,57 @@ student model API:
   STUDENT_MODEL_SPEC.md
 ```
 
-## 1. Run Directory Contract
+## 1. Runtime Environment Contract
+
+所有实验活动必须在 Miniforge / conda 虚拟环境中执行，包括：
+
+```text
+teacher simulator 生成
+dataset export / validation
+unit test / smoke test
+student model training / evaluation
+baseline training / evaluation
+report / metrics aggregation
+```
+
+默认环境文件：
+
+```text
+environment.yml
+```
+
+默认环境名：
+
+```text
+deep-sim
+```
+
+首次创建环境：
+
+```bash
+conda env create -f environment.yml
+conda activate deep-sim
+python -m pip install -r requirements.txt
+```
+
+后续所有命令必须在已激活的 `deep-sim` 环境中运行，或显式使用：
+
+```bash
+conda run -n deep-sim python -m experiments.run --config configs/runs/R000.yaml
+```
+
+禁止直接使用系统 Python 执行实验命令。自动化 runner / queue / remote backend 在启动前必须记录并检查：
+
+```text
+CONDA_DEFAULT_ENV == deep-sim
+CONDA_PREFIX is not empty
+python executable belongs to the conda environment
+package versions are captured in env.txt or equivalent environment snapshot
+```
+
+如果 backend 无法激活指定虚拟环境，应将 run 标记为 `blocked`，而不是退回系统 Python 静默执行。
+
+## 2. Run Directory Contract
 
 每个 run 必须创建独立目录：
 
@@ -66,7 +116,18 @@ success_criteria_met: true | false
 notes:
 ```
 
-## 2. Configuration Contract
+`env.txt` 必须至少记录：
+
+```text
+CONDA_DEFAULT_ENV
+CONDA_PREFIX
+python executable path
+python version
+installed package snapshot
+platform / CUDA / GPU info if available
+```
+
+## 3. Configuration Contract
 
 Every run config must include:
 
@@ -114,19 +175,26 @@ logging:
 
 `resolved_config.yaml` must contain all inherited defaults after expansion.
 
-## 3. Required CLI
+## 4. Required CLI
 
 Recommended commands:
 
 ```bash
+conda activate deep-sim
 python -m experiments.run --config configs/runs/R000.yaml
 python -m experiments.evaluate --checkpoint runs/R009_base/checkpoints/best.pt --config configs/eval/base.yaml
 python -m experiments.report --runs runs/R009_base runs/R010_seen runs/R011_road --out reports/B3_base.md
 ```
 
+Non-interactive / queue commands should use:
+
+```bash
+conda run -n deep-sim python -m experiments.run --config configs/runs/R000.yaml
+```
+
 All commands must write `command.txt` and `resolved_config.yaml`.
 
-## 4. Milestone And Run Mapping
+## 5. Milestone And Run Mapping
 
 | Milestone | Runs | Purpose | Gate |
 |---|---|---|---|
@@ -142,7 +210,7 @@ All commands must write `command.txt` and `resolved_config.yaml`.
 | `M9` | `R038-R045` | target fine-tune | FT0-FT6 × FTD0-FTD5 data efficiency |
 | `M10` | `R046+` | DS2 extreme + MoE | optional second phase |
 
-## 5. Stage A: Teacher And Data Runs
+## 6. Stage A: Teacher And Data Runs
 
 ### R000-R000d: Teacher Simulator Minimal Implementation
 
@@ -195,7 +263,7 @@ FTD0-FTD5 target windows reproducible
 vehicle_internal_params_hash available and excluded from student input
 ```
 
-## 6. Stage B Sanity Runs
+## 7. Stage B Sanity Runs
 
 ### R001-R004b: Data And Physics Sanity
 
@@ -219,7 +287,7 @@ tiny models overfit 5-10 short sequences
 physics-only rollout does not immediately diverge on smoke cases
 ```
 
-## 7. Stage B Baseline Runs
+## 8. Stage B Baseline Runs
 
 ### R005: Physics-Only Baseline
 
@@ -282,7 +350,7 @@ yaw drift
 constraint violations for physics-based models
 ```
 
-## 8. Stage B Base Hybrid Runs
+## 9. Stage B Base Hybrid Runs
 
 ### R009: Base Hybrid Training
 
@@ -323,7 +391,7 @@ base is at least not worse than black-box on 10s stability / yaw drift / physica
 residual magnitudes remain bounded and interpretable
 ```
 
-## 9. Stage B Component Ablations
+## 10. Stage B Component Ablations
 
 General rule:
 
@@ -452,7 +520,7 @@ Decision:
 U1 kept only if calibration / coverage / OOD metrics improve enough to justify cost
 ```
 
-## 10. Cross-Vehicle / Cross-Config Runs
+## 11. Cross-Vehicle / Cross-Config Runs
 
 ### R034-R036
 
@@ -483,7 +551,7 @@ uncertainty rises reasonably on held-out config
 residual magnitude does not become uncontrolled
 ```
 
-## 11. Final Single Model Freeze
+## 12. Final Single Model Freeze
 
 ### R037
 
@@ -509,7 +577,7 @@ final_single_model:
 
 This checkpoint is the initialization source for B6 / FT0-FT6.
 
-## 12. Stage C Fine-Tune Runs
+## 13. Stage C Fine-Tune Runs
 
 ### R038-R045
 
@@ -549,7 +617,7 @@ held-out target window performance
 small-data overfitting signs
 ```
 
-## 13. DS2 / MoE Runs
+## 14. DS2 / MoE Runs
 
 ### R046+
 
@@ -570,7 +638,7 @@ normal DS1 test does not degrade materially
 additional cost is justified
 ```
 
-## 14. Metrics Schema
+## 15. Metrics Schema
 
 `metrics.jsonl` each row:
 
@@ -604,7 +672,7 @@ OOD_AUC
 adapter_drift
 ```
 
-## 15. Report Contract
+## 16. Report Contract
 
 Each experiment block must produce a Markdown report:
 
@@ -631,7 +699,7 @@ decision
 next action
 ```
 
-## 16. Failure And Blocked Status
+## 17. Failure And Blocked Status
 
 Use `blocked` when:
 
@@ -654,7 +722,7 @@ leakage test fails
 
 `blocked` runs must include `blocker` and `required_fix` in `summary.json`.
 
-## 17. Reproducibility Requirements
+## 18. Reproducibility Requirements
 
 Every run must record:
 

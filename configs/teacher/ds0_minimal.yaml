@@ -1,0 +1,36 @@
+teacher:
+  dataset_id: DS0_DEBUG
+  schema_version: v0
+  teacher_model_version: teacher_simulator_v0
+  dt_internal: 0.01
+  dt_export: 0.02
+  duration_s: 12.0
+  integrator: semi_implicit_euler
+  gravity: 9.81
+  coordinate_convention: body_x_forward_y_left_z_up
+  seed: 7
+  default_feature_flags:
+    tire_relaxation: true
+    tire_thermal_wear_pressure: true
+    suspension_unsprung: true
+    steering_lag_compliance_backlash_hysteresis: true
+    drive_brake_lag_saturation_abs: true
+    aero_wind: true
+    sensor_noise_delay_filter_quantization: true
+    generator_version: teacher_simulator_v0
+    disabled_features: []
+    downgrade_reason: ""
+  numerical_limits:
+    min_speed_for_slip: 0.5
+    min_fz: 50.0
+    max_abs_state:
+      vx: 80.0
+      vy: 30.0
+      roll: 1.0
+      pitch: 1.0
+      r: 3.0
+  export:
+    include_teacher_aux_labels: true
+    include_metadata: true
+    resample_policy: hold_last
+scenario_set: ds0

@@ -1,0 +1,18 @@
+{
+  "config_name": "dataset_export_split",
+  "dataset_id": "DS0_DEBUG",
+  "end_time": "2026-05-21T05:29:36.055691+00:00",
+  "experiment_block": "B0.5",
+  "milestone": "M0",
+  "notes": "R000-R000d sanity subset gate passed for this run",
+  "primary_metric": "leakage_checks_passed",
+  "primary_metric_value": 1,
+  "run_id": "R000d",
+  "seed": 7,
+  "start_time": "2026-05-21T05:29:33.980979+00:00",
+  "status": "success",
+  "success_criteria_met": true,
+  "test_split": null,
+  "train_split": "ds0_smoke",
+  "val_split": null
+}

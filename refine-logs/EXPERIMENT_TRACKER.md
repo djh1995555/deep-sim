@@ -6,11 +6,11 @@
 
 | Run ID | Milestone | Purpose | System / Variant | Priority | Status |
 |--------|-----------|---------|------------------|----------|--------|
-| R000 | M0 | B0.1 simulator minimal implementation | high-fidelity teacher simulator v0 | MUST | TODO |
-| R000a | M0 | B0.2 tire/load validation | teacher simulator tire + suspension | MUST | TODO |
-| R000b | M0 | B0.3 road scenario generation | teacher simulator road μ map | MUST | TODO |
-| R000c | M0 | B0.4 sensor/actuator realism | actuator + sensor model | MUST | TODO |
-| R000d | M0 | B0.5 dataset export split | dataset builder | MUST | TODO |
+| R000 | M0 | B0.1 simulator minimal implementation | high-fidelity teacher simulator v0 | MUST | DONE |
+| R000a | M0 | B0.2 tire/load validation | teacher simulator tire + suspension | MUST | DONE |
+| R000b | M0 | B0.3 road scenario generation | teacher simulator road μ map | MUST | DONE |
+| R000c | M0 | B0.4 sensor/actuator realism | actuator + sensor model | MUST | DONE |
+| R000d | M0 | B0.5 dataset export split | dataset builder | MUST | DONE |
 | R000e | M1 | B0.6 scenario matrix v1 | dataset generator | MUST | TODO |
 | R000f | M1 | B0.7 single vehicle parameter randomization | teacher simulator vehicle_A | MUST | TODO |
 | R000g | M1 | B0.8 dataset split generation | dataset builder | MUST | TODO |

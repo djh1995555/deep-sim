@@ -30,7 +30,38 @@ EXPERIMENT_PLAN.md:
 
 如果后续修改组件结构，先更新对应 DESIGN 文档；只有当实验配置、ablation 组、指标或运行顺序改变时，才同步修改本文档。
 
-## 2. 研究问题
+## 2. 执行环境原则
+
+所有实验相关活动必须在 Miniforge / conda 虚拟环境中执行，不能直接使用系统 Python。默认环境文件为仓库根目录的 `environment.yml`，默认环境名为 `deep-sim`。
+
+覆盖范围包括：
+
+```text
+teacher simulator 生成
+dataset export / validation
+unit test / smoke test
+student model training / evaluation
+baseline training / evaluation
+report / metrics aggregation
+```
+
+执行方式：
+
+```bash
+conda env create -f environment.yml
+conda activate deep-sim
+python -m pip install -r requirements.txt
+```
+
+自动化 runner、远程 backend 和 queue 必须显式激活该环境，或使用：
+
+```bash
+conda run -n deep-sim python -m experiments.run --config configs/runs/R000.yaml
+```
+
+如果 backend 无法激活指定虚拟环境，对应 run 应标记为 `blocked`，不能静默退回系统 Python。具体运行环境 contract 以 `refine-logs/EXPERIMENT_RUN_SPEC.md` 为准。
+
+## 3. 研究问题
 
 目标不是做实时控制器，而是做可长时 rollout 的车辆动力学仿真模型。模型应覆盖：
 
@@ -52,11 +83,11 @@ EXPERIMENT_PLAN.md:
 
 这个假设必须通过 FT0-FT6 fine-tune 对照和 fine-tune data efficiency 曲线验证，不能直接当作前提。
 
-## 3. 总体路线
+## 4. 总体路线
 
 整体分三阶段。
 
-### 3.1 Stage A：Teacher Simulator 阶段
+### 4.1 Stage A：Teacher Simulator 阶段
 
 先构建高保真 teacher simulator，用于第一版方案验证。
 
@@ -70,7 +101,7 @@ teacher simulator 的职责：
 
 teacher simulator 的保真度应高于 student model。
 
-### 3.2 Stage B：通用 Base Model 阶段
+### 4.2 Stage B：通用 Base Model 阶段
 
 使用 DS1 V1 Research Dataset 训练通用 hybrid base model，并与 physics-only、black-box baseline 对照。
 
@@ -88,9 +119,9 @@ Stage B 需要完成三件事：
 Base = E1 + T1 + F1 + S1 + M1a + V1 + U0
 ```
 
-Stage B base 不启用 `VehicleParamAdapter`。该组件只在 Stage C 的目标车 / 目标时间段 fine-tune 中启用，用于单车适配；配置编号的含义见第 4 章；组件内部设计见 `MODULE_DESIGN.md`；具体实验块见 B3、B4、B5。
+Stage B base 不启用 `VehicleParamAdapter`。该组件只在 Stage C 的目标车 / 目标时间段 fine-tune 中启用，用于单车适配；配置编号的含义见第 5 章；组件内部设计见 `MODULE_DESIGN.md`；具体实验块见 B3、B4、B5。
 
-### 3.3 Stage C：目标车 / 目标时间段 Fine-Tune 阶段
+### 4.3 Stage C：目标车 / 目标时间段 Fine-Tune 阶段
 
 针对某台车某个目标时间段，验证少量目标数据是否足以适配 effective dynamics。
 
@@ -102,13 +133,13 @@ Stage C 需要完成：
 3. 验证 fine-tune 后在 held-out target windows 上是否稳定，而不是只记住目标训练片段
 ```
 
-fine-tune 配置使用 `FT0-FT6`，数据量轴使用 `FTD0-FTD5`。编号定义见第 4 章，数据划分和 episode 定义见 `DATA_DESIGN.md`，具体实验块见 B6。
+fine-tune 配置使用 `FT0-FT6`，数据量轴使用 `FTD0-FTD5`。编号定义见第 5 章，数据划分和 episode 定义见 `DATA_DESIGN.md`，具体实验块见 B6。
 
-## 4. 实验系统与配置命名
+## 5. 实验系统与配置命名
 
 本节只定义实验中需要比较的系统名称。每个系统的具体模块设计见 `MODULE_DESIGN.md`。
 
-### 4.1 Baseline 系统
+### 5.1 Baseline 系统
 
 ```text
 physics-only:
@@ -138,7 +169,7 @@ BB-NBEATSx:
 
 `BB-NBEATSx` 只作为 black-box direct forecasting baseline；不输出 `Fz_i / μ_i / tire force` 等物理中间量，不参与 residual module 设计。
 
-### 4.2 Base Hybrid 系统
+### 5.2 Base Hybrid 系统
 
 Stage B 固定 base 方案：
 
@@ -160,7 +191,7 @@ U0: single-model heteroscedastic uncertainty
 
 该 base 是 B3、B4、B5 的共同参考点。B4 中所有组件级 ablation 都以该 base 为基线，每次只替换 E/T/F/S/M/V/U 中的一个维度。`VehicleParamAdapter` 不属于 Stage B base，也不参与 B4 ablation；它只在 B6 fine-tune 中作为 FT1/FT6 的目标车适配模块启用。
 
-### 4.3 Stage B Ablation Families
+### 5.3 Stage B Ablation Families
 
 ```text
 Encoder family:
@@ -187,7 +218,7 @@ Uncertainty family:
 
 这些编号只表达实验配置差异。每个编号对应的模块接口、约束、head 设计和默认超参见 `MODULE_DESIGN.md`。
 
-### 4.4 Stage C Fine-Tune Families
+### 5.4 Stage C Fine-Tune Families
 
 fine-tune 对照定义如下：
 
@@ -221,9 +252,9 @@ columns: FTD0, FTD1, FTD2, FTD3, FTD4, FTD5
 
 其中 `FT0` 只在 `FTD0` 下有意义；`FT1-FT6` 在 `FTD1-FTD5` 下分别训练和评估。
 
-## 5. 实验归因原则
+## 6. 实验归因原则
 
-### 5.1 单因素替换
+### 6.1 单因素替换
 
 B4 的基本规则：
 
@@ -236,7 +267,7 @@ B4 的基本规则：
 
 这样才能把收益归因到具体组件选择，而不是归因到训练预算、数据划分或 checkpoint 差异。
 
-### 5.2 Teacher-Only 使用边界
+### 6.2 Teacher-Only 使用边界
 
 teacher-only 字段只能用于：
 
@@ -256,7 +287,7 @@ student input
 
 涉及 `F2`、`M2-oracle` 或 teacher label diagnostics 的实验，必须报告这些收益在真实数据阶段不可用时的解释限制。
 
-### 5.3 Ablation 与 Fine-Tune 的 checkpoint 规则
+### 6.3 Ablation 与 Fine-Tune 的 checkpoint 规则
 
 ```text
 B4 ablation:
@@ -268,7 +299,7 @@ B6 fine-tune:
   FT6 开放 full model，作为上界和过拟合风险对照
 ```
 
-### 5.4 组件复杂度升级规则
+### 6.4 组件复杂度升级规则
 
 新增或保留复杂组件必须同时满足：
 
@@ -282,7 +313,7 @@ held-out road 或 held-out vehicle/config 不明显退化
 
 如果复杂组件只在训练集或单一场景上改善，不能进入第一版主线，只能作为后续候选。
 
-## 6. 证据链
+## 7. 证据链
 
 | 编号 | 需要证明的结论 | 为什么重要 | 最小可信证据 | 对应实验 |
 |---|---|---|---|---|
@@ -293,7 +324,7 @@ held-out road 或 held-out vehicle/config 不明显退化
 | C4 | base model 具备跨车辆/配置泛化能力 | 支撑“多车 base + 少量新车数据适配”的核心假设 | held-out vehicle/config 上，base 优于 physics-only 和 black-box；泛化退化可由 B6 作为 supplementary evidence 检查 fine-tune 修复能力 | B3, B5 |
 | C5 | 极限操控下 MoE Tire Residual 是否值得进入后续版本 | 决定 DS2 阶段是否扩展模型复杂度 | 在 DS2 extreme handling 上，MoE tire residual 相比单专家 tire residual 改善 large-slip / emergency maneuver rollout，且不伤害常规工况 | B7 |
 
-## 7. 实验块
+## 8. 实验块
 
 ### B0：Teacher Simulator 构建
 
@@ -662,7 +693,7 @@ held-out road 或 held-out vehicle/config 不明显退化
   - fine-tune 数据和测试数据必须来自不同 target windows；
   - 所有 FT 方案从同一个 M8 final single model checkpoint 初始化。
 - **fine-tune 对照**：
-  - 使用 3.3 Stage C 中定义的 `FT0-FT6`；
+  - 使用 4.3 Stage C 中定义的 `FT0-FT6`；
   - `FT1-FT5` 每次只开放一个指定模块；
   - `FT6` 作为 full model fine-tune 上界和过拟合风险对照。
 - **实验矩阵**：
@@ -705,11 +736,11 @@ held-out road 或 held-out vehicle/config 不明显退化
   - gating / expert usage 行为可解释，不能只是更大黑箱；
   - 如果只在少数极端场景提升且常规场景退化，则不进入主线。
 
-## 8. 数据设计
+## 9. 数据设计
 
 详细数据集设计、工况矩阵、字段 schema、metadata、划分规则和质量检查放在 `refine-logs/DATA_DESIGN.md`。本节只保留实验计划层面的数据目标。
 
-### 8.1 数据集阶段
+### 9.1 数据集阶段
 
 ```text
 DS0 Debug Dataset:
@@ -726,7 +757,7 @@ DS2 Expanded Dataset:
   用于 MoE tire residual 和大范围泛化验证
 ```
 
-### 8.2 核心设计要求
+### 9.2 核心设计要求
 
 ```text
 第一版正式数据集必须包含多车/多配置，不再把单车型作为 full dataset
@@ -738,7 +769,7 @@ teacher_only 字段只允许用于 loss / diagnostics
 工况空间生成全覆盖，但 DS1 training、balanced test、deployment-weighted test 和 B6 fine-tune 必须使用不同采样比例
 ```
 
-### 8.3 必须支持的划分
+### 9.3 必须支持的划分
 
 ```text
 train / validation / test episodes
@@ -748,7 +779,7 @@ held-out target time windows
 FT0-FT6 × FTD0-FTD5 fine-tune data amount splits
 ```
 
-### 8.4 工况覆盖摘要
+### 9.4 工况覆盖摘要
 
 ```text
 基础稳态
@@ -761,9 +792,9 @@ patchy μ / wheel-level μ map（DS2-only）
 传感器 noise / bias / filtering
 ```
 
-## 9. Loss 与训练策略
+## 10. Loss 与训练策略
 
-### 9.1 总 Loss
+### 10.1 总 Loss
 
 ResidualNN 默认是端到端 hybrid model 的子模块，不是独立完整模型。
 
@@ -798,7 +829,7 @@ L_teacher_aux:
   只在仿真阶段使用
 ```
 
-### 9.2 Ablation 训练协议
+### 10.2 Ablation 训练协议
 
 本文档中的 ablation 指不同配置各自完整训练，而不是在同一个 checkpoint 上临时关闭或替换模块。
 
@@ -814,7 +845,7 @@ L_teacher_aux:
 
 唯一例外是 B6 fine-tune：所有 FT0-FT6 都从同一个 M8 final single model checkpoint 初始化，只开放指定模块。
 
-### 9.3 Fine-Tune 策略
+### 10.3 Fine-Tune 策略
 
 目标车/目标时间段 fine-tune 遵循以下规则：
 
@@ -827,11 +858,11 @@ fine-tune train window / validation window / test window 必须互不重叠
 记录 adapter output drift、residual magnitude drift 和 held-out window 性能
 ```
 
-具体 FT 对照以 3.3 Stage C 为准：FT1-FT5 每次只开放一个指定模块，FT6 才开放全模型。
+具体 FT 对照以 4.3 Stage C 为准：FT1-FT5 每次只开放一个指定模块，FT6 才开放全模型。
 
-## 10. 指标
+## 11. 指标
 
-### 10.1 主指标
+### 11.1 主指标
 
 ```text
 1s / 5s / 10s rollout RMSE
@@ -842,7 +873,7 @@ omega_fl/fr/rl/rr
 yaw drift
 ```
 
-### 10.2 物理约束指标
+### 11.2 物理约束指标
 
 ```text
 Fz_i < 0 rate
@@ -853,7 +884,7 @@ residual smoothness
 energy / acceleration sanity
 ```
 
-### 10.3 不确定性指标
+### 11.3 不确定性指标
 
 ```text
 NLL
@@ -864,7 +895,7 @@ error-uncertainty correlation
 OOD / held-out config detection AUC
 ```
 
-### 10.4 适配指标
+### 11.4 适配指标
 
 ```text
 fine-tune data efficiency
@@ -877,7 +908,7 @@ FT1-FT5 vs FT6 gap
 fine-tune 数据量增加后的收益饱和点
 ```
 
-### 10.5 极限操控指标
+### 11.5 极限操控指标
 
 ```text
 large-slip rollout RMSE
@@ -888,7 +919,7 @@ DS1 常规工况回归测试性能
 MoE vs single-expert tire residual gap
 ```
 
-## 11. 运行顺序
+## 12. 运行顺序
 
 1. 执行 B0：构建 high-fidelity teacher simulator。
 2. 生成第一版多车、多工况数据集。
@@ -904,7 +935,7 @@ MoE vs single-expert tire residual gap
 12. 如果 B4.6 证明 U1 有价值，再训练最终 K=3 ensemble；否则保留 U0。
 13. 执行 B7：DS2 extreme handling + MoE tire residual。
 
-## 12. 里程碑
+## 13. 里程碑
 
 | Milestone | 目标 | 核心 Runs | 决策门槛 |
 |---|---|---|---|
@@ -921,7 +952,7 @@ MoE vs single-expert tire residual gap
 | M10 | B7 extreme + MoE | R046+ | large-slip 明显收益且不伤害常规工况 |
 | M11 | Real vehicle validation | TBD | 有实车数据后验证 sim-to-real gap 和少量数据 fine-tune 假设 |
 
-## 13. 风险与缓解
+## 14. 风险与缓解
 
 - **teacher simulator 不可信**
   - 先验证 tire force、Fz、load transfer、road μ map、actuator lag、sensor noise。
@@ -942,7 +973,7 @@ MoE vs single-expert tire residual gap
 - **sim-to-real gap 未验证**
   - 第一版用 B2 分布扰动作为 proxy；有实车数据后必须增加 M11 real vehicle validation，不能只用仿真结果声称真实车落地。
 
-## 14. 最终 Checklist
+## 15. 最终 Checklist
 
 - [x] 计划是独立自包含版本。
 - [x] 目标是多车 base model + 目标车/目标时间段 fine-tune。

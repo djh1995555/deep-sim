@@ -1,0 +1,29 @@
+{
+  "errors": [],
+  "metrics": {
+    "episode_count": 8,
+    "has_single_mu": 1,
+    "has_split_mu": 1,
+    "has_transition_mu": 1,
+    "leakage_checks_passed": 1,
+    "road_types": [
+      "single",
+      "split",
+      "transition"
+    ],
+    "schema_checks_passed": 1,
+    "sign_checks_passed": 1,
+    "validation_cases": [
+      "acceleration",
+      "braking",
+      "left_turn",
+      "right_turn",
+      "split_mu_brake_left_high",
+      "split_mu_brake_right_high",
+      "steady",
+      "transition_mu"
+    ]
+  },
+  "passed": true,
+  "warnings": []
+}

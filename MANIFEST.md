@@ -101,3 +101,8 @@
 | 2026-05-20 16:38 | /experiment-plan | refine-logs/MODULE_DESIGN.md, refine-logs/EXPERIMENT_PLAN.md | design | moved VehicleParamAdapter out of Stage B base training and limited it to Stage C FT1/FT6 target-vehicle fine-tuning |
 | 2026-05-20 16:55 | /experiment-plan | refine-logs/MODULE_DESIGN.md | documentation | fixed MODULE_DESIGN chapter ordering so VehicleParamAdapter is section 3 and later sections are sequential |
 | 2026-05-20 17:03 | /experiment-plan | refine-logs/MODULE_DESIGN.md | documentation | moved VehicleParamAdapter before Fine-Tune Adapter Granularity and renumbered base module chapters sequentially |
+| 2026-05-21 12:41 | /experiment-bridge | teacher_simulator/, experiments/, configs/teacher/ds0_minimal.yaml, configs/runs/R000*.yaml, tests/test_teacher_simulator.py, requirements.txt | implementation | implemented sanity-first teacher simulator v0 and R000-R000d local experiment runner |
+| 2026-05-21 12:41 | /experiment-bridge | runs/R000*/, reports/B0_teacher.md | results | completed R000-R000d DS0 teacher simulator sanity runs with schema/leakage/sign validation |
+| 2026-05-21 12:41 | /experiment-bridge | refine-logs/EXPERIMENT_RESULTS_20260521_124155.md, refine-logs/EXPERIMENT_RESULTS.md | results | initial experiment results summary for R000-R000d |
+| 2026-05-21 12:41 | /experiment-bridge | refine-logs/EXPERIMENT_CODE_REVIEW_20260521_124155.md, refine-logs/EXPERIMENT_CODE_REVIEW.md | review | local-only code review fallback for R000-R000d implementation |
+| 2026-05-21 12:55 | /experiment-bridge | environment.yml, refine-logs/EXPERIMENT_PLAN.md, refine-logs/EXPERIMENT_RUN_SPEC.md, refine-logs/TEACHER_SIMULATOR_SPEC.md | implementation | added Miniforge/conda virtual environment requirement for all experiment activities |
