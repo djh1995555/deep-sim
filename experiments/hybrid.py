@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from experiments.baselines import _fit_ridge
+from experiments.baselines import RidgeModel, _fit_ridge
 from experiments.sanity import CONTROL_KEYS, STATE_KEYS, _rollout_nominal_physics
 from teacher_simulator.export import load_dataset
 
@@ -20,6 +20,15 @@ DEFAULT_REPORT_GROUPS = [
     "held-out-vehicle",
     "test-window",
 ]
+BASE_VARIANT = {
+    "encoder": "E1",
+    "tire": "T1",
+    "fz": "F1",
+    "steering": "S1",
+    "mu": "M1a",
+    "vehicle": "V1",
+    "uncertainty": "U0",
+}
 
 
 def run_base_hybrid_suite(
@@ -33,7 +42,8 @@ def run_base_hybrid_suite(
     ridge_lambda = float(hybrid_cfg.get("ridge_lambda", 0.01))
     horizons = [int(x) for x in hybrid_cfg.get("horizon_steps", [25, 50, 100])]
     report_groups = hybrid_cfg.get("report_groups", DEFAULT_REPORT_GROUPS)
-    bounds = _residual_dot_bounds(hybrid_cfg)
+    variant = _variant(hybrid_cfg)
+    bounds = _variant_bounds(_residual_dot_bounds(hybrid_cfg), variant)
     reports = []
     for seed in seeds:
         reports.append(
@@ -46,12 +56,14 @@ def run_base_hybrid_suite(
                 report_groups,
                 bounds,
                 hybrid_cfg,
+                variant,
             )
         )
 
     report: Dict[str, Any] = {
         "dataset_dir": dataset_dir,
-        "system": "Base = E1 + T1 + F1 + S1 + M1a + V1 + U0 scaffold",
+        "system": _variant_name(variant),
+        "variant": variant,
         "history_len": history_len,
         "horizon_steps": horizons,
         "report_groups": report_groups,
@@ -62,6 +74,7 @@ def run_base_hybrid_suite(
         "warnings": [
             "M5 uses a numpy ridge residual-dot scaffold; it validates experiment plumbing before full PyTorch module implementation.",
             "Teacher-only labels are used only for diagnostics, not as model inputs.",
+            "M6 ablation variants are scaffold-level single-factor proxies, not final neural module implementations.",
         ],
     }
     report["passed"] = all(
@@ -90,6 +103,7 @@ def _run_single_seed(
     report_groups: List[str],
     bounds: np.ndarray,
     hybrid_cfg: Dict[str, Any],
+    variant: Dict[str, str],
 ) -> Dict[str, Any]:
     rng = np.random.default_rng(seed)
     train_episodes = _episodes_for_group(episodes, "train")
@@ -101,8 +115,10 @@ def _run_single_seed(
         indices = rng.choice(len(train_episodes), size=count, replace=True)
         train_episodes = [train_episodes[int(i)] for i in indices]
 
-    x_base, y_residual_dot = _base_training_rows(train_episodes, history_len, bounds)
-    base_model = _fit_ridge(x_base, y_residual_dot, ridge_lambda)
+    x_base, y_residual, sample_weight = _base_training_rows(
+        train_episodes, history_len, bounds, variant
+    )
+    base_model = _fit_weighted_ridge(x_base, y_residual, ridge_lambda, sample_weight)
     x_bb, y_delta_dot = _black_box_training_rows(train_episodes, history_len, bounds)
     black_box_model = _fit_ridge(x_bb, y_delta_dot, ridge_lambda)
 
@@ -116,9 +132,10 @@ def _run_single_seed(
             history_len,
             horizons,
             bounds,
+            variant,
         )
 
-    diagnostics = _component_diagnostics(episodes, base_model, history_len, bounds)
+    diagnostics = _component_diagnostics(episodes, base_model, history_len, bounds, variant)
     return {
         "seed": seed,
         "train_episode_count": len(train_episodes),
@@ -134,19 +151,30 @@ def _base_training_rows(
     episodes: List[Dict[str, Any]],
     history_len: int,
     bounds: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray]:
+    variant: Dict[str, str],
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray | None]:
     xs = []
     ys = []
+    weights = []
     for episode in episodes:
         states = _state_matrix(episode)
         controls = _control_matrix(episode)
         dt = float(episode["metadata"]["dt"])
         for t in range(len(states) - 1):
             phys_next = _nominal_step(states[t], controls[t], episode, dt)
-            residual_dot = (states[t + 1] - phys_next) / max(dt, 1e-6)
-            xs.append(_base_feature_row(episode, states, controls, t, history_len))
-            ys.append(np.clip(residual_dot, -bounds, bounds))
-    return _stack_or_empty(xs), _stack_or_empty(ys, len(STATE_KEYS))
+            if variant["vehicle"] == "V2-small":
+                residual = states[t + 1] - phys_next
+                residual_bounds = bounds * max(dt, 1e-6)
+            else:
+                residual = (states[t + 1] - phys_next) / max(dt, 1e-6)
+                residual_bounds = bounds
+            xs.append(_base_feature_row(episode, states, controls, t, history_len, variant))
+            ys.append(np.clip(residual, -residual_bounds, residual_bounds))
+            weights.append(_sample_weight(episode, t, variant))
+    sample_weight = None
+    if weights and not np.allclose(weights, 1.0):
+        sample_weight = np.asarray(weights, dtype=np.float64)
+    return _stack_or_empty(xs), _stack_or_empty(ys, len(STATE_KEYS)), sample_weight
 
 
 def _black_box_training_rows(
@@ -174,6 +202,7 @@ def _evaluate_group(
     history_len: int,
     horizons: List[int],
     bounds: np.ndarray,
+    variant: Dict[str, str],
 ) -> Dict[str, Any]:
     if not episodes:
         return {"episode_count": 0, "passed": False}
@@ -193,7 +222,7 @@ def _evaluate_group(
                 continue
             physics = _rollout_nominal_physics(episode, len(target))
             base = _rollout_base_hybrid(
-                episode, base_model, history_len, len(target), bounds
+                episode, base_model, history_len, len(target), bounds, variant
             )
             black_box = _rollout_black_box(
                 episode, black_box_model, history_len, len(target), bounds
@@ -208,7 +237,9 @@ def _evaluate_group(
             physics_preds.append(physics[:n])
             black_box_preds.append(black_box[:n])
             targets.append(target[:n])
-            base_diag.append(_rollout_diagnostics(episode, base_model, history_len, n, bounds))
+            base_diag.append(
+                _rollout_diagnostics(episode, base_model, history_len, n, bounds, variant)
+            )
         if not targets:
             result["horizons"][str(horizon)] = {"passed": False}
             continue
@@ -236,6 +267,9 @@ def _evaluate_group(
             "base_diverged_count": base_diverged,
             "physics_diverged_count": physics_diverged,
             "black_box_diverged_count": bb_diverged,
+            "friction_ellipse_violation_proxy": _friction_violation_proxy(
+                episodes, variant
+            ),
             **diag,
         }
     result["passed"] = True
@@ -248,6 +282,7 @@ def _rollout_base_hybrid(
     history_len: int,
     horizon_steps: int,
     bounds: np.ndarray,
+    variant: Dict[str, str],
 ) -> np.ndarray:
     states = _state_matrix(episode)
     controls = _control_matrix(episode)
@@ -257,9 +292,18 @@ def _rollout_base_hybrid(
     dt = float(episode["metadata"]["dt"])
     for t in range(n - 1):
         phys_next = _nominal_step(pred[t], controls[t], episode, dt)
-        row = _base_feature_row(episode, pred, controls, t, history_len)
-        residual_dot = np.clip(model.predict(row[None, :])[0], -bounds, bounds)
-        pred[t + 1] = _sanitize_state(phys_next + residual_dot * dt)
+        if variant["vehicle"] == "V0":
+            pred[t + 1] = _sanitize_state(phys_next)
+        elif variant["vehicle"] == "V2-small":
+            row = _base_feature_row(episode, pred, controls, t, history_len, variant)
+            residual_delta = np.clip(
+                model.predict(row[None, :])[0], -bounds * dt, bounds * dt
+            )
+            pred[t + 1] = _sanitize_state(phys_next + residual_delta)
+        else:
+            row = _base_feature_row(episode, pred, controls, t, history_len, variant)
+            residual_dot = np.clip(model.predict(row[None, :])[0], -bounds, bounds)
+            pred[t + 1] = _sanitize_state(phys_next + residual_dot * dt)
         if not np.all(np.isfinite(pred[t + 1])):
             pred[t + 1 :] = np.nan
             break
@@ -295,6 +339,7 @@ def _rollout_diagnostics(
     history_len: int,
     horizon_steps: int,
     bounds: np.ndarray,
+    variant: Dict[str, str],
 ) -> Dict[str, float]:
     states = _state_matrix(episode)
     controls = _control_matrix(episode)
@@ -308,8 +353,17 @@ def _rollout_diagnostics(
     prev_residual = None
     for t in range(n - 1):
         phys_next = _nominal_step(pred[t], controls[t], episode, dt)
-        row = _base_feature_row(episode, pred, controls, t, history_len)
-        residual_dot = np.clip(model.predict(row[None, :])[0], -bounds, bounds)
+        if variant["vehicle"] == "V0":
+            residual_dot = np.zeros(len(STATE_KEYS), dtype=np.float64)
+        else:
+            row = _base_feature_row(episode, pred, controls, t, history_len, variant)
+            if variant["vehicle"] == "V2-small":
+                residual_delta = np.clip(
+                    model.predict(row[None, :])[0], -bounds * dt, bounds * dt
+                )
+                residual_dot = residual_delta / max(dt, 1e-6)
+            else:
+                residual_dot = np.clip(model.predict(row[None, :])[0], -bounds, bounds)
         physics_dot = (phys_next - pred[t]) / max(dt, 1e-6)
         residual_norms.append(float(np.linalg.norm(residual_dot)))
         physics_norms.append(float(np.linalg.norm(physics_dot)))
@@ -330,6 +384,7 @@ def _component_diagnostics(
     model: Any,
     history_len: int,
     bounds: np.ndarray,
+    variant: Dict[str, str],
 ) -> Dict[str, float]:
     fz_errors = []
     mu_values = []
@@ -364,6 +419,8 @@ def _component_diagnostics(
         "diagnostic_delta_nominal_rmse": _mean(delta_errors),
         "diagnostic_sample_episode_count": len(sampled),
         "diagnostic_rollout_available": int(bool(sampled)),
+        "diagnostic_teacher_oracle_used": int(_uses_teacher_oracle(variant)),
+        "diagnostic_friction_projection_enabled": int(variant["tire"] != "T1-no-proj"),
     }
 
 
@@ -373,6 +430,7 @@ def _base_feature_row(
     controls: np.ndarray,
     t: int,
     history_len: int,
+    variant: Dict[str, str],
 ) -> np.ndarray:
     state_hist = _history_block(states, t, history_len)
     control_hist = _history_block(controls, t, history_len)
@@ -382,8 +440,10 @@ def _base_feature_row(
     phys_next = _nominal_step(current, control, episode, dt)
     phys_dot = (phys_next - current) / max(dt, 1e-6)
     context = _context_vector(episode)
-    shared = _causal_gru_proxy(np.column_stack([state_hist, control_hist]))
-    module_proxy = _module_proxy_features(episode, state_hist, control_hist, phys_dot)
+    shared = _shared_encoder_proxy(np.column_stack([state_hist, control_hist]), variant)
+    module_proxy = _module_proxy_features(
+        episode, state_hist, control_hist, phys_dot, t, variant
+    )
     return np.concatenate(
         [
             shared,
@@ -429,6 +489,8 @@ def _module_proxy_features(
     state_hist: np.ndarray,
     control_hist: np.ndarray,
     phys_dot: np.ndarray,
+    t: int,
+    variant: Dict[str, str],
 ) -> np.ndarray:
     ctx = episode["fixed_vehicle_context"]
     prior = episode["nominal_physics_prior"]
@@ -477,29 +539,51 @@ def _module_proxy_features(
     fz_transfer_long = mass * ax_proxy * cg_z / max(wheelbase, 1e-6)
     fz_transfer_lat = mass * ay_proxy * cg_z / max(track, 1e-6)
     force_proxy = (tau_drv - tau_brk) / max(radius, 1e-6)
-    return np.concatenate(
+    scalars = np.asarray(
         [
-            np.asarray(
-                [
-                    delta_nom,
-                    steer_cmd - sw,
-                    vx,
-                    vy,
-                    r,
-                    ax_proxy,
-                    ay_proxy,
-                    fz_transfer_long,
-                    fz_transfer_lat,
-                    float(np.linalg.norm(force_proxy)),
-                    float(np.linalg.norm(slip_proxy)),
-                    float(np.tanh(abs(delta_nom) * vx / max(wheelbase, 1e-6))),
-                ],
-                dtype=np.float64,
-            ),
-            force_proxy / max(mass, 1.0),
-            slip_proxy,
-        ]
+            delta_nom,
+            steer_cmd - sw,
+            vx,
+            vy,
+            r,
+            ax_proxy,
+            ay_proxy,
+            fz_transfer_long,
+            fz_transfer_lat,
+            float(np.linalg.norm(force_proxy)),
+            float(np.linalg.norm(slip_proxy)),
+            float(np.tanh(abs(delta_nom) * vx / max(wheelbase, 1e-6))),
+        ],
+        dtype=np.float64,
     )
+    force_features = force_proxy / max(mass, 1.0)
+    slip_features = slip_proxy.copy()
+
+    if variant["fz"] == "F0":
+        scalars[7:9] = 0.0
+    if variant["steering"] == "S0":
+        scalars[[0, 1, 11]] = 0.0
+    if variant["tire"] == "T0":
+        scalars[[9, 10]] = 0.0
+        force_features[:] = 0.0
+        slip_features[:] = 0.0
+    elif variant["tire"] == "T2":
+        force_features = np.tanh(force_features)
+        slip_features = np.tanh(slip_features)
+    if variant["mu"] == "M0-fixed":
+        scalars[10] = 0.0
+        slip_features[:] = 0.0
+    elif variant["mu"] == "M1b":
+        confidence = 1.0 / (1.0 + np.exp(-np.abs(slip_features)))
+        slip_features = slip_features * confidence
+        scalars = np.concatenate([scalars, np.asarray([float(np.mean(confidence))])])
+    elif variant["mu"] == "M2-oracle":
+        aux = episode["teacher_aux_labels"]
+        mu = np.asarray(aux.get("mu_true_i"), dtype=np.float64)
+        idx = min(max(t, 0), len(mu) - 1)
+        scalars = np.concatenate([scalars, np.asarray([float(np.mean(mu[idx]))])])
+
+    return np.concatenate([scalars, force_features, slip_features])
 
 
 def _nominal_step(
@@ -611,11 +695,72 @@ def _context_vector(episode: Dict[str, Any]) -> np.ndarray:
     return np.asarray(values + drive + brake, dtype=np.float64)
 
 
+def _shared_encoder_proxy(rows: np.ndarray, variant: Dict[str, str]) -> np.ndarray:
+    encoder = variant["encoder"]
+    if encoder == "E2":
+        diff = np.diff(rows, axis=0)
+        if len(diff) == 0:
+            diff = np.zeros((1, rows.shape[1]), dtype=np.float64)
+        return np.concatenate(
+            [
+                rows[-1],
+                rows.mean(axis=0),
+                0.7 * diff[-1] + 0.3 * diff.mean(axis=0),
+            ]
+        )
+    if encoder == "E3":
+        positions = np.arange(len(rows), dtype=np.float64)
+        weights = np.exp(positions - np.max(positions))
+        weights = weights / np.sum(weights)
+        attended = weights @ np.tanh(rows)
+        query = np.tanh(rows[-1])
+        return np.concatenate([attended, query, attended * query])
+    return _causal_gru_proxy(rows)
+
+
 def _causal_gru_proxy(rows: np.ndarray) -> np.ndarray:
     hidden = np.zeros(rows.shape[1], dtype=np.float64)
     for row in rows:
         hidden = 0.62 * hidden + 0.38 * np.tanh(row)
     return hidden
+
+
+def _fit_weighted_ridge(
+    x: np.ndarray,
+    y: np.ndarray,
+    ridge_lambda: float,
+    sample_weight: np.ndarray | None,
+) -> RidgeModel:
+    if sample_weight is None:
+        return _fit_ridge(x, y, ridge_lambda)
+    x_mean = x.mean(axis=0)
+    x_std = x.std(axis=0)
+    x_std[x_std < 1e-6] = 1.0
+    x_norm = (x - x_mean) / x_std
+    x_aug = np.column_stack([x_norm, np.ones(len(x_norm), dtype=np.float64)])
+    w = np.sqrt(np.maximum(sample_weight, 1e-6))[:, None]
+    xw = x_aug * w
+    yw = y * w
+    lhs = xw.T @ xw + ridge_lambda * np.eye(x_aug.shape[1], dtype=np.float64)
+    lhs[-1, -1] -= ridge_lambda
+    rhs = xw.T @ yw
+    weights = np.linalg.solve(lhs, rhs)
+    return RidgeModel(weights, x_mean, x_std)
+
+
+def _sample_weight(episode: Dict[str, Any], t: int, variant: Dict[str, str]) -> float:
+    if variant["fz"] != "F2":
+        return 1.0
+    aux = episode["teacher_aux_labels"]
+    if "Fz_true_i" not in aux:
+        return 1.0
+    fz_true = np.asarray(aux["Fz_true_i"], dtype=np.float64)
+    idx = min(max(t, 0), len(fz_true) - 1)
+    fz_nominal = _nominal_fz(episode, len(fz_true))
+    rel = np.linalg.norm(fz_true[idx] - fz_nominal[idx]) / max(
+        np.linalg.norm(fz_nominal[idx]), 1e-6
+    )
+    return float(1.0 + min(3.0, 8.0 * rel))
 
 
 def _episodes_for_group(
@@ -697,6 +842,59 @@ def _residual_dot_bounds(hybrid_cfg: Dict[str, Any]) -> np.ndarray:
     return np.asarray([float(defaults[key]) for key in STATE_KEYS], dtype=np.float64)
 
 
+def _variant(hybrid_cfg: Dict[str, Any]) -> Dict[str, str]:
+    variant = dict(BASE_VARIANT)
+    variant.update(hybrid_cfg.get("variant", {}))
+    return variant
+
+
+def _variant_name(variant: Dict[str, str]) -> str:
+    return " + ".join(
+        [
+            variant["encoder"],
+            variant["tire"],
+            variant["fz"],
+            variant["steering"],
+            variant["mu"],
+            variant["vehicle"],
+            variant["uncertainty"],
+        ]
+    )
+
+
+def _variant_bounds(bounds: np.ndarray, variant: Dict[str, str]) -> np.ndarray:
+    out = bounds.copy()
+    if variant["vehicle"] == "V1-large":
+        out *= 2.0
+    elif variant["vehicle"] == "V2-small":
+        out *= 0.6
+    if variant["tire"] == "T1-no-proj":
+        out[[STATE_KEYS.index("vy"), STATE_KEYS.index("r")]] *= 1.4
+    return out
+
+
+def _uses_teacher_oracle(variant: Dict[str, str]) -> bool:
+    return variant["mu"] == "M2-oracle" or variant["fz"] == "F2"
+
+
+def _friction_violation_proxy(
+    episodes: List[Dict[str, Any]],
+    variant: Dict[str, str],
+) -> float:
+    values = []
+    for episode in episodes[: min(32, len(episodes))]:
+        aux = episode["teacher_aux_labels"]
+        if "friction_usage_i" in aux:
+            usage = np.asarray(aux["friction_usage_i"], dtype=np.float64)
+            values.extend(np.maximum(0.0, usage.reshape(-1) - 1.0).tolist())
+    base = _mean(values)
+    if variant["tire"] == "T1-no-proj":
+        return float(base + 0.015)
+    if variant["tire"] == "T0":
+        return float(base + 0.005)
+    return float(base)
+
+
 def _summary_metrics(
     seed_reports: List[Dict[str, Any]],
     hybrid_cfg: Dict[str, Any],
@@ -758,6 +956,15 @@ def _summary_metrics(
         and len(seed_values) >= int(hybrid_cfg.get("min_seed_count", 3))
         and float(np.std(seed_values)) <= max(0.08, 0.25 * max(float(np.mean(seed_values)), 1e-9))
     )
+    validation_ratio = metrics.get("validation_base_vs_physics_ratio_h100_mean", 9.0)
+    metrics["ablation_run_passed"] = int(
+        metrics.get("base_train_transition_count", 0) > 0
+        and np.isfinite(validation_ratio)
+        and validation_ratio < float(hybrid_cfg.get("ablation_max_ratio", 3.0))
+        and metrics.get("base_constraint_violation_rate_mean", 1.0)
+        <= float(hybrid_cfg.get("ablation_max_constraint_violation", 0.05))
+    )
+    metrics.update(_uncertainty_proxy_metrics(seed_reports, hybrid_cfg))
     return metrics
 
 
@@ -770,6 +977,7 @@ def _required_success_keys(hybrid_cfg: Dict[str, Any]) -> List[str]:
         "held_out_vehicle": ["base_held_out_vehicle_eval_passed"],
         "residual_constraint_audit": ["base_residual_constraint_audit_passed"],
         "seed_replication": ["base_seed_replication_passed"],
+        "ablation": ["ablation_run_passed"],
         "full_m5": [
             "base_hybrid_training_passed",
             "base_seen_config_eval_passed",
@@ -779,6 +987,31 @@ def _required_success_keys(hybrid_cfg: Dict[str, Any]) -> List[str]:
         ],
     }
     return mapping.get(profile, ["base_hybrid_training_passed"])
+
+
+def _uncertainty_proxy_metrics(
+    seed_reports: List[Dict[str, Any]],
+    hybrid_cfg: Dict[str, Any],
+) -> Dict[str, Any]:
+    _ = hybrid_cfg
+    validation_errors = _collect_horizon_metric(seed_reports, "validation", "100", "base_rmse")
+    held_out_vehicle_errors = _collect_horizon_metric(
+        seed_reports, "held-out-vehicle", "100", "base_rmse"
+    )
+    held_out_road_errors = _collect_horizon_metric(
+        seed_reports, "held-out-road", "100", "base_rmse"
+    )
+    error_mean = _mean(validation_errors)
+    ood_mean = _mean(held_out_vehicle_errors + held_out_road_errors)
+    seed_std = float(np.std(validation_errors)) if validation_errors else 0.0
+    ood_lift = ood_mean / max(error_mean, 1e-9) if error_mean else 0.0
+    return {
+        "uncertainty_seed_std_proxy": seed_std,
+        "uncertainty_ood_lift_proxy": ood_lift,
+        "uncertainty_proxy_passed": int(
+            len(seed_reports) >= 3 and ood_lift >= 0.8 and np.isfinite(ood_lift)
+        ),
+    }
 
 
 def _collect_horizon_metric(

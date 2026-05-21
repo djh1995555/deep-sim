@@ -290,6 +290,8 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
         return "base_residual_constraint_audit_passed", metrics.get("base_residual_constraint_audit_passed", 0)
     if run_id == "R014":
         return "base_seed_replication_passed", metrics.get("base_seed_replication_passed", 0)
+    if _is_m6_ablation_run(run_id):
+        return "ablation_run_passed", metrics.get("ablation_run_passed", 0)
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
@@ -377,7 +379,36 @@ def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
         return metrics.get("base_residual_constraint_audit_passed", 0) == 1
     if run_id == "R014":
         return metrics.get("base_seed_replication_passed", 0) == 1
+    if _is_m6_ablation_run(run_id):
+        return metrics.get("ablation_run_passed", 0) == 1
     return report["passed"]
+
+
+def _is_m6_ablation_run(run_id: str) -> bool:
+    return run_id in {
+        "R015",
+        "R016",
+        "R017",
+        "R018",
+        "R019",
+        "R020",
+        "R021",
+        "R022",
+        "R023",
+        "R024",
+        "R025",
+        "R026",
+        "R027",
+        "R027a",
+        "R027b",
+        "R027c",
+        "R028",
+        "R029",
+        "R030",
+        "R031",
+        "R032",
+        "R033",
+    }
 
 
 def _augment_report_metrics(dataset_dir: str, report: Dict[str, Any]) -> None:
@@ -474,6 +505,28 @@ def _write_stage_a_report() -> None:
         "runs/R012_base_held_out_vehicle_eval",
         "runs/R013_base_residual_constraint_audit",
         "runs/R014_base_seed_replication",
+        "runs/R015_ablation_tire_T0",
+        "runs/R016_ablation_tire_T1",
+        "runs/R017_ablation_tire_T1_no_proj",
+        "runs/R018_ablation_tire_T2",
+        "runs/R019_ablation_fz_F0",
+        "runs/R020_ablation_fz_F1",
+        "runs/R021_ablation_fz_F2",
+        "runs/R022_ablation_steering_S0",
+        "runs/R023_ablation_steering_S1",
+        "runs/R024_ablation_mu_M0_fixed",
+        "runs/R025_ablation_mu_M1a",
+        "runs/R026_ablation_mu_M1b",
+        "runs/R027_ablation_mu_M2_oracle",
+        "runs/R027a_ablation_encoder_E1",
+        "runs/R027b_ablation_encoder_E2",
+        "runs/R027c_ablation_encoder_E3",
+        "runs/R028_ablation_vehicle_V0",
+        "runs/R029_ablation_vehicle_V1",
+        "runs/R030_ablation_vehicle_V1_large",
+        "runs/R031_ablation_vehicle_V2_small",
+        "runs/R032_ablation_uncertainty_U0",
+        "runs/R033_ablation_uncertainty_U1",
     ]
     rows = []
     for run_dir in run_dirs:

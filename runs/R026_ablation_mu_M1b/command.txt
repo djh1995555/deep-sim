@@ -1,0 +1,1 @@
+/home/mi/vibe/research/deep_sim/codex/experiments/run.py --config configs/runs/R026.yaml

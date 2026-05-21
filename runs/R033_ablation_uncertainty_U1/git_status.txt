@@ -1,0 +1,47 @@
+ M experiments/hybrid.py
+ M experiments/run.py
+ M reports/B0_teacher.md
+?? configs/runs/R015.yaml
+?? configs/runs/R016.yaml
+?? configs/runs/R017.yaml
+?? configs/runs/R018.yaml
+?? configs/runs/R019.yaml
+?? configs/runs/R020.yaml
+?? configs/runs/R021.yaml
+?? configs/runs/R022.yaml
+?? configs/runs/R023.yaml
+?? configs/runs/R024.yaml
+?? configs/runs/R025.yaml
+?? configs/runs/R026.yaml
+?? configs/runs/R027.yaml
+?? configs/runs/R027a.yaml
+?? configs/runs/R027b.yaml
+?? configs/runs/R027c.yaml
+?? configs/runs/R028.yaml
+?? configs/runs/R029.yaml
+?? configs/runs/R030.yaml
+?? configs/runs/R031.yaml
+?? configs/runs/R032.yaml
+?? configs/runs/R033.yaml
+?? runs/R015_ablation_tire_T0/
+?? runs/R016_ablation_tire_T1/
+?? runs/R017_ablation_tire_T1_no_proj/
+?? runs/R018_ablation_tire_T2/
+?? runs/R019_ablation_fz_F0/
+?? runs/R020_ablation_fz_F1/
+?? runs/R021_ablation_fz_F2/
+?? runs/R022_ablation_steering_S0/
+?? runs/R023_ablation_steering_S1/
+?? runs/R024_ablation_mu_M0_fixed/
+?? runs/R025_ablation_mu_M1a/
+?? runs/R026_ablation_mu_M1b/
+?? runs/R027_ablation_mu_M2_oracle/
+?? runs/R027a_ablation_encoder_E1/
+?? runs/R027b_ablation_encoder_E2/
+?? runs/R027c_ablation_encoder_E3/
+?? runs/R028_ablation_vehicle_V0/
+?? runs/R029_ablation_vehicle_V1/
+?? runs/R030_ablation_vehicle_V1_large/
+?? runs/R031_ablation_vehicle_V2_small/
+?? runs/R032_ablation_uncertainty_U0/
+?? runs/R033_ablation_uncertainty_U1/
