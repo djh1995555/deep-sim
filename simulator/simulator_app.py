@@ -607,15 +607,29 @@ def _safe_stem(value: str) -> str:
     return "".join(keep)
 
 
+_WHEEL_SUFFIXES = ("fl", "fr", "rl", "rr")
+
+
 def _vehicle_debug(result: VehicleStepResult) -> Dict[str, Any]:
     mu = np.asarray(result.road_contact["mu"], dtype=np.float64)
-    return {
+    beta_rad = float(np.arctan2(result.state.vy, max(abs(result.state.vx), 1e-6)))
+    debug = {
         "vx": float(result.state.vx),
         "vy": float(result.state.vy),
+        "vz": float(result.state.vz),
         "x_world": float(result.state.x_world),
         "y_world": float(result.state.y_world),
+        "z_world": float(result.state.z_world),
+        "roll": float(result.state.roll),
+        "pitch": float(result.state.pitch),
         "yaw": float(result.state.yaw),
+        "p": float(result.state.p),
+        "q": float(result.state.q),
         "r": float(result.state.r),
+        "beta_rad": beta_rad,
+        "beta_deg": float(np.degrees(beta_rad)),
+        "ax_body_mps2": float(result.state.prev_ax),
+        "ay_body_mps2": float(result.state.prev_ay),
         "mu_min": float(np.min(result.tire["mu_true_i"])),
         "mu_fl": float(mu[0]),
         "mu_fr": float(mu[1]),
@@ -623,6 +637,39 @@ def _vehicle_debug(result: VehicleStepResult) -> Dict[str, Any]:
         "mu_rr": float(mu[3]),
         "friction_usage_max": float(np.max(result.tire["friction_usage_i"])),
     }
+    _add_wheel_debug(debug, "mu", result.tire["mu_true_i"])
+    _add_wheel_debug(debug, "slip_angle", result.tire["slip_angle_true_i"])
+    _add_wheel_debug(debug, "slip_ratio", result.tire["slip_ratio_true_i"])
+    _add_wheel_debug(debug, "friction_usage", result.tire["friction_usage_i"])
+    _add_wheel_debug(debug, "Fx_true", result.tire["Fx_true_i"])
+    _add_wheel_debug(debug, "Fy_true", result.tire["Fy_true_i"])
+    _add_wheel_debug(debug, "Fz_true", result.load_state["Fz_true_i"])
+    _add_wheel_debug(debug, "Mz_true", result.tire["Mz_true_i"])
+    _add_wheel_debug(debug, "camber_true", result.load_state["camber_true_i"])
+    _add_wheel_debug(debug, "toe_true", result.load_state["toe_true_i"])
+    _add_wheel_debug(debug, "road_height_true", result.road_contact["height"])
+    _add_wheel_xy_debug(debug, result.road_contact["wheel_xy"])
+    delta_eff = np.asarray(result.steering["delta_eff_i"], dtype=np.float64)
+    debug["delta_eff_fl"] = float(delta_eff[0])
+    debug["delta_eff_fr"] = float(delta_eff[1])
+    return debug
+
+
+def _add_wheel_debug(
+    debug: Dict[str, Any],
+    prefix: str,
+    values: Any,
+) -> None:
+    arr = np.asarray(values, dtype=np.float64).reshape(-1)
+    for suffix, value in zip(_WHEEL_SUFFIXES, arr):
+        debug["%s_%s" % (prefix, suffix)] = float(value)
+
+
+def _add_wheel_xy_debug(debug: Dict[str, Any], values: Any) -> None:
+    arr = np.asarray(values, dtype=np.float64)
+    for suffix, xy in zip(_WHEEL_SUFFIXES, arr):
+        debug["road_wheel_x_%s" % suffix] = float(xy[0])
+        debug["road_wheel_y_%s" % suffix] = float(xy[1])
 
 
 def _simulation_summary(

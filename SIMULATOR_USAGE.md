@@ -651,8 +651,12 @@ debug_report.html
 | `Trajectory` | 实际轨迹和 reference 轨迹。 |
 | `Speed Tracking` | `vx`、目标速度、速度误差、加速度命令。 |
 | `Lateral Tracking` | 横向位置、目标横向位置、航向角、横向误差、航向误差。 |
+| `Sideslip` | `beta_deg`、横向速度、横摆率、横向加速度、侧倾角和航向角。 |
 | `Commands` | 转向、油门、制动命令。 |
-| `Vehicle State` | `vy`、`r`、最小 μ、最大 friction usage。 |
+| `Vehicle State` | `vy`、`r`、四轮 μ、最小 μ、最大 friction usage。 |
+| `Tire Slip Teacher States` | 四轮 slip angle 和 slip ratio。 |
+| `Tire Force Teacher States` | 四轮 `Fy_true` 和 `Fz_true`。 |
+| `Friction Usage` | 四轮 friction usage。 |
 | `Reference` | path progress、lookahead、curvature 等 reference 信号。 |
 
 可以在 request YAML 中自定义面板：
