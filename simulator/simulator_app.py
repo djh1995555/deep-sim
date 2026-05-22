@@ -608,6 +608,7 @@ def _safe_stem(value: str) -> str:
 
 
 def _vehicle_debug(result: VehicleStepResult) -> Dict[str, Any]:
+    mu = np.asarray(result.road_contact["mu"], dtype=np.float64)
     return {
         "vx": float(result.state.vx),
         "vy": float(result.state.vy),
@@ -616,6 +617,10 @@ def _vehicle_debug(result: VehicleStepResult) -> Dict[str, Any]:
         "yaw": float(result.state.yaw),
         "r": float(result.state.r),
         "mu_min": float(np.min(result.tire["mu_true_i"])),
+        "mu_fl": float(mu[0]),
+        "mu_fr": float(mu[1]),
+        "mu_rl": float(mu[2]),
+        "mu_rr": float(mu[3]),
         "friction_usage_max": float(np.max(result.tire["friction_usage_i"])),
     }
 

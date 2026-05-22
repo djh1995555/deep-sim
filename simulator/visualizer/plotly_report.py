@@ -31,6 +31,10 @@ DEFAULT_DEBUG_PANELS: Dict[str, Sequence[str]] = {
         "vehicle.vy",
         "vehicle.r",
         "vehicle.mu_min",
+        "vehicle.mu_fl",
+        "vehicle.mu_fr",
+        "vehicle.mu_rl",
+        "vehicle.mu_rr",
         "vehicle.friction_usage_max",
     ),
     "Reference": (

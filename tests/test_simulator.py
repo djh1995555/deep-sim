@@ -215,6 +215,11 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
                 title="Regenerated Debug Report",
             )
             self.assertTrue(os.path.exists(regenerated))
+            rows = trace.to_list()
+            self.assertIn("vehicle.mu_fl", rows[0])
+            self.assertIn("vehicle.mu_fr", rows[0])
+            self.assertIn("vehicle.mu_rl", rows[0])
+            self.assertIn("vehicle.mu_rr", rows[0])
             report = TeacherEpisodeValidator().validate_dataset(tmp)
             self.assertTrue(report.passed, report.errors)
             episodes = load_dataset(tmp)
