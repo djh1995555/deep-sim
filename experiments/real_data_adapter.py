@@ -2,7 +2,7 @@ import argparse
 import csv
 import json
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
@@ -67,12 +67,32 @@ def _read_csv_columns(path: str) -> Dict[str, List[float]]:
     return columns
 
 
-def _column(columns: Dict[str, List[float]], field_map: Dict[str, str], key: str, default: float) -> np.ndarray:
+def _column(
+    columns: Dict[str, List[float]],
+    field_map: Dict[str, str],
+    key: str,
+    default: float,
+    allow_missing_defaults: bool,
+    missing_default_fields: List[str],
+) -> Tuple[np.ndarray, str]:
     candidates = [field_map.get(key, ""), key, "obs__%s" % key]
     for candidate in candidates:
         if candidate and candidate in columns:
-            return np.asarray(columns[candidate], dtype=np.float32)
-    return np.full((len(next(iter(columns.values()))),), default, dtype=np.float32)
+            return np.asarray(columns[candidate], dtype=np.float32), candidate
+    if not allow_missing_defaults:
+        raise KeyError(
+            "missing required CSV field for '%s'; expected one of %s"
+            % (key, [candidate for candidate in candidates if candidate])
+        )
+    missing_default_fields.append(key)
+    return np.full((len(next(iter(columns.values()))),), default, dtype=np.float32), "<default>"
+
+
+def _require_finite(key: str, values: np.ndarray, allow_nan: bool) -> None:
+    if allow_nan:
+        return
+    if not np.all(np.isfinite(values)):
+        raise ValueError("CSV field '%s' contains non-finite values" % key)
 
 
 def convert_csv_to_canonical(
@@ -84,6 +104,8 @@ def convert_csv_to_canonical(
     nominal_prior: Dict[str, Any] | None = None,
     metadata: Dict[str, Any] | None = None,
     field_map: Dict[str, str] | None = None,
+    allow_missing_defaults: bool = False,
+    allow_nan: bool = False,
 ) -> Dict[str, Any]:
     columns = _read_csv_columns(input_csv)
     field_map = field_map or {}
@@ -92,24 +114,56 @@ def convert_csv_to_canonical(
     metadata = metadata or {}
     os.makedirs(os.path.join(output_dir, "episodes"), exist_ok=True)
     arrays: Dict[str, np.ndarray] = {}
-    timestamp = _column(columns, field_map, "timestamp", 0.0).astype(np.float64)
+    missing_default_fields: List[str] = []
+    source_columns: Dict[str, str] = {}
+    timestamp_raw, source_columns["timestamp"] = _column(
+        columns,
+        field_map,
+        "timestamp",
+        0.0,
+        allow_missing_defaults,
+        missing_default_fields,
+    )
+    timestamp = timestamp_raw.astype(np.float64)
     if np.all(timestamp == 0.0):
         dt = float(metadata.get("dt", 0.04))
         timestamp = np.arange(len(timestamp), dtype=np.float64) * dt
+    _require_finite("timestamp", timestamp, allow_nan)
     arrays["obs__timestamp"] = timestamp
     for key in STATE_KEYS:
         default = 10.0 if key == "vx" else 0.0
-        arrays["obs__%s" % key] = _column(columns, field_map, key, default)
+        values, source_columns[key] = _column(
+            columns,
+            field_map,
+            key,
+            default,
+            allow_missing_defaults,
+            missing_default_fields,
+        )
+        _require_finite(key, values, allow_nan)
+        arrays["obs__%s" % key] = values
     for key in CONTROL_KEYS:
-        arrays["obs__%s" % key] = _column(columns, field_map, key, 0.0)
-    array_rel = "episodes/%s.npz" % episode_id
-    array_path = os.path.join(output_dir, array_rel)
-    np.savez(array_path, **arrays)
+        values, source_columns[key] = _column(
+            columns,
+            field_map,
+            key,
+            0.0,
+            allow_missing_defaults,
+            missing_default_fields,
+        )
+        _require_finite(key, values, allow_nan)
+        arrays["obs__%s" % key] = values
     sample_count = len(timestamp)
     if sample_count < 2:
         raise ValueError("episode must contain at least two samples")
     dt_values = np.diff(timestamp)
+    _require_finite("dt", dt_values, allow_nan)
+    if np.any(dt_values <= 0.0):
+        raise ValueError("timestamp must be strictly increasing")
     dt = float(np.nanmedian(dt_values)) if len(dt_values) else float(metadata.get("dt", 0.04))
+    array_rel = "episodes/%s.npz" % episode_id
+    array_path = os.path.join(output_dir, array_rel)
+    np.savez(array_path, **arrays)
     sidecar_rel = "episodes/%s.json" % episode_id
     sidecar = {
         "array_file": array_rel,
@@ -152,8 +206,23 @@ def convert_csv_to_canonical(
         ],
     }
     _write_json(os.path.join(output_dir, "manifest.json"), manifest)
+    adapter_quality = {
+        "allow_missing_defaults": bool(allow_missing_defaults),
+        "allow_nan": bool(allow_nan),
+        "missing_default_fields": missing_default_fields,
+        "missing_default_field_count": len(missing_default_fields),
+        "source_columns": source_columns,
+    }
+    _write_json(os.path.join(output_dir, "adapter_quality_report.json"), adapter_quality)
     summary = validate_canonical_dataset(output_dir)
-    summary.update({"dataset_id": dataset_id, "episode_id": episode_id, "output_dir": output_dir})
+    summary.update(
+        {
+            "dataset_id": dataset_id,
+            "episode_id": episode_id,
+            "output_dir": output_dir,
+            "missing_default_field_count": len(missing_default_fields),
+        }
+    )
     _write_json(os.path.join(output_dir, "adapter_summary.json"), summary)
     return summary
 
@@ -168,6 +237,8 @@ def main() -> int:
     parser.add_argument("--nominal-prior-json", default="")
     parser.add_argument("--metadata-json", default="")
     parser.add_argument("--field-map-json", default="")
+    parser.add_argument("--allow-missing-defaults", action="store_true")
+    parser.add_argument("--allow-nan", action="store_true")
     args = parser.parse_args()
     fixed_context = _read_json_or_default(args.fixed_context_json, DEFAULT_FIXED_CONTEXT)
     nominal_prior = _read_json_or_default(args.nominal_prior_json, DEFAULT_NOMINAL_PRIOR)
@@ -182,6 +253,8 @@ def main() -> int:
         nominal_prior=nominal_prior,
         metadata=metadata,
         field_map=field_map,
+        allow_missing_defaults=args.allow_missing_defaults,
+        allow_nan=args.allow_nan,
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
     return 0

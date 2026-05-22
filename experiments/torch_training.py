@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 import random
+import traceback
 from dataclasses import asdict, fields
 from typing import Any, Dict, Tuple
 
@@ -13,7 +14,9 @@ from student_model.data import (
     TorchTransitionDataset,
     context_vector,
     episode_arrays,
+    filter_manifest_items,
     load_episode_record,
+    load_manifest,
     validate_canonical_dataset,
 )
 
@@ -22,6 +25,12 @@ def _write_json(path: str, data: Dict[str, Any]) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, sort_keys=True)
+
+
+def _write_text(path: str, content: str) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write(content)
 
 
 def _torch_import_status() -> Tuple[Any, str]:
@@ -203,6 +212,7 @@ def _build_loader(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any]) -> An
         dataset_dir,
         history_len=int(torch_cfg.get("history_len", 8)),
         split_role=torch_cfg.get("split_role", "train"),
+        allow_empty_filter_fallback=bool(torch_cfg.get("allow_empty_filter_fallback", False)),
     )
     max_episodes = int(torch_cfg.get("max_episodes", 0) or 0)
     if max_episodes > 0 and len(dataset) > max_episodes:
@@ -235,6 +245,7 @@ def _build_transition_loader(
         target_window_role=torch_cfg.get("target_window_role"),
         scenario_groups=torch_cfg.get("scenario_groups"),
         vehicle_config_ids=torch_cfg.get("vehicle_config_ids"),
+        allow_empty_filter_fallback=bool(torch_cfg.get("allow_empty_filter_fallback", False)),
     )
     return DataLoader(
         dataset,
@@ -364,6 +375,17 @@ def _load_training_checkpoint(torch: Any, path: str, device: Any) -> Dict[str, A
     return torch.load(path, map_location=device, weights_only=True)
 
 
+def _load_state_dict_strict(model: Any, state_dict: Dict[str, Any], context: str) -> None:
+    result = model.load_state_dict(state_dict, strict=True)
+    missing = list(getattr(result, "missing_keys", []))
+    unexpected = list(getattr(result, "unexpected_keys", []))
+    if missing or unexpected:
+        raise RuntimeError(
+            "%s checkpoint key mismatch: missing=%s unexpected=%s"
+            % (context, missing, unexpected)
+        )
+
+
 def _restore_model_from_checkpoint(torch: Any, checkpoint: Dict[str, Any], device: Any) -> Any:
     model_type = checkpoint.get("model_type", "hybrid")
     if str(model_type).startswith("direct_"):
@@ -383,7 +405,7 @@ def _restore_model_from_checkpoint(torch: Any, checkpoint: Dict[str, Any], devic
         from student_model.torch_model import HybridStudentConfig, HybridStudentModel
 
         model = HybridStudentModel(HybridStudentConfig(**checkpoint.get("model_config", {}))).to(device)
-    model.load_state_dict(checkpoint["model_state_dict"], strict=False)
+    _load_state_dict_strict(model, checkpoint["model_state_dict"], "restore")
     return model
 
 
@@ -435,7 +457,7 @@ def _one_step_train(torch: Any, dataset_dir: str, torch_cfg: Dict[str, Any], out
     start_step = 0
     if resume_from:
         checkpoint = _load_training_checkpoint(torch, resume_from, device)
-        model.load_state_dict(checkpoint["model_state_dict"], strict=False)
+        _load_state_dict_strict(model, checkpoint["model_state_dict"], "resume_from")
         start_step = int(checkpoint.get("step", 0))
     fine_tune_mode = torch_cfg.get("fine_tune_mode")
     if fine_tune_mode and hasattr(model, "set_trainability"):
@@ -892,29 +914,15 @@ def _rollout_eval_from_checkpoint(
     rollout_steps = int(torch_cfg.get("rollout_steps", 16))
     max_episodes = int(torch_cfg.get("max_episodes", 4))
     split_role = torch_cfg.get("split_role", "validation")
-    from student_model.data import _manifest_item_matches, load_manifest
-
-    manifest_items = load_manifest(dataset_dir).get("episodes", [])
-    items = [
-        (idx, item)
-        for idx, item in enumerate(manifest_items)
-        if _manifest_item_matches(
-            item,
-            split_role,
-            torch_cfg.get("fine_tune_buckets"),
-            torch_cfg.get("target_window_role"),
-            torch_cfg.get("scenario_groups"),
-            torch_cfg.get("vehicle_config_ids"),
-        )
-    ]
-    if not items:
-        items = [
-            (idx, item)
-            for idx, item in enumerate(manifest_items)
-            if not split_role or item.get("split_role") == split_role
-        ]
-    if not items:
-        items = list(enumerate(manifest_items))
+    items = filter_manifest_items(
+        load_manifest(dataset_dir),
+        split_role=split_role,
+        fine_tune_buckets=torch_cfg.get("fine_tune_buckets"),
+        target_window_role=torch_cfg.get("target_window_role"),
+        scenario_groups=torch_cfg.get("scenario_groups"),
+        vehicle_config_ids=torch_cfg.get("vehicle_config_ids"),
+        allow_empty_filter_fallback=bool(torch_cfg.get("allow_empty_filter_fallback", False)),
+    )
     rows = []
     all_sqerr = []
     all_channel_sqerr = []
@@ -1491,6 +1499,9 @@ def run_torch_training_suite(
         if not passed:
             report["errors"].append("%s failed success gate" % mode)
     except Exception as exc:  # pragma: no cover - covered by runner smoke at integration level.
+        trace_path = os.path.join(out_dir, "artifacts", "torch_training_error_traceback.txt")
+        _write_text(trace_path, traceback.format_exc())
+        report["error_traceback_path"] = trace_path
         report["errors"].append(repr(exc))
         report["passed"] = False
 

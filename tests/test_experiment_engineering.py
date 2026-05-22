@@ -8,6 +8,7 @@ import unittest
 from experiments.experiment_queue import run_queue
 from experiments.matrix_report import build_matrix_report
 from experiments.real_data_adapter import convert_csv_to_canonical
+from student_model.constants import CONTROL_KEYS, STATE_KEYS
 from student_model.data import episode_arrays, load_episode_record, validate_canonical_dataset
 
 
@@ -83,11 +84,24 @@ class ExperimentEngineeringTest(unittest.TestCase):
     def test_real_data_adapter_outputs_canonical_dataset(self):
         with tempfile.TemporaryDirectory() as tmp:
             csv_path = os.path.join(tmp, "episode.csv")
+            fieldnames = ["timestamp"] + STATE_KEYS + CONTROL_KEYS
             with open(csv_path, "w", encoding="utf-8", newline="") as handle:
-                writer = csv.DictWriter(handle, fieldnames=["timestamp", "vx", "sw_angle"])
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
                 writer.writeheader()
                 for i in range(4):
-                    writer.writerow({"timestamp": i * 0.04, "vx": 10.0 + i, "sw_angle": 0.01 * i})
+                    row = {key: 0.0 for key in fieldnames}
+                    row.update(
+                        {
+                            "timestamp": i * 0.04,
+                            "vx": 10.0 + i,
+                            "omega_fl": 31.0,
+                            "omega_fr": 31.0,
+                            "omega_rl": 31.0,
+                            "omega_rr": 31.0,
+                            "sw_angle": 0.01 * i,
+                        }
+                    )
+                    writer.writerow(row)
             out_dir = os.path.join(tmp, "real_ds")
             summary = convert_csv_to_canonical(
                 csv_path,
@@ -105,6 +119,38 @@ class ExperimentEngineeringTest(unittest.TestCase):
             with open(os.path.join(out_dir, "manifest.json"), "r", encoding="utf-8") as handle:
                 manifest = json.load(handle)
             self.assertEqual(manifest["dataset_id"], "REAL_TEST")
+            with open(os.path.join(out_dir, "adapter_quality_report.json"), "r", encoding="utf-8") as handle:
+                quality = json.load(handle)
+            self.assertEqual(quality["missing_default_field_count"], 0)
+
+    def test_real_data_adapter_rejects_missing_fields_by_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            csv_path = os.path.join(tmp, "episode.csv")
+            with open(csv_path, "w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=["timestamp", "vx", "sw_angle"])
+                writer.writeheader()
+                for i in range(4):
+                    writer.writerow({"timestamp": i * 0.04, "vx": 10.0 + i, "sw_angle": 0.01 * i})
+            with self.assertRaisesRegex(KeyError, "missing required CSV field"):
+                convert_csv_to_canonical(csv_path, os.path.join(tmp, "strict_ds"), "REAL_TEST", "real_ep_000")
+
+    def test_real_data_adapter_can_explicitly_default_missing_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            csv_path = os.path.join(tmp, "episode.csv")
+            with open(csv_path, "w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=["timestamp", "vx", "sw_angle"])
+                writer.writeheader()
+                for i in range(4):
+                    writer.writerow({"timestamp": i * 0.04, "vx": 10.0 + i, "sw_angle": 0.01 * i})
+            out_dir = os.path.join(tmp, "defaulted_ds")
+            summary = convert_csv_to_canonical(
+                csv_path,
+                out_dir,
+                "REAL_TEST",
+                "real_ep_000",
+                allow_missing_defaults=True,
+            )
+            self.assertGreater(summary["missing_default_field_count"], 0)
 
 
 if __name__ == "__main__":

@@ -112,6 +112,68 @@ def _manifest_item_matches(
     return True
 
 
+def _filter_description(
+    split_role: str,
+    fine_tune_buckets: List[str] | None,
+    target_window_role: str | None,
+    scenario_groups: List[str] | None,
+    vehicle_config_ids: List[str] | None,
+) -> Dict[str, Any]:
+    return {
+        "split_role": split_role,
+        "fine_tune_buckets": fine_tune_buckets,
+        "target_window_role": target_window_role,
+        "scenario_groups": scenario_groups,
+        "vehicle_config_ids": vehicle_config_ids,
+    }
+
+
+def filter_manifest_items(
+    manifest: Dict[str, Any],
+    split_role: str = "train",
+    fine_tune_buckets: List[str] | None = None,
+    target_window_role: str | None = None,
+    scenario_groups: List[str] | None = None,
+    vehicle_config_ids: List[str] | None = None,
+    allow_empty_filter_fallback: bool = False,
+) -> List[Tuple[int, Dict[str, Any]]]:
+    episodes = list(manifest.get("episodes", []))
+    items = [
+        (idx, item)
+        for idx, item in enumerate(episodes)
+        if _manifest_item_matches(
+            item,
+            split_role,
+            fine_tune_buckets,
+            target_window_role,
+            scenario_groups,
+            vehicle_config_ids,
+        )
+    ]
+    if items:
+        return items
+    if allow_empty_filter_fallback:
+        fallback_items = [
+            (idx, item)
+            for idx, item in enumerate(episodes)
+            if not split_role or item.get("split_role") == split_role
+        ]
+        return fallback_items or list(enumerate(episodes))
+    raise ValueError(
+        "no episodes match dataset filter: %s"
+        % json.dumps(
+            _filter_description(
+                split_role,
+                fine_tune_buckets,
+                target_window_role,
+                scenario_groups,
+                vehicle_config_ids,
+            ),
+            sort_keys=True,
+        )
+    )
+
+
 def validate_canonical_dataset(dataset_dir: str) -> Dict[str, int]:
     manifest = load_manifest(dataset_dir)
     episode_count = len(manifest.get("episodes", []))
@@ -130,7 +192,13 @@ def validate_canonical_dataset(dataset_dir: str) -> Dict[str, int]:
 
 
 class TorchEpisodeDataset:
-    def __init__(self, dataset_dir: str, history_len: int = 8, split_role: str = "train"):
+    def __init__(
+        self,
+        dataset_dir: str,
+        history_len: int = 8,
+        split_role: str = "train",
+        allow_empty_filter_fallback: bool = False,
+    ):
         try:
             import torch  # noqa: F401
         except ImportError as exc:
@@ -140,11 +208,12 @@ class TorchEpisodeDataset:
         manifest = load_manifest(dataset_dir)
         self.items = [
             item
-            for item in manifest.get("episodes", [])
-            if item.get("split_role") == split_role
+            for _, item in filter_manifest_items(
+                manifest,
+                split_role=split_role,
+                allow_empty_filter_fallback=allow_empty_filter_fallback,
+            )
         ]
-        if not self.items:
-            self.items = manifest.get("episodes", [])
 
     def __len__(self) -> int:
         return len(self.items)
@@ -192,6 +261,7 @@ class TorchTransitionDataset:
         target_window_role: str | None = None,
         scenario_groups: List[str] | None = None,
         vehicle_config_ids: List[str] | None = None,
+        allow_empty_filter_fallback: bool = False,
     ):
         try:
             import torch  # noqa: F401
@@ -203,25 +273,15 @@ class TorchTransitionDataset:
         self.fine_tune_buckets = fine_tune_buckets
         self.target_window_role = target_window_role
         manifest = load_manifest(dataset_dir)
-        items = [
-            (idx, item)
-            for idx, item in enumerate(manifest.get("episodes", []))
-            if _manifest_item_matches(
-                item,
-                split_role,
-                fine_tune_buckets,
-                target_window_role,
-                scenario_groups,
-                vehicle_config_ids,
-            )
-        ]
-        if not items:
-            fallback_items = [
-                (idx, item)
-                for idx, item in enumerate(manifest.get("episodes", []))
-                if not split_role or item.get("split_role") == split_role
-            ]
-            items = fallback_items or list(enumerate(manifest.get("episodes", [])))
+        items = filter_manifest_items(
+            manifest,
+            split_role=split_role,
+            fine_tune_buckets=fine_tune_buckets,
+            target_window_role=target_window_role,
+            scenario_groups=scenario_groups,
+            vehicle_config_ids=vehicle_config_ids,
+            allow_empty_filter_fallback=allow_empty_filter_fallback,
+        )
         max_episode_count = int(max_episodes or 0)
         if max_episode_count > 0:
             items = items[:max_episode_count]

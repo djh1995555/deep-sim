@@ -5,6 +5,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import traceback
 from datetime import datetime, timezone
 from typing import Any, Dict, List
 
@@ -122,6 +123,7 @@ def run_config(config_path: str) -> int:
     notes = ""
     success = False
     blocked_reason = ""
+    error_traceback_path = ""
     env_error = _env_error()
     if env_error:
         summary = {
@@ -244,6 +246,8 @@ def run_config(config_path: str) -> int:
         primary_metric = cfg.get("primary_metric", "run_completed")
         primary_value = 0
         notes = repr(exc)
+        error_traceback_path = os.path.join(out_dir, "artifacts", "error_traceback.txt")
+        _write_text(error_traceback_path, traceback.format_exc())
 
     summary = {
         "run_id": run_id,
@@ -263,6 +267,8 @@ def run_config(config_path: str) -> int:
         "success_criteria_met": bool(success),
         "notes": notes,
     }
+    if error_traceback_path:
+        summary["error_traceback_path"] = error_traceback_path
     _write_json(os.path.join(out_dir, "summary.json"), summary)
     _write_stage_a_report()
     print(json.dumps(summary, indent=2, sort_keys=True))

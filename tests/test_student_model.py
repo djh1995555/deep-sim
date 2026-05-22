@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 
 from student_model.data import (
+    TorchEpisodeDataset,
     TorchTransitionDataset,
     context_vector,
     episode_arrays,
@@ -129,6 +130,27 @@ class StudentModelSmokeTest(unittest.TestCase):
         self.assertEqual(tuple(sample["tire_force_true"].shape), (8,))
         self.assertEqual(tuple(sample["mu_true"].shape), (4,))
         self.assertEqual(tuple(sample["steering_true"].shape), (2,))
+
+    def test_dataset_filters_fail_when_no_episode_matches(self):
+        with self.assertRaisesRegex(ValueError, "no episodes match dataset filter"):
+            TorchEpisodeDataset("data/ds1_v1", split_role="definitely_missing")
+        with self.assertRaisesRegex(ValueError, "no episodes match dataset filter"):
+            TorchTransitionDataset(
+                "data/ds1_proxy_ft_v1",
+                split_role="fine-tune",
+                fine_tune_buckets=["MISSING_BUCKET"],
+                target_window_role="target_train",
+                max_samples=5,
+            )
+
+    def test_dataset_filter_fallback_must_be_explicit(self):
+        dataset = TorchTransitionDataset(
+            "data/ds1_v1",
+            split_role="definitely_missing",
+            max_samples=3,
+            allow_empty_filter_fallback=True,
+        )
+        self.assertEqual(len(dataset), 3)
 
 
 if __name__ == "__main__":

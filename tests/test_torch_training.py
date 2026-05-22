@@ -134,6 +134,43 @@ class TorchTrainingRunnerTest(unittest.TestCase):
         restored = _restore_model_from_checkpoint(torch, payload, device)
         self.assertTrue(hasattr(restored, "backcast"))
 
+    def test_checkpoint_restore_rejects_mismatched_keys(self):
+        if importlib.util.find_spec("torch") is None:
+            self.skipTest("PyTorch is not installed")
+        import torch
+
+        device = torch.device("cpu")
+        cfg = {
+            "model_type": "direct_tcn",
+            "baseline_config": {
+                "hidden_dim": 32,
+                "context_dim": 17,
+                "direct_residual_bound": 0.6,
+            },
+        }
+        model = _build_direct_model(torch, cfg["baseline_config"], device)
+        payload = _checkpoint_payload(model, None, cfg, step=80, metrics={})
+        payload["model_state_dict"] = dict(payload["model_state_dict"])
+        payload["model_state_dict"]["unexpected.weight"] = torch.zeros(1)
+        with self.assertRaises(RuntimeError):
+            _restore_model_from_checkpoint(torch, payload, device)
+
+    def test_torch_training_error_report_includes_traceback(self):
+        if importlib.util.find_spec("torch") is None:
+            self.skipTest("PyTorch is not installed")
+        with tempfile.TemporaryDirectory() as tmp:
+            report = run_torch_training_suite(
+                "data/ds1_v1",
+                {
+                    "mode": "definitely_unknown",
+                    "seed": 23,
+                    "device": "cpu",
+                },
+                tmp,
+            )
+            self.assertFalse(report["passed"])
+            self.assertTrue(os.path.exists(report["error_traceback_path"]))
+
     def test_generated_torch_matrix_manifest(self):
         with open("configs/experiments/matrix/MANIFEST.json", "r", encoding="utf-8") as handle:
             manifest = json.load(handle)
