@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
 import numpy as np
@@ -12,11 +12,14 @@ from simulator.vehicle_model.state import TeacherState
 class Waypoint:
     x_m: float
     y_m: float
-    yaw_rad: float
-    curvature_1pm: float
-    speed_mps: float
     z_m: float = 0.0
+    speed_mps: float = 0.0
+    yaw_rad: float = 0.0
     yaw_rate_rps: float = 0.0
+    curvature_1pm: float = 0.0
+    path_s_m: float = 0.0
+    lookahead_distance_m: float = 0.0
+    extra: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -35,6 +38,7 @@ class WaypointReferenceProvider:
                 [
                     p.x_m,
                     p.y_m,
+                    p.z_m,
                     p.speed_mps,
                     p.yaw_rad,
                     p.yaw_rate_rps,
@@ -50,6 +54,9 @@ class WaypointReferenceProvider:
             raise ValueError("consecutive waypoints must be distinct")
         self.segment_lengths = lengths
         self.s = np.concatenate([[0.0], np.cumsum(lengths)])
+        for waypoint, path_s in zip(self.config.waypoints, self.s):
+            waypoint.path_s_m = float(path_s)
+            waypoint.lookahead_distance_m = float(self.config.lookahead_m)
 
     def reset(self, scenario: ScenarioConfig) -> None:
         pass
@@ -59,14 +66,14 @@ class WaypointReferenceProvider:
         target_s = min(float(self.s[-1]), nearest_s + self.config.lookahead_m)
         target = self._interpolate_at_s(target_s)
         yaw = self._yaw_at_s(target_s, target)
-        speed = float(target[2])
         return ControllerReference(
-            target_x_m=float(target[0]),
-            target_y_m=float(target[1]),
-            target_speed_mps=speed,
-            target_yaw_rad=yaw,
-            target_yaw_rate_rps=float(target[4]),
-            target_curvature_1pm=float(target[5]),
+            x_m=float(target[0]),
+            y_m=float(target[1]),
+            z_m=float(target[2]),
+            speed_mps=float(target[3]),
+            yaw_rad=yaw,
+            yaw_rate_rps=float(target[5]),
+            curvature_1pm=float(target[6]),
             path_s_m=float(target_s),
             lookahead_distance_m=float(self.config.lookahead_m),
             extra={
@@ -108,8 +115,8 @@ class WaypointReferenceProvider:
         return (1.0 - u) * self.points[idx] + u * self.points[idx + 1]
 
     def _yaw_at_s(self, target_s: float, target: np.ndarray) -> float:
-        if not np.isnan(target[3]):
-            return float(target[3])
+        if not np.isnan(target[4]):
+            return float(target[4])
         if target_s >= self.s[-1]:
             idx = len(self.segment_lengths) - 1
         else:
@@ -125,10 +132,13 @@ def parse_waypoint(value: Any) -> Waypoint:
     missing = sorted(required - set(value))
     if missing:
         raise ValueError("waypoint missing required fields: %s" % ", ".join(missing))
-    allowed = required | {"z_m", "yaw_rate_rps"}
+    allowed = required | {"z_m", "yaw_rate_rps", "path_s_m", "lookahead_distance_m", "extra"}
     unknown = sorted(set(value) - allowed)
     if unknown:
         raise ValueError("unknown waypoint fields: %s" % ", ".join(unknown))
+    extra = value.get("extra", {})
+    if not isinstance(extra, dict):
+        raise ValueError("waypoint extra must be a mapping")
     return Waypoint(
         x_m=float(value["x_m"]),
         y_m=float(value["y_m"]),
@@ -137,4 +147,7 @@ def parse_waypoint(value: Any) -> Waypoint:
         yaw_rad=float(value["yaw_rad"]),
         yaw_rate_rps=float(value.get("yaw_rate_rps", 0.0)),
         curvature_1pm=float(value["curvature_1pm"]),
+        path_s_m=float(value.get("path_s_m", 0.0)),
+        lookahead_distance_m=float(value.get("lookahead_distance_m", 0.0)),
+        extra=dict(extra),
     )

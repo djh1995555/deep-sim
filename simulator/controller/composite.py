@@ -51,12 +51,13 @@ class PIDLQRController:
 
 def _reference_debug(reference: ControllerReference) -> Dict[str, Any]:
     return {
-        "target_x_m": reference.target_x_m,
-        "target_speed_mps": reference.target_speed_mps,
-        "target_y_m": reference.target_y_m,
-        "target_yaw_rad": reference.target_yaw_rad,
-        "target_yaw_rate_rps": reference.target_yaw_rate_rps,
-        "target_curvature_1pm": reference.target_curvature_1pm,
+        "x_m": reference.x_m,
+        "y_m": reference.y_m,
+        "z_m": reference.z_m,
+        "speed_mps": reference.speed_mps,
+        "yaw_rad": reference.yaw_rad,
+        "yaw_rate_rps": reference.yaw_rate_rps,
+        "curvature_1pm": reference.curvature_1pm,
         "path_s_m": reference.path_s_m,
         "lookahead_distance_m": reference.lookahead_distance_m,
         "extra": reference.extra,

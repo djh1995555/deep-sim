@@ -43,12 +43,12 @@ class SinusoidalReferenceProvider:
         yaw = float(np.arctan(slope))
         curvature = float(second_derivative / np.power(1.0 + slope * slope, 1.5))
         return ControllerReference(
-            target_x_m=float(state.x_world),
-            target_speed_mps=float(cfg.speed_mps),
-            target_y_m=float(target_y),
-            target_yaw_rad=yaw,
-            target_yaw_rate_rps=float(curvature * cfg.speed_mps),
-            target_curvature_1pm=curvature,
+            x_m=float(state.x_world),
+            y_m=float(target_y),
+            speed_mps=float(cfg.speed_mps),
+            yaw_rad=yaw,
+            yaw_rate_rps=float(curvature * cfg.speed_mps),
+            curvature_1pm=curvature,
             path_s_m=float(max(0.0, distance_m)),
             lookahead_distance_m=0.0,
             extra={

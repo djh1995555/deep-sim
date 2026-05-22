@@ -32,7 +32,7 @@ class LongitudinalPIDController:
 
     def compute_accel_command(self, controller_input: ControllerInput) -> Dict[str, float]:
         cfg = self.config
-        error = controller_input.reference.target_speed_mps - controller_input.state.vx
+        error = controller_input.reference.speed_mps - controller_input.state.vx
         self.integral = float(
             np.clip(
                 self.integral + error * controller_input.dt,

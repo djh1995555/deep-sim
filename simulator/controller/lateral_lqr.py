@@ -23,10 +23,10 @@ class LateralLQRController:
     def compute_steering(self, controller_input: ControllerInput) -> Dict[str, float]:
         state = controller_input.state
         ref = controller_input.reference
-        e_y = state.y_world - ref.target_y_m
-        e_yaw = _wrap_angle(state.yaw - ref.target_yaw_rad)
+        e_y = state.y_world - ref.y_m
+        e_yaw = _wrap_angle(state.yaw - ref.yaw_rad)
         e_vy = state.vy
-        e_r = state.r - ref.target_yaw_rate_rps
+        e_r = state.r - ref.yaw_rate_rps
         k_y, k_yaw, k_vy, k_r = self.config.gains
         raw = -(k_y * e_y + k_yaw * e_yaw + k_vy * e_vy + k_r * e_r)
         sw_angle = float(

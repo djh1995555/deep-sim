@@ -145,11 +145,26 @@ request YAML / CLI args
 
 | 对象 | 文件 | 内容 |
 | --- | --- | --- |
-| `ControllerReference` | `controller/base.py` | 目标速度、目标横向位置、目标航向、曲率、lookahead 等 reference 信号。 |
+| `ControllerReference` | `controller/base.py` | controller 每一步接收到的完整 reference 点，包括位置、速度、航向、yaw rate、曲率、路径进度和 lookahead。 |
 | `ControllerInput` | `controller/base.py` | 当前仿真时间、车辆状态、scenario、reference、上一帧 observation。 |
 | `ControllerOutput` | `controller/base.py` | `sw_angle`、`steer_cmd`、`throttle_cmd`、`brake_cmd` 和 debug 字段。 |
 | `VehicleStepResult` | `vehicle_model/model.py` | 单步车辆动力学输出，包括 state、observation、轮胎、载荷、转向、路面接触等中间量。 |
 | `DebugTrace` | `visualizer/debug_trace.py` | 保存 controller input/output 与 vehicle debug 信号，用于 CSV/JSON/HTML 可视化。 |
+
+`ControllerReference` 与 waypoint 使用同一组 reference 点信息：
+
+```text
+x_m, y_m, z_m
+speed_mps
+yaw_rad
+yaw_rate_rps
+curvature_1pm
+path_s_m
+lookahead_distance_m
+extra
+```
+
+`ControllerReference` 不再保留 `target_*` 兼容字段。debug trace 中 reference 统一输出到 `input.reference.*`，例如 `input.reference.x_m`、`input.reference.y_m`、`input.reference.speed_mps`。
 
 ## 3. 快速运行闭环仿真
 
@@ -425,7 +440,7 @@ second_length_m: 50.0
 mode: spatial
 ```
 
-也可以是 waypoint 轨迹。每个点必须显式写出 `x_m`、`y_m`、`yaw_rad`、`curvature_1pm`、`speed_mps`：
+也可以是 waypoint 轨迹。每个点必须显式写出 `x_m`、`y_m`、`yaw_rad`、`curvature_1pm`、`speed_mps`；可选 `z_m`、`yaw_rate_rps`、`path_s_m`、`lookahead_distance_m`、`extra`。构建 provider 时会按几何路径重新计算每个 waypoint 的 `path_s_m`，并填入当前 `lookahead_m`。
 
 ```yaml
 type: waypoints
@@ -565,7 +580,7 @@ mode: spatial
 
 ### waypoints
 
-多 waypoint 路径跟踪：
+多 waypoint 路径跟踪。waypoint 与 `ControllerReference` 拥有同一组 reference 点信息；配置中必须给出 `x_m`、`y_m`、`yaw_rad`、`curvature_1pm`、`speed_mps`，可选 `z_m`、`yaw_rate_rps`、`path_s_m`、`lookahead_distance_m`、`extra`。
 
 ```yaml
 type: waypoints
@@ -646,7 +661,7 @@ debug_report.html
 debug_html_signals:
   Speed:
     - input.vx
-    - input.target_speed_mps
+    - input.reference.speed_mps
     - output.debug.longitudinal.speed_error
   Steering:
     - output.sw_angle

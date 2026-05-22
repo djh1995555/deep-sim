@@ -211,7 +211,7 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
             regenerated = os.path.join(tmp, "debug_report_regenerated.html")
             trace.write_html(
                 regenerated,
-                panels={"Smoke": ["input.vx", "input.target_speed_mps"]},
+                panels={"Smoke": ["input.vx", "input.reference.speed_mps"]},
                 title="Regenerated Debug Report",
             )
             self.assertTrue(os.path.exists(regenerated))
@@ -279,8 +279,8 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
             fallback=ControllerReference(),
         )
         mid_ref = lane_change.query(0.0, TeacherState(x_world=20.0, y_world=0.0))
-        self.assertAlmostEqual(mid_ref.target_y_m, 1.75, places=2)
-        self.assertGreater(mid_ref.target_yaw_rad, 0.0)
+        self.assertAlmostEqual(mid_ref.y_m, 1.75, places=2)
+        self.assertGreater(mid_ref.yaw_rad, 0.0)
 
         waypoints = build_reference_provider(
             {
@@ -313,9 +313,14 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
             fallback=ControllerReference(),
         )
         ref = waypoints.query(0.0, TeacherState(x_world=8.0, y_world=0.0))
-        self.assertGreater(ref.target_x_m, 8.0)
-        self.assertGreaterEqual(ref.target_speed_mps, 10.0)
-        self.assertGreater(ref.target_curvature_1pm, 0.04)
+        self.assertGreater(ref.x_m, 8.0)
+        self.assertGreaterEqual(ref.speed_mps, 10.0)
+        self.assertGreater(ref.curvature_1pm, 0.04)
+        self.assertAlmostEqual(waypoints.config.waypoints[1].path_s_m, 10.0)
+        self.assertEqual(
+            waypoints.config.waypoints[1].lookahead_distance_m,
+            waypoints.config.lookahead_m,
+        )
 
         double_lane_change = build_reference_provider(
             {
@@ -338,12 +343,12 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
             0.0,
             TeacherState(x_world=17.0, y_world=0.0),
         )
-        self.assertAlmostEqual(first_mid.target_y_m, 1.75, places=2)
-        self.assertAlmostEqual(hold.target_y_m, 3.5, places=2)
-        self.assertAlmostEqual(second_mid.target_y_m, 1.75, places=2)
-        self.assertEqual(first_mid.target_speed_mps, 5.0)
-        self.assertGreater(first_mid.target_yaw_rad, 0.0)
-        self.assertLess(second_mid.target_yaw_rad, 0.0)
+        self.assertAlmostEqual(first_mid.y_m, 1.75, places=2)
+        self.assertAlmostEqual(hold.y_m, 3.5, places=2)
+        self.assertAlmostEqual(second_mid.y_m, 1.75, places=2)
+        self.assertEqual(first_mid.speed_mps, 5.0)
+        self.assertGreater(first_mid.yaw_rad, 0.0)
+        self.assertLess(second_mid.yaw_rad, 0.0)
 
         sinusoidal = build_reference_provider(
             {
@@ -357,10 +362,10 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
         )
         sine_start = sinusoidal.query(0.0, TeacherState(x_world=0.0, y_world=0.0))
         sine_quarter = sinusoidal.query(0.0, TeacherState(x_world=5.0, y_world=0.0))
-        self.assertAlmostEqual(sine_start.target_y_m, 0.0, places=6)
-        self.assertAlmostEqual(sine_quarter.target_y_m, 5.0, places=6)
-        self.assertAlmostEqual(sine_quarter.target_curvature_1pm, -0.49348, places=4)
-        self.assertEqual(sine_quarter.target_speed_mps, 5.0)
+        self.assertAlmostEqual(sine_start.y_m, 0.0, places=6)
+        self.assertAlmostEqual(sine_quarter.y_m, 5.0, places=6)
+        self.assertAlmostEqual(sine_quarter.curvature_1pm, -0.49348, places=4)
+        self.assertEqual(sine_quarter.speed_mps, 5.0)
 
     def test_waypoint_reference_requires_explicit_fields(self):
         with self.assertRaisesRegex(ValueError, "waypoint missing required fields"):

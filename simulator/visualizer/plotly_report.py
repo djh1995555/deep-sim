@@ -8,16 +8,16 @@ DEFAULT_DEBUG_PANELS: Dict[str, Sequence[str]] = {
     "Speed Tracking": (
         "input.vx",
         "vehicle.vx",
-        "input.target_speed_mps",
+        "input.reference.speed_mps",
         "output.debug.longitudinal.speed_error",
         "output.debug.longitudinal.accel_cmd",
     ),
     "Lateral Tracking": (
         "input.y_world",
-        "input.target_y_m",
+        "input.reference.y_m",
         "output.debug.lateral.lateral_error_m",
         "input.yaw",
-        "input.target_yaw_rad",
+        "input.reference.yaw_rad",
         "output.debug.lateral.heading_error_rad",
     ),
     "Commands": (
@@ -34,11 +34,11 @@ DEFAULT_DEBUG_PANELS: Dict[str, Sequence[str]] = {
         "vehicle.friction_usage_max",
     ),
     "Reference": (
-        "input.target_x_m",
-        "input.path_s_m",
-        "input.lookahead_distance_m",
-        "input.target_curvature_1pm",
-        "input.target_yaw_rate_rps",
+        "input.reference.x_m",
+        "input.reference.path_s_m",
+        "input.reference.lookahead_distance_m",
+        "input.reference.curvature_1pm",
+        "input.reference.yaw_rate_rps",
     ),
 }
 
@@ -151,7 +151,7 @@ def _build_trajectory_figure(rows: Sequence[Dict[str, Any]]) -> Optional[Any]:
                 ),
             )
         )
-    reference_x, reference_y = _xy_series(rows, "input.target_x_m", "input.target_y_m")
+    reference_x, reference_y = _xy_series(rows, "input.reference.x_m", "input.reference.y_m")
     if _has_valid_value(reference_x) and _has_valid_value(reference_y):
         fig.add_trace(
             go.Scatter(
@@ -195,8 +195,8 @@ def _add_endpoint_markers(fig: Any, rows: Sequence[Dict[str, Any]]) -> None:
     endpoints = [
         ("actual start", "vehicle.x_world", "vehicle.y_world", 0, "#22c55e"),
         ("actual end", "vehicle.x_world", "vehicle.y_world", -1, "#ef4444"),
-        ("reference start", "input.target_x_m", "input.target_y_m", 0, "#84cc16"),
-        ("reference end", "input.target_x_m", "input.target_y_m", -1, "#f97316"),
+        ("reference start", "input.reference.x_m", "input.reference.y_m", 0, "#84cc16"),
+        ("reference end", "input.reference.x_m", "input.reference.y_m", -1, "#f97316"),
     ]
     for name, x_key, y_key, index, color in endpoints:
         if not rows:

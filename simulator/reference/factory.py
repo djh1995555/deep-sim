@@ -34,8 +34,8 @@ def build_reference_provider(
     if ref_type == "lane_change":
         return LaneChangeReferenceProvider(
             LaneChangeReferenceConfig(
-                speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
-                start_y_m=float(config.get("start_y_m", fallback.target_y_m)),
+                speed_mps=float(config.get("speed_mps", fallback.speed_mps)),
+                start_y_m=float(config.get("start_y_m", fallback.y_m)),
                 end_y_m=float(config.get("end_y_m", 3.5)),
                 start_x_m=float(config.get("start_x_m", 20.0)),
                 length_m=float(config.get("length_m", 35.0)),
@@ -47,10 +47,10 @@ def build_reference_provider(
     if ref_type == "double_lane_change":
         return DoubleLaneChangeReferenceProvider(
             DoubleLaneChangeReferenceConfig(
-                speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
-                start_y_m=float(config.get("start_y_m", fallback.target_y_m)),
+                speed_mps=float(config.get("speed_mps", fallback.speed_mps)),
+                start_y_m=float(config.get("start_y_m", fallback.y_m)),
                 offset_y_m=float(config.get("offset_y_m", 3.5)),
-                end_y_m=float(config.get("end_y_m", fallback.target_y_m)),
+                end_y_m=float(config.get("end_y_m", fallback.y_m)),
                 start_x_m=float(config.get("start_x_m", 5.0)),
                 first_length_m=float(config.get("first_length_m", 18.0)),
                 hold_length_m=float(config.get("hold_length_m", 8.0)),
@@ -62,7 +62,7 @@ def build_reference_provider(
     if ref_type in {"sin", "sine", "sinusoidal"}:
         return SinusoidalReferenceProvider(
             SinusoidalReferenceConfig(
-                speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
+                speed_mps=float(config.get("speed_mps", fallback.speed_mps)),
                 center_y_m=float(config.get("center_y_m", config.get("y_m", 0.0))),
                 amplitude_m=float(config.get("amplitude_m", 5.0)),
                 period_m=float(config.get("period_m", 20.0)),
@@ -92,16 +92,13 @@ def _fixed_reference(
     fallback: ControllerReference,
 ) -> ControllerReference:
     return ControllerReference(
-        target_x_m=float(config.get("x_m", fallback.target_x_m)),
-        target_speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
-        target_y_m=float(config.get("y_m", fallback.target_y_m)),
-        target_yaw_rad=float(config.get("yaw_rad", fallback.target_yaw_rad)),
-        target_yaw_rate_rps=float(
-            config.get("yaw_rate_rps", fallback.target_yaw_rate_rps)
-        ),
-        target_curvature_1pm=float(
-            config.get("curvature_1pm", fallback.target_curvature_1pm)
-        ),
+        x_m=float(config.get("x_m", fallback.x_m)),
+        y_m=float(config.get("y_m", fallback.y_m)),
+        z_m=float(config.get("z_m", fallback.z_m)),
+        speed_mps=float(config.get("speed_mps", fallback.speed_mps)),
+        yaw_rad=float(config.get("yaw_rad", fallback.yaw_rad)),
+        yaw_rate_rps=float(config.get("yaw_rate_rps", fallback.yaw_rate_rps)),
+        curvature_1pm=float(config.get("curvature_1pm", fallback.curvature_1pm)),
         path_s_m=float(config.get("path_s_m", fallback.path_s_m)),
         lookahead_distance_m=float(
             config.get("lookahead_distance_m", fallback.lookahead_distance_m)

@@ -7,12 +7,13 @@ from simulator.vehicle_model.state import TeacherState
 
 @dataclass
 class ControllerReference:
-    target_x_m: float = 0.0
-    target_speed_mps: float = 14.0
-    target_y_m: float = 0.0
-    target_yaw_rad: float = 0.0
-    target_yaw_rate_rps: float = 0.0
-    target_curvature_1pm: float = 0.0
+    x_m: float = 0.0
+    y_m: float = 0.0
+    z_m: float = 0.0
+    speed_mps: float = 14.0
+    yaw_rad: float = 0.0
+    yaw_rate_rps: float = 0.0
+    curvature_1pm: float = 0.0
     path_s_m: float = 0.0
     lookahead_distance_m: float = 0.0
     extra: Dict[str, Any] = field(default_factory=dict)
@@ -36,14 +37,18 @@ class ControllerInput:
             "y_world": float(self.state.y_world),
             "yaw": float(self.state.yaw),
             "r": float(self.state.r),
-            "target_x_m": float(self.reference.target_x_m),
-            "target_speed_mps": float(self.reference.target_speed_mps),
-            "target_y_m": float(self.reference.target_y_m),
-            "target_yaw_rad": float(self.reference.target_yaw_rad),
-            "target_yaw_rate_rps": float(self.reference.target_yaw_rate_rps),
-            "target_curvature_1pm": float(self.reference.target_curvature_1pm),
-            "path_s_m": float(self.reference.path_s_m),
-            "lookahead_distance_m": float(self.reference.lookahead_distance_m),
+            "reference": {
+                "x_m": float(self.reference.x_m),
+                "y_m": float(self.reference.y_m),
+                "z_m": float(self.reference.z_m),
+                "speed_mps": float(self.reference.speed_mps),
+                "yaw_rad": float(self.reference.yaw_rad),
+                "yaw_rate_rps": float(self.reference.yaw_rate_rps),
+                "curvature_1pm": float(self.reference.curvature_1pm),
+                "path_s_m": float(self.reference.path_s_m),
+                "lookahead_distance_m": float(self.reference.lookahead_distance_m),
+                "extra": self.reference.extra,
+            },
         }
 
 

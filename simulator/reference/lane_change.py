@@ -46,12 +46,12 @@ class LaneChangeReferenceProvider:
             yaw = float(np.arctan(slope))
             yaw_rate = 0.0
         return ControllerReference(
-            target_x_m=float(state.x_world),
-            target_speed_mps=float(cfg.speed_mps),
-            target_y_m=float(target_y),
-            target_yaw_rad=yaw,
-            target_yaw_rate_rps=yaw_rate,
-            target_curvature_1pm=0.0,
+            x_m=float(state.x_world),
+            y_m=float(target_y),
+            speed_mps=float(cfg.speed_mps),
+            yaw_rad=yaw,
+            yaw_rate_rps=yaw_rate,
+            curvature_1pm=0.0,
             path_s_m=float(max(0.0, state.x_world - cfg.start_x_m)),
             lookahead_distance_m=0.0,
             extra={
