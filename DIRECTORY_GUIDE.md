@@ -48,6 +48,7 @@
 | --- | --- |
 | `demo_single.yaml` | 闭环仿真器示例 request，可通过 `python -m simulator.cli --request configs/simulator/demo_single.yaml` 运行。 |
 | `double_lane_change_5mps.yaml` | 5 m/s 双移线闭环仿真示例，默认输出到 `output/simulation/<timestamp>/double_lane_change_5mps/`。 |
+| `split_dry_ice_double_lane_change_10mps.yaml` | split-μ 左 dry / 右 ice 场景下的 10 m/s 双移线闭环仿真示例。 |
 | `sine_dry_to_wet_amp5_period20_5mps.yaml` | dry -> wet 路面过渡下的 5 m 振幅、20 m 周期正弦路线闭环仿真示例。 |
 | `references/` | reference 轨迹配置。支持参数式 reference，也支持 waypoint reference。 |
 
