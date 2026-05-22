@@ -4,7 +4,10 @@ from simulator.controller.base import (
     ControllerOutput,
     ControllerReference,
 )
-from simulator.controller.composite import PIDLQRController, PIDLQRControllerConfig
+from simulator.controller.controller import (
+    SimulationController,
+    SimulationControllerConfig,
+)
 from simulator.controller.lateral_lqr import LateralLQRConfig, LateralLQRController
 from simulator.controller.longitudinal_pid import (
     LongitudinalPIDConfig,
@@ -20,6 +23,6 @@ __all__ = [
     "LateralLQRController",
     "LongitudinalPIDConfig",
     "LongitudinalPIDController",
-    "PIDLQRController",
-    "PIDLQRControllerConfig",
+    "SimulationController",
+    "SimulationControllerConfig",
 ]

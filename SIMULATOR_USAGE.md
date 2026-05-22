@@ -24,7 +24,7 @@ simulator/
   controller/
     __init__.py
     base.py
-    composite.py
+    controller.py
     longitudinal_pid.py
     lateral_lqr.py
   reference/
@@ -72,9 +72,9 @@ simulator/
 | `simulator/__init__.py`                          | 暴露 simulator 包的主要入口，方便外部直接 import `run_closed_loop_simulation` 等 API。                     |
 | `simulator/cli.py`                               | 闭环仿真的命令行入口，读取 request YAML 或 CLI 参数，合并覆盖项后调用 `simulator_app`。                             |
 | `simulator/simulator_app.py`                     | 闭环仿真主流程：构建 scenario、reference、controller、vehicle model，并导出结果。                             |
-| `simulator/controller/__init__.py`               | 汇总并导出 controller 子包的接口和默认控制器实现。                                                           |
+| `simulator/controller/__init__.py`               | 汇总并导出 controller 子包的接口和默认控制器 facade。                                                         |
 | `simulator/controller/base.py`                   | 定义控制器通用数据结构：`ControllerReference`、`ControllerInput`、`ControllerOutput` 和 `Controller` 接口。 |
-| `simulator/controller/composite.py`              | 组合纵向 PID 与横向 LQR，形成当前默认的闭环控制器 `PIDLQRController`。                                         |
+| `simulator/controller/controller.py`             | 对外调用的闭环控制器 facade，内部可选择纵向 / 横向控制器；当前默认组合为纵向 PID 与横向 LQR。                     |
 | `simulator/controller/longitudinal_pid.py`       | 纵向 PID 控制器，根据目标速度和当前速度输出 throttle / brake 命令。                                             |
 | `simulator/controller/lateral_lqr.py`            | 简化横向 LQR 控制器，根据横向误差、航向误差等输出方向盘角。                                                          |
 | `simulator/reference/__init__.py`                | 汇总并导出 reference provider 构建入口和各类 reference 实现。                                            |
@@ -129,7 +129,7 @@ request YAML / CLI args
   -> SimulatorApp
   -> build_scenario()
   -> build_reference_provider()
-  -> default PIDLQRController
+  -> default SimulationController
   -> VehicleModel.initialize()
   -> loop over t:
        ReferenceProvider.query(t, state)
@@ -772,7 +772,7 @@ class Controller(Protocol):
 1. 新建一个实现 `reset()` 和 `compute()` 的 controller 类。
 2. 在 Python 中直接调用 `run_closed_loop_simulation(request, controller=custom_controller)`。
 
-默认 CLI 当前使用 `_default_controller()` 构建 `PIDLQRController`。如果希望 CLI 也支持新控制器，需要扩展 `ClosedLoopSimulationRequest` 和 `_default_controller()`。
+默认 CLI 当前使用 `_default_controller()` 构建 `SimulationController`。如果希望 CLI 也支持新控制器，需要扩展 `ClosedLoopSimulationRequest` 和 `_default_controller()`。
 
 默认控制器结构：
 
@@ -780,7 +780,7 @@ class Controller(Protocol):
 | --- | --- |
 | `controller/longitudinal_pid.py` | 纵向速度 PID，输出加速度命令，再映射到油门/制动。 |
 | `controller/lateral_lqr.py` | 横向 LQR，根据横向误差、航向误差等输出方向盘角。 |
-| `controller/composite.py` | 把纵向 PID 和横向 LQR 组合成 `PIDLQRController`。 |
+| `controller/controller.py` | 对外闭环控制器 facade，当前默认把纵向 PID 和横向 LQR 组合成 `SimulationController`。 |
 
 ## 13. 如何扩展车辆模型
 

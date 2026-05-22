@@ -12,8 +12,8 @@ from simulator.controller import (
     ControllerReference,
     LateralLQRConfig,
     LongitudinalPIDConfig,
-    PIDLQRController,
-    PIDLQRControllerConfig,
+    SimulationController,
+    SimulationControllerConfig,
 )
 from simulator.reference import build_reference_provider
 from simulator.vehicle_model.config import config_from_dict, load_yaml
@@ -541,12 +541,12 @@ def _build_road_profile_from_mapping(data: Dict[str, Any]) -> RoadProfile:
     raise ValueError("unsupported road type: %s" % road_type)
 
 
-def _default_controller(request: ClosedLoopSimulationRequest) -> PIDLQRController:
+def _default_controller(request: ClosedLoopSimulationRequest) -> SimulationController:
     gains = tuple(float(x) for x in request.lqr_gains)
     if len(gains) != 4:
         raise ValueError("lqr_gains must contain 4 values")
-    return PIDLQRController(
-        PIDLQRControllerConfig(
+    return SimulationController(
+        SimulationControllerConfig(
             longitudinal=LongitudinalPIDConfig(
                 kp=request.pid_kp,
                 ki=request.pid_ki,
