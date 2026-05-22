@@ -9,6 +9,10 @@ from simulator.reference.lane_change import (
     LaneChangeReferenceConfig,
     LaneChangeReferenceProvider,
 )
+from simulator.reference.sinusoidal import (
+    SinusoidalReferenceConfig,
+    SinusoidalReferenceProvider,
+)
 from simulator.reference.waypoints import (
     Waypoint,
     WaypointReferenceConfig,
@@ -22,6 +26,8 @@ __all__ = [
     "LaneChangeReferenceConfig",
     "LaneChangeReferenceProvider",
     "ReferenceProvider",
+    "SinusoidalReferenceConfig",
+    "SinusoidalReferenceProvider",
     "Waypoint",
     "WaypointReferenceConfig",
     "WaypointReferenceProvider",

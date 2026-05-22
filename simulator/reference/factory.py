@@ -11,6 +11,10 @@ from simulator.reference.lane_change import (
     LaneChangeReferenceConfig,
     LaneChangeReferenceProvider,
 )
+from simulator.reference.sinusoidal import (
+    SinusoidalReferenceConfig,
+    SinusoidalReferenceProvider,
+)
 from simulator.reference.waypoints import (
     WaypointReferenceConfig,
     WaypointReferenceProvider,
@@ -52,6 +56,18 @@ def build_reference_provider(
                 hold_length_m=float(config.get("hold_length_m", 8.0)),
                 second_length_m=float(config.get("second_length_m", 18.0)),
                 start_time_s=float(config.get("start_time_s", 0.0)),
+                mode=str(config.get("mode", "spatial")),
+            )
+        )
+    if ref_type in {"sin", "sine", "sinusoidal"}:
+        return SinusoidalReferenceProvider(
+            SinusoidalReferenceConfig(
+                speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
+                center_y_m=float(config.get("center_y_m", config.get("y_m", 0.0))),
+                amplitude_m=float(config.get("amplitude_m", 5.0)),
+                period_m=float(config.get("period_m", 20.0)),
+                start_x_m=float(config.get("start_x_m", 0.0)),
+                phase_rad=float(config.get("phase_rad", 0.0)),
                 mode=str(config.get("mode", "spatial")),
             )
         )

@@ -345,6 +345,23 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
         self.assertGreater(first_mid.target_yaw_rad, 0.0)
         self.assertLess(second_mid.target_yaw_rad, 0.0)
 
+        sinusoidal = build_reference_provider(
+            {
+                "type": "sinusoidal",
+                "speed_mps": 5.0,
+                "amplitude_m": 5.0,
+                "period_m": 20.0,
+                "start_x_m": 0.0,
+            },
+            fallback=ControllerReference(),
+        )
+        sine_start = sinusoidal.query(0.0, TeacherState(x_world=0.0, y_world=0.0))
+        sine_quarter = sinusoidal.query(0.0, TeacherState(x_world=5.0, y_world=0.0))
+        self.assertAlmostEqual(sine_start.target_y_m, 0.0, places=6)
+        self.assertAlmostEqual(sine_quarter.target_y_m, 5.0, places=6)
+        self.assertAlmostEqual(sine_quarter.target_curvature_1pm, -0.49348, places=4)
+        self.assertEqual(sine_quarter.target_speed_mps, 5.0)
+
     def test_waypoint_reference_requires_explicit_fields(self):
         with self.assertRaisesRegex(ValueError, "waypoint missing required fields"):
             build_reference_provider(

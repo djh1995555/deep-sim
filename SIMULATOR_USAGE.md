@@ -34,6 +34,7 @@ simulator/
     fixed.py
     lane_change.py
     double_lane_change.py
+    sinusoidal.py
     waypoints.py
   vehicle_model/
     __init__.py
@@ -78,10 +79,11 @@ simulator/
 | `simulator/controller/lateral_lqr.py`            | 简化横向 LQR 控制器，根据横向误差、航向误差等输出方向盘角。                                                          |
 | `simulator/reference/__init__.py`                | 汇总并导出 reference provider 构建入口和各类 reference 实现。                                            |
 | `simulator/reference/base.py`                    | 定义 reference provider 抽象接口，以及 reference 配置的公共工具。                                          |
-| `simulator/reference/factory.py`                 | 根据 YAML / dict 中的 `type` 字段创建 fixed、lane change、double lane change 或 waypoint reference。  |
+| `simulator/reference/factory.py`                 | 根据 YAML / dict 中的 `type` 字段创建 fixed、lane change、double lane change、sinusoidal 或 waypoint reference。  |
 | `simulator/reference/fixed.py`                   | 固定速度 / 固定横向位置 reference，用于直线跟踪和最小 smoke。                                                  |
 | `simulator/reference/lane_change.py`             | 单移线 reference，按时间或空间生成从起点横向移动到目标车道的轨迹。                                                    |
 | `simulator/reference/double_lane_change.py`      | 双移线 reference，生成横移、保持、回正三段轨迹。                                                             |
+| `simulator/reference/sinusoidal.py`              | 正弦路线 reference，按空间周期生成目标横向位置、航向、曲率和 yaw rate。                                             |
 | `simulator/reference/waypoints.py`               | waypoint reference，读取离散轨迹点并插值出目标位置、航向、曲率和速度。                                              |
 | `simulator/vehicle_model/__init__.py`            | 汇总并导出 vehicle model 子包的主要配置、模型和场景类型。                                                      |
 | `simulator/vehicle_model/config.py`              | 读取和解析车辆模型 / 数据生成 YAML，构建 `TeacherSimConfig`。                                              |
@@ -448,6 +450,23 @@ points:
 | `hold_length_m` | 中间保持段长度。 |
 | `second_length_m` | 第二段回正长度。 |
 | `mode` | reference 推进方式。`spatial` 表示按车辆 `x_world` 位置推进。 |
+
+### sinusoidal
+
+正弦路线 reference。`sin`、`sine` 和 `sinusoidal` 都会映射到同一个 provider：
+
+```yaml
+type: sinusoidal
+speed_mps: 5.0
+center_y_m: 0.0
+amplitude_m: 5.0
+period_m: 20.0
+start_x_m: 0.0
+phase_rad: 0.0
+mode: spatial
+```
+
+其中目标路线为 `y = center_y_m + amplitude_m * sin(2π * (x - start_x_m) / period_m + phase_rad)`。当前实现只支持 `mode: spatial`。
 
 `timestamped_output` 默认是 `true`。因此 `out_dir: output/simulation/double_lane_change_5mps` 的实际输出会变成：
 
