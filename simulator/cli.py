@@ -64,6 +64,11 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--pid-kd", type=float)
     parser.add_argument("--lqr-gains", type=float, nargs=4)
     parser.add_argument("--lqr-max-sw-angle-rad", type=float)
+    parser.add_argument("--controller-type")
+    parser.add_argument(
+        "--mpc-config-json",
+        help="JSON coupled MPC config, for example '{\"horizon_steps\":8}'",
+    )
     parser.add_argument("--debug-stride", type=int)
     parser.add_argument("--write-debug-trace", action=argparse.BooleanOptionalAction)
     parser.add_argument("--write-debug-html", action=argparse.BooleanOptionalAction)
@@ -87,6 +92,9 @@ def _cli_overrides(
             continue
         if key == "reference_file":
             scenario_overrides["reference"] = value
+            continue
+        if key == "mpc_config_json":
+            overrides["mpc_config"] = json.loads(value)
             continue
         if key in model_keys:
             model_overrides[key] = value

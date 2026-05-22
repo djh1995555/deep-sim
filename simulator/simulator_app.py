@@ -10,6 +10,7 @@ from simulator.controller import (
     Controller,
     ControllerInput,
     ControllerReference,
+    CoupledMPCConfig,
     LateralLQRConfig,
     LongitudinalPIDConfig,
     SimulationController,
@@ -106,11 +107,13 @@ class ClosedLoopSimulationRequest:
     actuator_sensor_delay_steps: int = 1
     wind_x_mps: float = 0.0
     wind_y_mps: float = 0.5
+    controller_type: str = "modular"
     pid_kp: float = 0.18
     pid_ki: float = 0.025
     pid_kd: float = 0.02
     lqr_gains: Sequence[float] = (0.18, 0.85, 0.04, 0.16)
     lqr_max_sw_angle_rad: float = 1.2
+    mpc_config: Dict[str, Any] = field(default_factory=dict)
     debug_stride: int = 1
     write_debug_trace: bool = True
     write_debug_html: bool = True
@@ -224,9 +227,10 @@ class SimulatorApp:
             final_state=runtime.state,
             last_modules_present=last_result is not None,
         )
-        episode["metadata"]["control_mode"] = "closed_loop_pid_lqr"
+        episode["metadata"]["control_mode"] = _control_mode(self.request)
         episode["metadata"]["controller"] = {
             "type": self.controller.__class__.__name__,
+            "controller_type": self.request.controller_type,
             "reference_provider": self.reference_provider.describe(),
         }
         return self._export(episode)
@@ -547,6 +551,7 @@ def _default_controller(request: ClosedLoopSimulationRequest) -> SimulationContr
         raise ValueError("lqr_gains must contain 4 values")
     return SimulationController(
         SimulationControllerConfig(
+            controller_type=request.controller_type,
             longitudinal=LongitudinalPIDConfig(
                 kp=request.pid_kp,
                 ki=request.pid_ki,
@@ -556,8 +561,17 @@ def _default_controller(request: ClosedLoopSimulationRequest) -> SimulationContr
                 gains=gains,
                 max_sw_angle_rad=request.lqr_max_sw_angle_rad,
             ),
+            mpc=CoupledMPCConfig.from_dict(request.mpc_config),
         )
     )
+
+
+def _control_mode(request: ClosedLoopSimulationRequest) -> str:
+    if request.controller_type == "modular":
+        return "closed_loop_pid_lqr"
+    if request.controller_type == "coupled_mpc":
+        return "closed_loop_coupled_mpc"
+    return "closed_loop_%s" % _safe_stem(request.controller_type)
 
 
 def _validate_surface(surface: str) -> None:

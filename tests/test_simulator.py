@@ -2,7 +2,13 @@ import os
 import tempfile
 import unittest
 
-from simulator.controller import ControllerReference
+from simulator.controller import (
+    ControllerInput,
+    ControllerReference,
+    CoupledMPCConfig,
+    SimulationController,
+    SimulationControllerConfig,
+)
 from simulator.simulator_app import (
     ClosedLoopSimulationRequest,
     build_road_profile,
@@ -444,6 +450,98 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
             episodes = load_dataset(tmp)
             provider = episodes[0]["metadata"]["controller"]["reference_provider"]
             self.assertEqual(provider["type"], "lane_change")
+
+    def test_coupled_mpc_controller_outputs_joint_command(self):
+        request = ClosedLoopSimulationRequest(
+            model=_sim_model(duration_s=0.1),
+            scenario=_sim_scenario(
+                scenario_id="unit_mpc_controller_direct",
+                road="single:dry",
+                speed_mps=9.0,
+                reference={
+                    "type": "fixed",
+                    "speed_mps": 11.0,
+                    "y_m": 1.0,
+                    "yaw_rad": 0.05,
+                },
+            ),
+        )
+        scenario = build_scenario(request)
+        runtime = VehicleModel(config_from_dict(_sim_model(duration_s=0.1))).initialize(
+            scenario
+        )
+        controller = SimulationController(
+            SimulationControllerConfig(
+                controller_type="coupled_mpc",
+                mpc=CoupledMPCConfig(
+                    horizon_steps=3,
+                    accel_samples=3,
+                    steering_samples=3,
+                ),
+            )
+        )
+        controller.reset(scenario)
+        output = controller.compute(
+            ControllerInput(
+                t=0.0,
+                dt=0.01,
+                state=runtime.state,
+                scenario=scenario,
+                reference=ControllerReference(
+                    x_m=runtime.state.x_world,
+                    y_m=1.0,
+                    speed_mps=11.0,
+                    yaw_rad=0.05,
+                    curvature_1pm=0.01,
+                ),
+            )
+        )
+        self.assertGreaterEqual(output.throttle_cmd, 0.0)
+        self.assertGreaterEqual(output.brake_cmd, 0.0)
+        self.assertLessEqual(abs(output.sw_angle), 1.2)
+        self.assertEqual(output.debug["controller"], "CoupledMPCController")
+        self.assertIn("predicted_max_friction_usage", output.debug)
+
+    def test_simulation_app_can_use_coupled_mpc_controller(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            request = ClosedLoopSimulationRequest(
+                out_dir=tmp,
+                model=_sim_model(duration_s=0.25, dt_export=0.05),
+                scenario=_sim_scenario(
+                    scenario_id="unit_closed_loop_mpc",
+                    road="single:dry",
+                    vehicle_index=0,
+                    seed=19,
+                    speed_mps=8.0,
+                    reference={
+                        "type": "lane_change",
+                        "speed_mps": 8.0,
+                        "start_y_m": 0.0,
+                        "end_y_m": 0.5,
+                        "start_x_m": 0.0,
+                        "length_m": 12.0,
+                    },
+                ),
+                controller_type="coupled_mpc",
+                mpc_config={
+                    "horizon_steps": 3,
+                    "accel_samples": 3,
+                    "steering_samples": 3,
+                },
+                timestamped_output=False,
+            )
+            summary = run_closed_loop_simulation(request)
+            self.assertEqual(summary["status"], "success")
+            episodes = load_dataset(tmp)
+            self.assertEqual(episodes[0]["metadata"]["control_mode"], "closed_loop_coupled_mpc")
+            self.assertEqual(
+                episodes[0]["metadata"]["controller"]["controller_type"],
+                "coupled_mpc",
+            )
+            trace = DebugTrace.read_json(os.path.join(tmp, "debug_trace.json"))
+            first = trace.to_list()[0]
+            self.assertEqual(first["output.debug.controller"], "CoupledMPCController")
+            self.assertIn("output.debug.best_cost", first)
 
     def test_simulation_request_loads_reference_file_and_initial_state(self):
         request = load_simulation_request("configs/simulator/double_lane_change_5mps.yaml")

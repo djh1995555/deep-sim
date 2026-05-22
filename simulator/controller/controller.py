@@ -6,6 +6,7 @@ from simulator.controller.base import (
     ControllerOutput,
     ControllerReference,
 )
+from simulator.controller.coupled_mpc import CoupledMPCConfig, CoupledMPCController
 from simulator.controller.lateral_lqr import LateralLQRConfig, LateralLQRController
 from simulator.controller.longitudinal_pid import (
     LongitudinalPIDConfig,
@@ -16,28 +17,44 @@ from simulator.vehicle_model.scenario import ScenarioConfig
 
 @dataclass
 class SimulationControllerConfig:
+    controller_type: str = "modular"
     longitudinal_type: str = "pid"
     lateral_type: str = "lqr"
     longitudinal: LongitudinalPIDConfig = field(default_factory=LongitudinalPIDConfig)
     lateral: LateralLQRConfig = field(default_factory=LateralLQRConfig)
+    mpc: CoupledMPCConfig = field(default_factory=CoupledMPCConfig)
 
 
 class SimulationController:
     def __init__(self, config: SimulationControllerConfig | None = None) -> None:
         self.config = config or SimulationControllerConfig()
-        self.longitudinal = _build_longitudinal_controller(self.config)
-        self.lateral = _build_lateral_controller(self.config)
+        self.coupled = _build_coupled_controller(self.config)
+        self.longitudinal = None
+        self.lateral = None
+        if self.coupled is None:
+            self.longitudinal = _build_longitudinal_controller(self.config)
+            self.lateral = _build_lateral_controller(self.config)
 
     def reset(self, scenario: ScenarioConfig) -> None:
+        if self.coupled is not None:
+            self.coupled.reset(scenario)
+            return
+        assert self.longitudinal is not None
+        assert self.lateral is not None
         self.longitudinal.reset(scenario)
         self.lateral.reset(scenario)
 
     def compute(self, controller_input: ControllerInput) -> ControllerOutput:
+        if self.coupled is not None:
+            return self.coupled.compute(controller_input)
+        assert self.longitudinal is not None
+        assert self.lateral is not None
         long_debug = self.longitudinal.compute_accel_command(controller_input)
         pedals = self.longitudinal.command_to_pedals(long_debug["accel_cmd"])
         lat_debug = self.lateral.compute_steering(controller_input)
         debug: Dict[str, Any] = {
             "controller": "SimulationController",
+            "controller_type": self.config.controller_type,
             "longitudinal_type": self.config.longitudinal_type,
             "lateral_type": self.config.lateral_type,
             "reference": _reference_debug(controller_input.reference),
@@ -51,6 +68,16 @@ class SimulationController:
             brake_cmd=pedals["brake_cmd"],
             debug=debug,
         )
+
+
+def _build_coupled_controller(
+    config: SimulationControllerConfig,
+) -> CoupledMPCController | None:
+    if config.controller_type == "modular":
+        return None
+    if config.controller_type == "coupled_mpc":
+        return CoupledMPCController(config.mpc)
+    raise ValueError("unsupported simulation controller: %s" % config.controller_type)
 
 
 def _build_longitudinal_controller(

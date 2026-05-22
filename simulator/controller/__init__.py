@@ -4,6 +4,7 @@ from simulator.controller.base import (
     ControllerOutput,
     ControllerReference,
 )
+from simulator.controller.coupled_mpc import CoupledMPCConfig, CoupledMPCController
 from simulator.controller.controller import (
     SimulationController,
     SimulationControllerConfig,
@@ -19,6 +20,8 @@ __all__ = [
     "ControllerInput",
     "ControllerOutput",
     "ControllerReference",
+    "CoupledMPCConfig",
+    "CoupledMPCController",
     "LateralLQRConfig",
     "LateralLQRController",
     "LongitudinalPIDConfig",
