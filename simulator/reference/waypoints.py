@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -12,7 +12,11 @@ from simulator.vehicle_model.state import TeacherState
 class Waypoint:
     x_m: float
     y_m: float
+    yaw_rad: float
+    curvature_1pm: float
     speed_mps: float
+    z_m: float = 0.0
+    yaw_rate_rps: float = 0.0
 
 
 @dataclass
@@ -27,7 +31,17 @@ class WaypointReferenceProvider:
             raise ValueError("waypoint reference requires at least two waypoints")
         self.config = config
         self.points = np.asarray(
-            [[p.x_m, p.y_m, p.speed_mps] for p in config.waypoints],
+            [
+                [
+                    p.x_m,
+                    p.y_m,
+                    p.speed_mps,
+                    p.yaw_rad,
+                    p.yaw_rate_rps,
+                    p.curvature_1pm,
+                ]
+                for p in config.waypoints
+            ],
             dtype=np.float64,
         )
         deltas = np.diff(self.points[:, :2], axis=0)
@@ -44,15 +58,15 @@ class WaypointReferenceProvider:
         nearest_s = self._project_state_to_path_s(state)
         target_s = min(float(self.s[-1]), nearest_s + self.config.lookahead_m)
         target = self._interpolate_at_s(target_s)
-        yaw = self._yaw_at_s(target_s)
+        yaw = self._yaw_at_s(target_s, target)
         speed = float(target[2])
         return ControllerReference(
             target_x_m=float(target[0]),
             target_y_m=float(target[1]),
             target_speed_mps=speed,
             target_yaw_rad=yaw,
-            target_yaw_rate_rps=0.0,
-            target_curvature_1pm=0.0,
+            target_yaw_rate_rps=float(target[4]),
+            target_curvature_1pm=float(target[5]),
             path_s_m=float(target_s),
             lookahead_distance_m=float(self.config.lookahead_m),
             extra={
@@ -93,7 +107,9 @@ class WaypointReferenceProvider:
         u = (target_s - self.s[idx]) / self.segment_lengths[idx]
         return (1.0 - u) * self.points[idx] + u * self.points[idx + 1]
 
-    def _yaw_at_s(self, target_s: float) -> float:
+    def _yaw_at_s(self, target_s: float, target: np.ndarray) -> float:
+        if not np.isnan(target[3]):
+            return float(target[3])
         if target_s >= self.s[-1]:
             idx = len(self.segment_lengths) - 1
         else:
@@ -102,22 +118,23 @@ class WaypointReferenceProvider:
         return float(np.arctan2(delta[1], delta[0]))
 
 
-def parse_waypoint(value: Any, default_speed_mps: float) -> Waypoint:
-    if isinstance(value, dict):
-        return Waypoint(
-            x_m=float(value["x_m"] if "x_m" in value else value["x"]),
-            y_m=float(value["y_m"] if "y_m" in value else value["y"]),
-            speed_mps=float(
-                value["speed_mps"]
-                if "speed_mps" in value
-                else value.get("speed", default_speed_mps)
-            ),
-        )
-    if (
-        isinstance(value, Sequence)
-        and not isinstance(value, (str, bytes))
-        and len(value) >= 2
-    ):
-        speed = float(value[2]) if len(value) >= 3 else default_speed_mps
-        return Waypoint(x_m=float(value[0]), y_m=float(value[1]), speed_mps=speed)
-    raise ValueError("waypoint must be a mapping or sequence [x, y, speed?]")
+def parse_waypoint(value: Any) -> Waypoint:
+    if not isinstance(value, dict):
+        raise ValueError("waypoint must be a mapping with explicit fields")
+    required = {"x_m", "y_m", "yaw_rad", "curvature_1pm", "speed_mps"}
+    missing = sorted(required - set(value))
+    if missing:
+        raise ValueError("waypoint missing required fields: %s" % ", ".join(missing))
+    allowed = required | {"z_m", "yaw_rate_rps"}
+    unknown = sorted(set(value) - allowed)
+    if unknown:
+        raise ValueError("unknown waypoint fields: %s" % ", ".join(unknown))
+    return Waypoint(
+        x_m=float(value["x_m"]),
+        y_m=float(value["y_m"]),
+        z_m=float(value.get("z_m", 0.0)),
+        speed_mps=float(value["speed_mps"]),
+        yaw_rad=float(value["yaw_rad"]),
+        yaw_rate_rps=float(value.get("yaw_rate_rps", 0.0)),
+        curvature_1pm=float(value["curvature_1pm"]),
+    )

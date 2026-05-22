@@ -153,11 +153,28 @@ class SplitMetadata:
 
 
 @dataclass
+class InitialState:
+    x_m: float = 0.0
+    y_m: float = 0.0
+    z_m: float = 0.0
+    speed_mps: Optional[float] = None
+    vy_mps: float = 0.0
+    vz_mps: float = 0.0
+    roll_rad: float = 0.0
+    pitch_rad: float = 0.0
+    yaw_rad: float = 0.0
+    roll_rate_rps: float = 0.0
+    pitch_rate_rps: float = 0.0
+    yaw_rate_rps: float = 0.0
+
+
+@dataclass
 class ScenarioConfig:
     scenario_id: str
     vehicle_config: VehicleConfig
     road_profile: RoadProfile
     control_script: ControlScript
+    initial_state: InitialState = field(default_factory=InitialState)
     actuator_profile: ActuatorProfile = field(default_factory=ActuatorProfile)
     sensor_profile: SensorProfile = field(default_factory=SensorProfile)
     environment_profile: EnvironmentProfile = field(default_factory=EnvironmentProfile)

@@ -32,7 +32,7 @@ def build_reference_provider(
             LaneChangeReferenceConfig(
                 speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
                 start_y_m=float(config.get("start_y_m", fallback.target_y_m)),
-                end_y_m=float(config.get("end_y_m", config.get("target_y_m", 3.5))),
+                end_y_m=float(config.get("end_y_m", 3.5)),
                 start_x_m=float(config.get("start_x_m", 20.0)),
                 length_m=float(config.get("length_m", 35.0)),
                 start_time_s=float(config.get("start_time_s", 0.0)),
@@ -57,7 +57,7 @@ def build_reference_provider(
         )
     if ref_type == "waypoints":
         waypoints = [
-            parse_waypoint(item, fallback.target_speed_mps)
+            parse_waypoint(item)
             for item in config.get("points", config.get("waypoints", []))
         ]
         return WaypointReferenceProvider(
@@ -76,20 +76,15 @@ def _fixed_reference(
     fallback: ControllerReference,
 ) -> ControllerReference:
     return ControllerReference(
-        target_x_m=float(config.get("target_x_m", fallback.target_x_m)),
-        target_speed_mps=float(
-            config.get(
-                "speed_mps",
-                config.get("target_speed_mps", fallback.target_speed_mps),
-            )
-        ),
-        target_y_m=float(config.get("target_y_m", fallback.target_y_m)),
-        target_yaw_rad=float(config.get("target_yaw_rad", fallback.target_yaw_rad)),
+        target_x_m=float(config.get("x_m", fallback.target_x_m)),
+        target_speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
+        target_y_m=float(config.get("y_m", fallback.target_y_m)),
+        target_yaw_rad=float(config.get("yaw_rad", fallback.target_yaw_rad)),
         target_yaw_rate_rps=float(
-            config.get("target_yaw_rate_rps", fallback.target_yaw_rate_rps)
+            config.get("yaw_rate_rps", fallback.target_yaw_rate_rps)
         ),
         target_curvature_1pm=float(
-            config.get("target_curvature_1pm", fallback.target_curvature_1pm)
+            config.get("curvature_1pm", fallback.target_curvature_1pm)
         ),
         path_s_m=float(config.get("path_s_m", fallback.path_s_m)),
         lookahead_distance_m=float(

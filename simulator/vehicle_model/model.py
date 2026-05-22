@@ -50,7 +50,26 @@ class VehicleModel:
 
     def initialize(self, scenario: ScenarioConfig) -> VehicleModelRuntime:
         vehicle = scenario.vehicle_config
-        state = TeacherState(vx=scenario.control_script.initial_speed_mps)
+        initial = scenario.initial_state
+        initial_speed = (
+            scenario.control_script.initial_speed_mps
+            if initial.speed_mps is None
+            else initial.speed_mps
+        )
+        state = TeacherState(
+            x_world=float(initial.x_m),
+            y_world=float(initial.y_m),
+            z_world=float(initial.z_m),
+            vx=float(initial_speed),
+            vy=float(initial.vy_mps),
+            vz=float(initial.vz_mps),
+            roll=float(initial.roll_rad),
+            pitch=float(initial.pitch_rad),
+            yaw=float(initial.yaw_rad),
+            p=float(initial.roll_rate_rps),
+            q=float(initial.pitch_rate_rps),
+            r=float(initial.yaw_rate_rps),
+        )
         state.omega = np.full(
             4, state.vx / max(vehicle.wheel_radius, 1e-6), dtype=np.float64
         )

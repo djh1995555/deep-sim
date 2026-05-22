@@ -136,13 +136,19 @@ def _build_trajectory_figure(rows: Sequence[Dict[str, Any]]) -> Optional[Any]:
 
     fig = go.Figure()
     vehicle_x, vehicle_y = _xy_series(rows, "vehicle.x_world", "vehicle.y_world")
+    time_values = [float(row.get("t", index)) for index, row in enumerate(rows)]
     if _has_valid_value(vehicle_x) and _has_valid_value(vehicle_y):
         fig.add_trace(
             go.Scatter(
                 x=vehicle_x,
                 y=vehicle_y,
                 mode="lines",
-                name="vehicle trajectory",
+                name="actual vehicle trajectory",
+                customdata=time_values,
+                hovertemplate=(
+                    "actual<br>x=%{x:.3f} m<br>y=%{y:.3f} m<br>"
+                    "t=%{customdata:.3f} s<extra></extra>"
+                ),
             )
         )
     reference_x, reference_y = _xy_series(rows, "input.target_x_m", "input.target_y_m")
@@ -152,14 +158,20 @@ def _build_trajectory_figure(rows: Sequence[Dict[str, Any]]) -> Optional[Any]:
                 x=reference_x,
                 y=reference_y,
                 mode="lines",
-                name="reference",
+                name="reference trajectory",
+                customdata=time_values,
+                hovertemplate=(
+                    "reference<br>x=%{x:.3f} m<br>y=%{y:.3f} m<br>"
+                    "t=%{customdata:.3f} s<extra></extra>"
+                ),
             )
         )
     if not fig.data:
         return None
+    _add_endpoint_markers(fig, rows)
     fig.update_layout(
         template="plotly_dark",
-        height=460,
+        height=620,
         margin={"l": 60, "r": 220, "t": 55, "b": 55},
         xaxis_title="x_world [m]",
         yaxis_title="y_world [m]",
@@ -170,9 +182,40 @@ def _build_trajectory_figure(rows: Sequence[Dict[str, Any]]) -> Optional[Any]:
             "y": 1.0,
             "yanchor": "top",
         },
+        hovermode="closest",
+        dragmode="pan",
     )
     fig.update_yaxes(scaleanchor="x", scaleratio=1.0)
     return fig
+
+
+def _add_endpoint_markers(fig: Any, rows: Sequence[Dict[str, Any]]) -> None:
+    import plotly.graph_objects as go
+
+    endpoints = [
+        ("actual start", "vehicle.x_world", "vehicle.y_world", 0, "#22c55e"),
+        ("actual end", "vehicle.x_world", "vehicle.y_world", -1, "#ef4444"),
+        ("reference start", "input.target_x_m", "input.target_y_m", 0, "#84cc16"),
+        ("reference end", "input.target_x_m", "input.target_y_m", -1, "#f97316"),
+    ]
+    for name, x_key, y_key, index, color in endpoints:
+        if not rows:
+            continue
+        row = rows[index]
+        x_value = _numeric_or_nan(row.get(x_key))
+        y_value = _numeric_or_nan(row.get(y_key))
+        if not math.isfinite(x_value) or not math.isfinite(y_value):
+            continue
+        fig.add_trace(
+            go.Scatter(
+                x=[x_value],
+                y=[y_value],
+                mode="markers",
+                name=name,
+                marker={"size": 10, "color": color, "symbol": "circle"},
+                hovertemplate="%{fullData.name}<br>x=%{x:.3f} m<br>y=%{y:.3f} m<extra></extra>",
+            )
+        )
 
 
 def _numeric_series(

@@ -1,25 +1,40 @@
-dataset_config: configs/datasets/ds0_minimal.yaml
-out_dir: output/simulation/SIM001_demo_closed_loop
-scenario_id: demo_closed_loop_dry
-dataset_id: SIM_DEMO_CLOSED_LOOP
-road: single:dry
-vehicle_index: 0
-seed: 11
-initial_speed_mps: 10.0
-duration_s: 4.0
-dt_export: 0.02
-split_role: simulation
-target_speed_mps: 14.0
-target_y_m: 0.5
-target_yaw_rad: 0.0
-reference:
-  type: lane_change
-  speed_mps: 14.0
-  start_y_m: 0.0
-  end_y_m: 0.5
-  start_x_m: 5.0
-  length_m: 25.0
-  mode: spatial
+model:
+  dt_internal: 0.01
+  dt_export: 0.02
+  duration_s: 4.0
+  integrator: semi_implicit_euler
+  gravity: 9.81
+  coordinate_convention: body_x_forward_y_left_z_up
+  numerical_limits:
+    min_speed_for_slip: 0.5
+    min_fz: 50.0
+    max_abs_state:
+      vx: 80.0
+      vy: 30.0
+      roll: 1.0
+      pitch: 1.0
+      r: 3.0
+out_dir: output/simulation/demo_single
+scenario:
+  id: single_dry_vehicle0_lane_change_14mps
+  road:
+    type: single
+    surface: dry
+    grade_rad: 0.0
+    bank_rad: 0.0
+    roughness_amp_m: 0.003
+  vehicle_index: 0
+  seed: 11
+  initial_state:
+    x_m: 0.0
+    y_m: 0.0
+    z_m: 0.0
+    yaw_rad: 0.0
+    speed_mps: 10.0
+  reference: configs/simulator/references/lane_change_14mps.yaml
+pid_kp: 0.18
+pid_ki: 0.025
+pid_kd: 0.02
 debug_stride: 2
 write_debug_trace: true
 write_debug_html: true

@@ -3,7 +3,9 @@ import json
 import os
 from typing import Any, Dict, Iterable, List, Optional
 
-from simulator.visualizer.plotly_report import write_plotly_debug_report
+from simulator.visualizer.plotly_report import (
+    write_plotly_debug_report,
+)
 
 
 class DebugTrace:

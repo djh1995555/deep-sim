@@ -1,6 +1,7 @@
 import json
 import os
-from dataclasses import asdict, dataclass, fields, replace
+from dataclasses import asdict, dataclass, field, fields, replace
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
@@ -15,7 +16,7 @@ from simulator.controller import (
     PIDLQRControllerConfig,
 )
 from simulator.reference import build_reference_provider
-from simulator.vehicle_model.config import load_dataset_config, load_yaml
+from simulator.vehicle_model.config import config_from_dict, load_yaml
 from simulator.vehicle_model.export import export_dataset
 from simulator.vehicle_model.model import VehicleModel, VehicleStepResult
 from simulator.vehicle_model.scenario import (
@@ -23,6 +24,7 @@ from simulator.vehicle_model.scenario import (
     ActuatorProfile,
     ControlScript,
     EnvironmentProfile,
+    InitialState,
     RoadProfile,
     ScenarioConfig,
     SensorProfile,
@@ -32,25 +34,69 @@ from simulator.vehicle_model.vehicle_params import make_vehicle_config_variant
 from simulator.visualizer import DebugTrace
 
 
+def default_simulator_model_config() -> Dict[str, Any]:
+    return {
+        "schema_version": "v0",
+        "teacher_model_version": "teacher_simulator_v0",
+        "dt_internal": 0.01,
+        "dt_export": 0.02,
+        "duration_s": 12.0,
+        "integrator": "semi_implicit_euler",
+        "gravity": 9.81,
+        "coordinate_convention": "body_x_forward_y_left_z_up",
+        "default_feature_flags": {
+            "tire_relaxation": True,
+            "tire_thermal_wear_pressure": True,
+            "suspension_unsprung": True,
+            "steering_lag_compliance_backlash_hysteresis": True,
+            "drive_brake_lag_saturation_abs": True,
+            "aero_wind": True,
+            "sensor_noise_delay_filter_quantization": True,
+            "generator_version": "teacher_simulator_v0",
+            "disabled_features": [],
+            "downgrade_reason": "",
+        },
+        "numerical_limits": {
+            "min_speed_for_slip": 0.5,
+            "min_fz": 50.0,
+            "max_abs_state": {
+                "vx": 80.0,
+                "vy": 30.0,
+                "roll": 1.0,
+                "pitch": 1.0,
+                "r": 3.0,
+            },
+        },
+        "export": {
+            "include_teacher_aux_labels": True,
+            "include_metadata": True,
+            "resample_policy": "hold_last",
+        },
+    }
+
+
+def default_simulator_scenario() -> Dict[str, Any]:
+    return {
+        "id": None,
+        "road": {"type": "single", "surface": "dry"},
+        "vehicle_index": 0,
+        "seed": 0,
+        "initial_state": {
+            "x_m": 0.0,
+            "y_m": 0.0,
+            "z_m": 0.0,
+            "yaw_rad": 0.0,
+            "speed_mps": 12.0,
+        },
+        "reference": None,
+    }
+
+
 @dataclass
 class ClosedLoopSimulationRequest:
-    dataset_config: str = "configs/datasets/ds0_minimal.yaml"
+    model: Dict[str, Any] = field(default_factory=default_simulator_model_config)
+    scenario: Dict[str, Any] = field(default_factory=default_simulator_scenario)
     out_dir: Optional[str] = None
-    scenario_id: Optional[str] = None
-    dataset_id: Optional[str] = None
-    road: str = "single:dry"
-    vehicle_index: int = 0
-    seed: int = 0
-    initial_speed_mps: float = 12.0
-    duration_s: Optional[float] = None
-    dt_internal: Optional[float] = None
-    dt_export: Optional[float] = None
-    split_role: str = "simulation"
-    transition_start_s: float = 4.0
-    transition_duration_s: float = 3.0
-    road_grade_rad: float = 0.0
-    road_bank_rad: float = 0.0
-    road_roughness_amp_m: float = 0.003
     sensor_noise_scale: float = 1.0
     timestamp_jitter_std_s: float = 0.00015
     sensor_dropout_probability: float = 0.0
@@ -60,11 +106,6 @@ class ClosedLoopSimulationRequest:
     actuator_sensor_delay_steps: int = 1
     wind_x_mps: float = 0.0
     wind_y_mps: float = 0.5
-    target_speed_mps: float = 14.0
-    target_y_m: float = 0.0
-    target_yaw_rad: float = 0.0
-    target_yaw_rate_rps: float = 0.0
-    reference: Optional[Dict[str, Any]] = None
     pid_kp: float = 0.18
     pid_ki: float = 0.025
     pid_kd: float = 0.02
@@ -74,29 +115,27 @@ class ClosedLoopSimulationRequest:
     write_debug_trace: bool = True
     write_debug_html: bool = True
     debug_html_signals: Optional[Dict[str, Sequence[str]]] = None
+    timestamped_output: bool = True
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ClosedLoopSimulationRequest":
-        data = _normalize_request_dict(data)
         valid = {field.name for field in fields(cls)}
         unknown = sorted(set(data) - valid)
         if unknown:
             raise ValueError("unknown simulator request fields: %s" % ", ".join(unknown))
-        return cls(**data)
+        request = cls(**data)
+        if not isinstance(request.model, dict):
+            raise ValueError("model must be a mapping")
+        if not isinstance(request.scenario, dict):
+            raise ValueError("scenario must be a mapping")
+        _validate_scenario_schema(request.scenario)
+        return request
 
     def with_overrides(self, overrides: Dict[str, Any]) -> "ClosedLoopSimulationRequest":
         clean = {key: value for key, value in overrides.items() if value is not None}
         if not clean:
             return self
         return replace(self, **clean)
-
-    def to_reference(self) -> ControllerReference:
-        return ControllerReference(
-            target_speed_mps=self.target_speed_mps,
-            target_y_m=self.target_y_m,
-            target_yaw_rad=self.target_yaw_rad,
-            target_yaw_rate_rps=self.target_yaw_rate_rps,
-        )
 
 
 class SimulatorApp:
@@ -106,19 +145,16 @@ class SimulatorApp:
         controller: Optional[Controller] = None,
     ) -> None:
         self.request = request
-        self.config = load_dataset_config(request.dataset_config)
-        if request.duration_s is not None:
-            self.config.duration_s = float(request.duration_s)
-        if request.dt_internal is not None:
-            self.config.dt_internal = float(request.dt_internal)
-        if request.dt_export is not None:
-            self.config.dt_export = float(request.dt_export)
+        self.config = config_from_dict(request.model)
         self.config.validate()
         self.vehicle_model = VehicleModel(self.config)
         self.scenario = build_scenario(request)
-        fallback_reference = request.to_reference()
+        reference_config = _reference_config(request)
+        if reference_config is None:
+            raise ValueError("simulator request must define reference")
+        fallback_reference = ControllerReference()
         self.reference_provider = build_reference_provider(
-            request.reference,
+            reference_config,
             fallback_reference,
         )
         self.controller = controller or _default_controller(request)
@@ -196,10 +232,9 @@ class SimulatorApp:
         return self._export(episode)
 
     def _export(self, episode: Dict[str, Any]) -> Dict[str, Any]:
-        out_dir = self.request.out_dir or _default_out_dir(self.scenario.scenario_id)
-        dataset_id = self.request.dataset_id or "SIM_%s" % _safe_stem(
-            self.scenario.scenario_id
-        )
+        output_root = self.request.out_dir or _default_out_dir(self.scenario.scenario_id)
+        out_dir = _resolve_output_dir(output_root, self.request.timestamped_output)
+        dataset_id = "SIM_%s" % _safe_stem(self.scenario.scenario_id)
         manifest = export_dataset(
             [episode],
             out_dir,
@@ -211,6 +246,7 @@ class SimulatorApp:
         request_payload.update(
             {
                 "resolved_out_dir": out_dir,
+                "resolved_output_root": output_root,
                 "resolved_dataset_id": dataset_id,
                 "resolved_scenario_id": self.scenario.scenario_id,
             }
@@ -239,14 +275,9 @@ class SimulatorApp:
 
 
 def load_simulation_request(path: str) -> ClosedLoopSimulationRequest:
-    return ClosedLoopSimulationRequest.from_dict(load_yaml(path))
-
-
-def _normalize_request_dict(data: Dict[str, Any]) -> Dict[str, Any]:
-    normalized = dict(data)
-    if "teacher_config" in normalized and "dataset_config" not in normalized:
-        normalized["dataset_config"] = normalized.pop("teacher_config")
-    return normalized
+    data = load_yaml(path)
+    _resolve_reference_file(data, os.path.dirname(path))
+    return ClosedLoopSimulationRequest.from_dict(data)
 
 
 def run_closed_loop_simulation(
@@ -257,9 +288,18 @@ def run_closed_loop_simulation(
 
 
 def build_scenario(request: ClosedLoopSimulationRequest) -> ScenarioConfig:
-    vehicle = make_vehicle_config_variant(request.vehicle_index)
+    scenario_data = _scenario_data(request)
+    vehicle_index = int(scenario_data.get("vehicle_index", 0))
+    vehicle = make_vehicle_config_variant(vehicle_index)
     road = build_road_profile(request)
-    scenario_id = request.scenario_id or _default_scenario_id(request, road)
+    scenario_id = scenario_data.get("id")
+    scenario_id = str(scenario_id) if scenario_id else _default_scenario_id(
+        vehicle_index, road
+    )
+    initial_state = _initial_state_from_scenario(scenario_data)
+    initial_speed = (
+        12.0 if initial_state.speed_mps is None else float(initial_state.speed_mps)
+    )
     return ScenarioConfig(
         scenario_id=scenario_id,
         vehicle_config=vehicle,
@@ -267,10 +307,11 @@ def build_scenario(request: ClosedLoopSimulationRequest) -> ScenarioConfig:
         control_script=ControlScript(
             longitudinal="closed_loop_speed_pid",
             lateral="closed_loop_lqr",
-            initial_speed_mps=request.initial_speed_mps,
+            initial_speed_mps=initial_speed,
             longitudinal_id="CL-PID",
             lateral_id="CL-LQR",
         ),
+        initial_state=initial_state,
         actuator_profile=ActuatorProfile(
             torque_observability_mode=request.torque_observability_mode,
             steering_saturation_rad=request.steering_saturation_rad,
@@ -286,9 +327,9 @@ def build_scenario(request: ClosedLoopSimulationRequest) -> ScenarioConfig:
             wind_x_mps=request.wind_x_mps,
             wind_y_mps=request.wind_y_mps,
         ),
-        split_metadata=SplitMetadata(split_role=request.split_role),
+        split_metadata=SplitMetadata(split_role="simulation"),
         validation_case="closed_loop_simulation",
-        seed=request.seed,
+        seed=int(scenario_data.get("seed", 0)),
         scenario_group="SIM-CLOSED-LOOP",
         longitudinal_factor_id="CL-PID",
         lateral_factor_id="CL-LQR",
@@ -296,7 +337,11 @@ def build_scenario(request: ClosedLoopSimulationRequest) -> ScenarioConfig:
 
 
 def build_road_profile(request: ClosedLoopSimulationRequest) -> RoadProfile:
-    road_spec = request.road.strip()
+    scenario_data = _scenario_data(request)
+    road_spec = scenario_data.get("road", {"type": "single", "surface": "dry"})
+    if isinstance(road_spec, dict):
+        return _build_road_profile_from_mapping(road_spec)
+    road_spec = str(road_spec).strip()
     if "->" in road_spec and ":" not in road_spec:
         left, right = [part.strip() for part in road_spec.split("->", 1)]
         road_spec = "transition:%s:%s" % (left, right)
@@ -309,11 +354,11 @@ def build_road_profile(request: ClosedLoopSimulationRequest) -> RoadProfile:
     for surface in parts[1:]:
         _validate_surface(surface)
     common = {
-        "transition_start_s": request.transition_start_s,
-        "transition_duration_s": request.transition_duration_s,
-        "grade_rad": request.road_grade_rad,
-        "bank_rad": request.road_bank_rad,
-        "roughness_amp_m": request.road_roughness_amp_m,
+        "transition_start_s": 4.0,
+        "transition_duration_s": 3.0,
+        "grade_rad": 0.0,
+        "bank_rad": 0.0,
+        "roughness_amp_m": 0.003,
         "scenario_group": "SIM-CLOSED-LOOP",
     }
     if road_type == "single" and len(parts) == 2:
@@ -341,8 +386,159 @@ def build_road_profile(request: ClosedLoopSimulationRequest) -> RoadProfile:
         )
     raise ValueError(
         "unsupported road spec '%s'; use dry, single:dry, split:dry:ice, or transition:dry:wet"
-        % request.road
+        % road_spec
     )
+
+
+def _scenario_data(request: ClosedLoopSimulationRequest) -> Dict[str, Any]:
+    if not isinstance(request.scenario, dict):
+        raise ValueError("scenario must be a mapping")
+    _validate_scenario_schema(request.scenario)
+    return request.scenario
+
+
+def _validate_scenario_schema(scenario: Dict[str, Any]) -> None:
+    allowed = {"id", "road", "vehicle_index", "seed", "initial_state", "reference"}
+    unknown = sorted(set(scenario) - allowed)
+    if unknown:
+        raise ValueError("unknown simulator scenario fields: %s" % ", ".join(unknown))
+    initial_state = scenario.get("initial_state")
+    if initial_state is not None:
+        if not isinstance(initial_state, dict):
+            raise ValueError("scenario.initial_state must be a mapping")
+        allowed_initial = {
+            "x_m",
+            "y_m",
+            "z_m",
+            "speed_mps",
+            "vy_mps",
+            "vz_mps",
+            "roll_rad",
+            "pitch_rad",
+            "yaw_rad",
+            "roll_rate_rps",
+            "pitch_rate_rps",
+            "yaw_rate_rps",
+        }
+        unknown_initial = sorted(set(initial_state) - allowed_initial)
+        if unknown_initial:
+            raise ValueError(
+                "unknown simulator scenario.initial_state fields: %s"
+                % ", ".join(unknown_initial)
+            )
+
+
+def _reference_config(request: ClosedLoopSimulationRequest) -> Optional[Dict[str, Any]]:
+    reference = _scenario_data(request).get("reference")
+    if reference is None:
+        return None
+    if isinstance(reference, str):
+        return _load_reference_file(reference, None)
+    if isinstance(reference, dict):
+        if "file" in reference:
+            loaded = _load_reference_file(str(reference["file"]), None)
+            return {**loaded, **{k: v for k, v in reference.items() if k != "file"}}
+        return reference
+    raise ValueError("scenario.reference must be a mapping or file path")
+
+
+def _resolve_reference_file(data: Dict[str, Any], base_dir: str) -> None:
+    scenario = data.get("scenario")
+    if not isinstance(scenario, dict):
+        return
+    reference = scenario.get("reference")
+    if isinstance(reference, str):
+        scenario["reference"] = _load_reference_file(reference, base_dir)
+    elif isinstance(reference, dict) and "file" in reference:
+        loaded = _load_reference_file(str(reference["file"]), base_dir)
+        scenario["reference"] = {
+            **loaded,
+            **{k: v for k, v in reference.items() if k != "file"},
+        }
+
+
+def _load_reference_file(path: str, base_dir: Optional[str]) -> Dict[str, Any]:
+    candidates = [path]
+    if base_dir and not os.path.isabs(path):
+        candidates.insert(0, os.path.join(base_dir, path))
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            data = load_yaml(candidate)
+            data.setdefault("source_path", candidate)
+            return data
+    raise ValueError("reference file not found: %s" % path)
+
+
+def _initial_state_from_scenario(scenario_data: Dict[str, Any]) -> InitialState:
+    data = dict(scenario_data.get("initial_state", {}) or {})
+    return InitialState(
+        x_m=float(data.get("x_m", 0.0)),
+        y_m=float(data.get("y_m", 0.0)),
+        z_m=float(data.get("z_m", 0.0)),
+        speed_mps=(
+            None if data.get("speed_mps") is None else float(data.get("speed_mps"))
+        ),
+        vy_mps=float(data.get("vy_mps", 0.0)),
+        vz_mps=float(data.get("vz_mps", 0.0)),
+        roll_rad=float(data.get("roll_rad", 0.0)),
+        pitch_rad=float(data.get("pitch_rad", 0.0)),
+        yaw_rad=float(data.get("yaw_rad", 0.0)),
+        roll_rate_rps=float(data.get("roll_rate_rps", 0.0)),
+        pitch_rate_rps=float(data.get("pitch_rate_rps", 0.0)),
+        yaw_rate_rps=float(data.get("yaw_rate_rps", 0.0)),
+    )
+
+
+def _build_road_profile_from_mapping(data: Dict[str, Any]) -> RoadProfile:
+    road_type = str(data.get("type", "single"))
+    common = {
+        "transition_start_s": float(data.get("transition_start_s", 4.0)),
+        "transition_duration_s": float(data.get("transition_duration_s", 3.0)),
+        "transition_start_x_m": float(data.get("transition_start_x_m", 25.0)),
+        "transition_length_m": float(data.get("transition_length_m", 35.0)),
+        "split_boundary_y_m": float(data.get("split_boundary_y_m", 0.0)),
+        "split_start_x_m": float(data.get("split_start_x_m", 0.0)),
+        "split_end_x_m": float(data.get("split_end_x_m", 120.0)),
+        "split_default_surface": str(data.get("split_default_surface", "dry")),
+        "grade_rad": float(data.get("grade_rad", 0.0)),
+        "bank_rad": float(data.get("bank_rad", 0.0)),
+        "roughness_amp_m": float(data.get("roughness_amp_m", 0.003)),
+        "scenario_group": "SIM-CLOSED-LOOP",
+    }
+    if road_type == "single":
+        surface = str(data.get("surface", data.get("single_surface", "dry")))
+        _validate_surface(surface)
+        return RoadProfile(
+            road_type="single",
+            mu_pattern=surface,
+            single_surface=surface,
+            **common,
+        )
+    if road_type == "split":
+        left = str(data.get("left", data.get("split_left", "dry")))
+        right = str(data.get("right", data.get("split_right", "ice")))
+        _validate_surface(left)
+        _validate_surface(right)
+        return RoadProfile(
+            road_type="split",
+            mu_pattern="split",
+            split_left=left,
+            split_right=right,
+            **common,
+        )
+    if road_type == "transition":
+        start = str(data.get("from", data.get("transition_from", "dry")))
+        end = str(data.get("to", data.get("transition_to", "wet")))
+        _validate_surface(start)
+        _validate_surface(end)
+        return RoadProfile(
+            road_type="transition",
+            mu_pattern="transition",
+            transition_from=start,
+            transition_to=end,
+            **common,
+        )
+    raise ValueError("unsupported road type: %s" % road_type)
 
 
 def _default_controller(request: ClosedLoopSimulationRequest) -> PIDLQRController:
@@ -372,15 +568,33 @@ def _validate_surface(surface: str) -> None:
         )
 
 
-def _default_scenario_id(request: ClosedLoopSimulationRequest, road: RoadProfile) -> str:
+def _default_scenario_id(vehicle_index: int, road: RoadProfile) -> str:
     return "closed_loop_v%d_%s_speed_pid_lqr" % (
-        request.vehicle_index,
+        vehicle_index,
         road.factor_id,
     )
 
 
 def _default_out_dir(scenario_id: str) -> str:
-    return os.path.join("output", "simulation", "SIM001_%s" % _safe_stem(scenario_id))
+    return os.path.join("output", "simulation", _safe_stem(scenario_id))
+
+
+def _resolve_output_dir(output_root: str, timestamped_output: bool) -> str:
+    if not timestamped_output:
+        return output_root
+    output_root = os.path.normpath(output_root)
+    parent, run_name = os.path.split(output_root)
+    if not parent:
+        parent = "."
+    if not run_name:
+        raise ValueError("out_dir must include a run directory name")
+    for index in range(100):
+        stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        suffix = "" if index == 0 else "_%02d" % index
+        candidate = os.path.join(parent, stamp + suffix, run_name)
+        if not os.path.exists(candidate):
+            return candidate
+    raise RuntimeError("could not allocate timestamped simulation output directory")
 
 
 def _safe_stem(value: str) -> str:
