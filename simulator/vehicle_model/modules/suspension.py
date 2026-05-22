@@ -2,7 +2,7 @@ from typing import Dict
 
 import numpy as np
 
-from teacher_simulator.vehicle_params import VehicleConfig
+from simulator.vehicle_model.vehicle_params import VehicleConfig
 
 
 class SuspensionModel:

@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from experiments.torch_training import run_torch_training_suite
-from teacher_simulator.config import load_yaml
+from simulator.vehicle_model.config import load_yaml
 
 
 def _now() -> str:

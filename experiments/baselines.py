@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 import numpy as np
 
 from experiments.sanity import CONTROL_KEYS, STATE_KEYS, _rollout_nominal_physics
-from teacher_simulator.export import load_dataset
+from simulator.vehicle_model.export import load_dataset
 
 
 EVAL_STATE_KEYS = ["vx", "vy", "roll", "pitch", "yaw", "p", "q", "r"]

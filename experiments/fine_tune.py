@@ -21,8 +21,8 @@ from experiments.hybrid import (
     _variant_bounds,
 )
 from experiments.sanity import CONTROL_KEYS, STATE_KEYS
-from teacher_simulator.export import load_dataset
-from teacher_simulator.generate import generate_dataset
+from simulator.data_generator.generate import generate_dataset
+from simulator.vehicle_model.export import load_dataset
 
 
 BUCKETS = ["FTD1", "FTD2", "FTD3", "FTD4", "FTD5"]

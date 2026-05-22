@@ -14,6 +14,8 @@ conda run -n deep-sim <command>
 
 不要直接用系统 Python 运行实验。
 
+如果只是想手动运行一个指定工况的闭环车辆仿真 episode，而不是跑完整实验或数据集生成流程，见根目录 `SIMULATOR_USAGE.md`。
+
 ## 1. 运行前检查
 
 确认代码状态：
@@ -246,7 +248,7 @@ dataset_source: existing
 
 ```bash
 conda run -n deep-sim python -m unittest
-conda run -n deep-sim python -m compileall teacher_simulator experiments student_model tests
+conda run -n deep-sim python -m compileall simulator experiments student_model tests
 git diff --check
 ```
 

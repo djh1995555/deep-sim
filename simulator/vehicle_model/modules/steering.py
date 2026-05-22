@@ -2,9 +2,9 @@ from typing import Dict
 
 import numpy as np
 
-from teacher_simulator.scenario import ActuatorProfile
-from teacher_simulator.state import TeacherState
-from teacher_simulator.vehicle_params import VehicleConfig
+from simulator.vehicle_model.scenario import ActuatorProfile
+from simulator.vehicle_model.state import TeacherState
+from simulator.vehicle_model.vehicle_params import VehicleConfig
 
 
 class SteeringActuator:

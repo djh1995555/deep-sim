@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from teacher_simulator.vehicle_params import (
+from simulator.vehicle_model.vehicle_params import (
     VehicleConfig,
     default_vehicle_config,
     make_vehicle_config_variants,
@@ -30,6 +30,12 @@ class RoadProfile:
     transition_to: Optional[str] = None
     transition_start_s: float = 4.0
     transition_duration_s: float = 3.0
+    transition_start_x_m: float = 25.0
+    transition_length_m: float = 35.0
+    split_boundary_y_m: float = 0.0
+    split_start_x_m: float = 0.0
+    split_end_x_m: float = 120.0
+    split_default_surface: str = "dry"
     grade_rad: float = 0.0
     bank_rad: float = 0.0
     roughness_amp_m: float = 0.003

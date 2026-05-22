@@ -13,9 +13,9 @@ from experiments.fine_tune import fine_tune_metrics_for_runner, run_fine_tune_su
 from experiments.hybrid import base_hybrid_metrics_for_runner, run_base_hybrid_suite
 from experiments.sanity import run_sanity_check
 from experiments.torch_training import run_torch_training_suite
-from teacher_simulator.config import load_yaml, write_yaml
-from teacher_simulator.generate import generate_dataset
-from teacher_simulator.validators import TeacherEpisodeValidator, write_validation_report
+from simulator.data_generator.generate import generate_dataset
+from simulator.vehicle_model.config import load_yaml, write_yaml
+from simulator.vehicle_model.validators import TeacherEpisodeValidator, write_validation_report
 
 
 def _now() -> str:

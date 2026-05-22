@@ -1,21 +1,43 @@
+from dataclasses import dataclass
 from typing import Any, Dict, List
 
 import numpy as np
 
-from teacher_simulator.config import TeacherSimConfig
-from teacher_simulator.modules.aero import AeroModel
-from teacher_simulator.modules.drive_brake import DriveBrakeActuator
-from teacher_simulator.modules.road import RoadModel
-from teacher_simulator.modules.sensors import SensorModel
-from teacher_simulator.modules.steering import SteeringActuator
-from teacher_simulator.modules.suspension import SuspensionModel
-from teacher_simulator.modules.tire import TireModel
-from teacher_simulator.scenario import ScenarioConfig
-from teacher_simulator.state import TeacherState
-from teacher_simulator.vehicle_params import vehicle_internal_hash
+from simulator.vehicle_model.config import TeacherSimConfig
+from simulator.vehicle_model.modules.aero import AeroModel
+from simulator.vehicle_model.modules.drive_brake import DriveBrakeActuator
+from simulator.vehicle_model.modules.road import RoadModel
+from simulator.vehicle_model.modules.sensors import SensorModel
+from simulator.vehicle_model.modules.steering import SteeringActuator
+from simulator.vehicle_model.modules.suspension import SuspensionModel
+from simulator.vehicle_model.modules.tire import TireModel
+from simulator.vehicle_model.scenario import ScenarioConfig
+from simulator.vehicle_model.state import TeacherState
+from simulator.vehicle_model.vehicle_params import vehicle_internal_hash
 
 
-class TeacherSimulator:
+@dataclass
+class VehicleModelRuntime:
+    scenario: ScenarioConfig
+    state: TeacherState
+    sensors: SensorModel
+
+
+@dataclass
+class VehicleStepResult:
+    t: float
+    command: Dict[str, float]
+    state: TeacherState
+    observation: Dict[str, float]
+    steering: Dict[str, np.ndarray]
+    torques: Dict[str, np.ndarray]
+    road_contact: Dict[str, object]
+    load_state: Dict[str, np.ndarray]
+    tire: Dict[str, np.ndarray]
+    aero: Dict[str, np.ndarray]
+
+
+class VehicleModel:
     def __init__(self, config: TeacherSimConfig) -> None:
         config.validate()
         self.config = config
@@ -26,120 +48,152 @@ class TeacherSimulator:
         self.tire = TireModel()
         self.aero = AeroModel()
 
-    def run_episode(self, scenario: ScenarioConfig) -> Dict[str, Any]:
+    def initialize(self, scenario: ScenarioConfig) -> VehicleModelRuntime:
         vehicle = scenario.vehicle_config
         state = TeacherState(vx=scenario.control_script.initial_speed_mps)
         state.omega = np.full(
             4, state.vx / max(vehicle.wheel_radius, 1e-6), dtype=np.float64
         )
         rng = np.random.default_rng(self.config.seed + scenario.seed)
-        sensors = SensorModel(rng)
+        return VehicleModelRuntime(
+            scenario=scenario,
+            state=state,
+            sensors=SensorModel(rng),
+        )
 
+    def step(
+        self,
+        runtime: VehicleModelRuntime,
+        t: float,
+        command: Dict[str, float],
+    ) -> VehicleStepResult:
+        scenario = runtime.scenario
+        state = runtime.state
+        vehicle = scenario.vehicle_config
+        steering = self.steering.step(
+            command["sw_angle"],
+            state,
+            vehicle,
+            scenario.actuator_profile,
+            self.config.dt_internal,
+        )
+        torques = self.drive_brake.step(
+            command["throttle_cmd"],
+            command["brake_cmd"],
+            state,
+            vehicle,
+            scenario.actuator_profile,
+            self.config.dt_internal,
+        )
+        road_contact = self.road.query(t, scenario.road_profile, state, vehicle)
+        load_state = self.suspension.step(
+            state.prev_ax,
+            state.prev_ay,
+            road_contact,
+            vehicle,
+            self.config.gravity,
+        )
+        tire = self.tire.step(
+            state,
+            steering,
+            torques,
+            road_contact,
+            load_state,
+            vehicle,
+            self.config.numerical_limits.min_speed_for_slip,
+        )
+        aero = self.aero.step(state, scenario.environment_profile, vehicle)
+        self._integrate_chassis_and_wheels(
+            state, tire, torques, aero, vehicle, self.config.dt_internal
+        )
+        observation = runtime.sensors.observe(
+            t,
+            state,
+            command,
+            torques,
+            vehicle,
+            scenario.sensor_profile,
+        )
+        return VehicleStepResult(
+            t=t,
+            command=dict(command),
+            state=state,
+            observation=observation,
+            steering=steering,
+            torques=torques,
+            road_contact=road_contact,
+            load_state=load_state,
+            tire=tire,
+            aero=aero,
+        )
+
+    def run_episode(self, scenario: ScenarioConfig) -> Dict[str, Any]:
+        runtime = self.initialize(scenario)
         obs_rows: List[Dict[str, float]] = []
         aux_rows: Dict[str, List[Any]] = {}
         road_labels: List[List[str]] = []
         n_steps = int(round(self.config.duration_s / self.config.dt_internal))
         export_stride = int(round(self.config.dt_export / self.config.dt_internal))
-        last_tire = None
-        last_load = None
-        last_torques = None
-        last_steering = None
-        last_road = None
-        last_aero = None
+        last_result = None
 
         for step in range(n_steps + 1):
             t = step * self.config.dt_internal
             command = scenario.control_script.command_at(t)
-            steering = self.steering.step(
-                command["sw_angle"],
-                state,
-                vehicle,
-                scenario.actuator_profile,
-                self.config.dt_internal,
-            )
-            torques = self.drive_brake.step(
-                command["throttle_cmd"],
-                command["brake_cmd"],
-                state,
-                vehicle,
-                scenario.actuator_profile,
-                self.config.dt_internal,
-            )
-            road_contact = self.road.query(t, scenario.road_profile)
-            load_state = self.suspension.step(
-                state.prev_ax,
-                state.prev_ay,
-                road_contact,
-                vehicle,
-                self.config.gravity,
-            )
-            tire = self.tire.step(
-                state,
-                steering,
-                torques,
-                road_contact,
-                load_state,
-                vehicle,
-                self.config.numerical_limits.min_speed_for_slip,
-            )
-            aero = self.aero.step(state, scenario.environment_profile, vehicle)
-            self._integrate_chassis_and_wheels(
-                state, tire, torques, aero, vehicle, self.config.dt_internal
-            )
-
-            last_tire = tire
-            last_load = load_state
-            last_torques = torques
-            last_steering = steering
-            last_road = road_contact
-            last_aero = aero
+            result = self.step(runtime, t, command)
+            last_result = result
 
             if step % export_stride == 0:
-                obs = sensors.observe(
-                    t,
-                    state,
-                    command,
-                    torques,
-                    vehicle,
-                    scenario.sensor_profile,
-                )
-                obs_rows.append(obs)
+                obs_rows.append(result.observation)
                 self._append_aux(
                     aux_rows,
-                    tire,
-                    load_state,
-                    torques,
-                    steering,
-                    road_contact,
-                    aero,
+                    result.tire,
+                    result.load_state,
+                    result.torques,
+                    result.steering,
+                    result.road_contact,
+                    result.aero,
                 )
-                road_labels.append(list(road_contact["labels"]))
+                road_labels.append(list(result.road_contact["labels"]))
 
+        return self.build_episode(
+            scenario=scenario,
+            obs_rows=obs_rows,
+            aux_rows=aux_rows,
+            road_labels=road_labels,
+            final_state=runtime.state,
+            last_modules_present=last_result is not None,
+        )
+
+    def build_episode(
+        self,
+        scenario: ScenarioConfig,
+        obs_rows: List[Dict[str, float]],
+        aux_rows: Dict[str, List[Any]],
+        road_labels: List[List[str]],
+        final_state: TeacherState,
+        last_modules_present: bool,
+    ) -> Dict[str, Any]:
         metadata = self._metadata(
             scenario,
             len(obs_rows),
-            vehicle_internal_hash(vehicle.hidden_params),
+            vehicle_internal_hash(scenario.vehicle_config.hidden_params),
         )
         metadata["final_state_preview"] = {
-            "vx": float(state.vx),
-            "vy": float(state.vy),
-            "yaw": float(state.yaw),
-            "r": float(state.r),
+            "vx": float(final_state.vx),
+            "vy": float(final_state.vy),
+            "yaw": float(final_state.yaw),
+            "r": float(final_state.r),
         }
-        metadata["last_modules_present"] = all(
-            x is not None
-            for x in [last_tire, last_load, last_torques, last_steering, last_road, last_aero]
-        )
-        episode = {
+        metadata["last_modules_present"] = bool(last_modules_present)
+        return {
             "metadata": metadata,
-            "fixed_vehicle_context": vehicle.fixed_vehicle_context,
-            "nominal_physics_prior": vehicle.nominal_physics_prior,
+            "fixed_vehicle_context": scenario.vehicle_config.fixed_vehicle_context,
+            "nominal_physics_prior": scenario.vehicle_config.nominal_physics_prior,
             "time_series_observable": self._stack_obs(obs_rows),
             "teacher_aux_labels": self._stack_aux(
-                aux_rows, road_labels, vehicle.hidden_params
+                aux_rows, road_labels, scenario.vehicle_config.hidden_params
             ),
         }
-        return episode
 
     def _integrate_chassis_and_wheels(
         self,
@@ -231,6 +285,7 @@ class TeacherSimulator:
             "brake_temperature_i": torques["brake_temperature_i"],
             "road_height_true_i": road_contact["height"],
             "road_normal_true_i": road_contact["normal"],
+            "road_wheel_xy_true_i": road_contact["wheel_xy"],
             "grade_true": np.array(float(road_contact["grade"])),
             "bank_true": np.array(float(road_contact["bank"])),
             "aero_force_moment_diagnostics": aero["force_moment"],
@@ -379,8 +434,13 @@ class TeacherSimulator:
             "road_surface_labels",
             "road_height_true_i",
             "road_normal_true_i",
+            "road_wheel_xy_true_i",
             "grade_true",
             "bank_true",
             "aero_force_moment_diagnostics",
             "teacher_hidden_params",
         ]
+
+
+TeacherSimulator = VehicleModel
+VehicleModelSimulator = VehicleModel

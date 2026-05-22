@@ -1,0 +1,24 @@
+teacher_config: configs/teacher/ds0_minimal.yaml
+out_dir: runs/SIM001_demo_closed_loop
+scenario_id: demo_closed_loop_dry
+dataset_id: SIM_DEMO_CLOSED_LOOP
+road: single:dry
+vehicle_index: 0
+seed: 11
+initial_speed_mps: 10.0
+duration_s: 4.0
+dt_export: 0.02
+split_role: simulation
+target_speed_mps: 14.0
+target_y_m: 0.5
+target_yaw_rad: 0.0
+reference:
+  type: lane_change
+  speed_mps: 14.0
+  start_y_m: 0.0
+  end_y_m: 0.5
+  start_x_m: 5.0
+  length_m: 25.0
+  mode: spatial
+debug_stride: 2
+write_debug_trace: true

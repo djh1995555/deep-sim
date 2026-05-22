@@ -1,1 +1,0 @@
-"""Teacher simulator module implementations."""

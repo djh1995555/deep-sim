@@ -4,7 +4,7 @@ import os
 from copy import deepcopy
 from typing import Any, Dict, List
 
-from teacher_simulator.config import write_yaml
+from simulator.vehicle_model.config import write_yaml
 
 
 BASE_MODEL_CONFIG = {

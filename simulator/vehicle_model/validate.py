@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 
-from teacher_simulator.validators import TeacherEpisodeValidator, write_validation_report
+from simulator.vehicle_model.validators import TeacherEpisodeValidator, write_validation_report
 
 
 def validate_dataset(dataset_dir: str, report_path: str) -> int:

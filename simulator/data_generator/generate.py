@@ -5,9 +5,9 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from teacher_simulator.config import load_teacher_config, load_yaml
-from teacher_simulator.export import export_dataset
-from teacher_simulator.scenario import (
+from simulator.vehicle_model.config import load_teacher_config, load_yaml
+from simulator.vehicle_model.export import export_dataset
+from simulator.vehicle_model.scenario import (
     make_ds0_scenarios,
     make_ds2_extreme_matrix,
     make_ds2_extreme_scenarios,
@@ -16,7 +16,7 @@ from teacher_simulator.scenario import (
     make_ds1_scenarios,
     make_proxy_perturbation_profiles,
 )
-from teacher_simulator.simulator import TeacherSimulator
+from simulator.vehicle_model.model import TeacherSimulator
 
 
 def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:

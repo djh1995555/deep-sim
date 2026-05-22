@@ -5,8 +5,8 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from teacher_simulator.export import load_dataset, make_model_input
-from teacher_simulator.vehicle_params import WHEEL_ORDER
+from simulator.vehicle_model.export import load_dataset, make_model_input
+from simulator.vehicle_model.vehicle_params import WHEEL_ORDER
 
 
 OBS_REQUIRED = [

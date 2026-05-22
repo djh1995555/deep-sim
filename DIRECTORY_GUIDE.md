@@ -1,6 +1,6 @@
 # 目录说明
 
-本文件说明当前仓库各目录的内容和用途。当前状态截至 2026-05-21。
+本文件说明当前仓库各目录的内容和用途。当前状态截至 2026-05-22。
 
 ## 顶层目录总览
 
@@ -10,6 +10,7 @@
 | `.agents/`            | 内部工具                 | 本仓库随附的 agent skills 定义                                                      | 给 Codex/ARIS 工作流使用，例如 `experiment-bridge`、`research-wiki`、`experiment-plan`。不是车辆动力学模型源码。 |
 | `.git/`               | Git 元数据              | 提交历史、对象库、分支引用                                                               | Git 内部目录，不需要手动修改。                                                                        |
 | `EXPERIMENT_USAGE.md` | 手动实验使用指南             | 单 run、队列、矩阵报告、实车 CSV 适配、验证命令                                                | 给人工手动执行实验时使用，是最直接的操作入口。                                                                  |
+| `SIMULATOR_USAGE.md`  | 闭环仿真器使用指南            | 基于 `simulator` 运行一个指定工况 episode 的命令和输出说明                                      | 手动生成一段车辆闭环仿真轨迹，输出 canonical episode 和 debug trace。                                      |
 | `configs/`            | 实验配置                 | Teacher 数据集配置和每个 run 的 YAML 配置                                              | 定义实验入口参数，是复现实验的主要配置来源。                                                                   |
 | `data/`               | 数据入口                 | canonical dataset 真实目录                                                      | 给 PyTorch 训练阶段提供稳定数据路径，当前保留 `ds1_v1` 和 `ds1_proxy_ft_v1` 两个数据集。                          |
 | `experiments/`        | 实验执行代码               | runner、sanity、baseline、hybrid、PyTorch smoke、ablation 报告代码                   | `python -m experiments.run --config ...` 的执行入口和实验逻辑。                                     |
@@ -19,8 +20,8 @@
 | `research-wiki/`      | 研究知识库                | 论文卡片、idea 卡片、claim/gap/query 记录                                             | 持久化研究知识库，用于追踪证据、文献和想法之间的关系。                                                              |
 | `runs/`               | 运行时产物目录              | 当前不存在，重新执行实验时由 runner 自动创建                                                     | 只用于保存新 run 的输出；canonical 数据已经迁移到 `data/`。                                               |
 | `student_model/`      | PyTorch 模型源码         | Student model 的数据接口、常量、E1/E2/E3 encoder、residual heads、adapter trainability | 正式训练阶段的模型实现入口；训练由 `experiments/torch_training.py` 调度。                                    |
-| `teacher_simulator/`  | Teacher simulator 源码 | 高保真车辆动力学 teacher 的当前 v0/scaffold 实现                                         | 生成 DS0/DS1/DS1 proxy 数据，支撑 sanity、baseline 和 hybrid scaffold 实验。                         |
-| `tests/`              | 测试代码                 | teacher simulator、canonical data、student model、PyTorch runner 测试            | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。                                                              |
+| `simulator/`          | 闭环仿真器主源码             | simulator_app、controller、reference、vehicle_model、data_generator、visualizer        | 新的车辆闭环仿真、训练数据生成和 debug 可视化主入口。                                                          |
+| `tests/`              | 测试代码                 | simulator、canonical data、student model、PyTorch runner 测试                       | 验证数据生成、采样、基础物理逻辑和训练入口没有被破坏。                                                              |
 
 ## 配置目录
 
@@ -38,6 +39,14 @@ Teacher 数据集生成配置。
 | `ds1_v1.yaml` | DS1 多车、多工况 scaffold 数据集配置，用于当前主线实验。 |
 | `ds1_proxy_v1.yaml` | sim-to-real proxy 数据配置，用于扰动 profile、target window 和分布 sanity。 |
 | `ds2_extreme_v0.yaml` | DS2 极限操控 scaffold 数据配置，用于 B7 / MoE tire residual 后续实验入口。 |
+
+### `configs/simulator/`
+
+单次闭环仿真器 request 配置。它不负责批量采样数据集，而是指定车辆、路面、目标速度/轨迹参考和控制器参数后，输出一个 canonical episode 与 debug trace。
+
+| 文件 | 用途 |
+| --- | --- |
+| `demo_single.yaml` | 闭环仿真器示例 request，可通过 `python -m simulator.cli --request configs/simulator/demo_single.yaml` 运行。 |
 
 ### `configs/runs/`
 
@@ -135,39 +144,25 @@ conda run -n deep-sim python -m experiments.materialize_data
 
 当前限制：这里仍是小规模训练开发链路，不是完整训练结论。训练 loss、optimizer、scheduler、early stopping、best checkpoint、rollout、checkpoint save/load、resume、direct black-box baseline、fair comparison、fine-tune adapter 和 ensemble 已在 `experiments/torch_training.py` 中接入；R100-R115 历史上已通过，但运行产物已清理，需要时按配置重新执行。
 
-## Teacher Simulator 目录
+## Simulator 目录
 
-### `teacher_simulator/`
+### `simulator/`
 
-Teacher simulator 当前实现。它负责生成可控的车辆动力学数据，用于第一版模型训练与 sanity 验证。
+新的车辆仿真器主包。它把闭环运行、控制器、车辆模型、数据生成和可视化分开，后续新开发优先改这里。
 
-| 文件 | 用途 |
+| 路径/文件 | 用途 |
 | --- | --- |
-| `config.py` | 数据集和仿真配置结构。 |
-| `generate.py` | 数据生成主流程。 |
-| `export.py` | episode、metadata、split 等导出逻辑。 |
-| `scenario.py` | 工况组合、采样和 episode 定义。 |
-| `simulator.py` | 单 episode 仿真推进主逻辑。 |
-| `state.py` | 车辆状态和中间状态结构。 |
-| `vehicle_params.py` | 车辆参数、参数随机化和 nominal prior。 |
-| `validate.py` | 基础验证入口。 |
-| `validators.py` | schema、泄漏检查、物理一致性等 validator。 |
+| `simulator_app.py` | 闭环仿真主入口。每个 internal step 查询 reference，读取状态/观测，调用 controller，再推进 vehicle_model。 |
+| `cli.py` | 闭环仿真命令行入口：`python -m simulator.cli ...`。 |
+| `controller/` | 控制器接口和默认实现；当前包含 `ControllerInput`、`ControllerOutput`、纵向 PID、横向 LQR 和组合控制器。 |
+| `reference/` | 参考速度/轨迹 provider；当前包含固定参考、平滑换道 reference 和 waypoint lookahead reference。 |
+| `vehicle_model/` | 原 teacher simulator 的车辆物理模型，包括配置、工况、状态、导出、验证和物理子模块。 |
+| `data_generator/` | 批量训练数据生成入口，调用 `vehicle_model` 生成 DS0/DS1/DS1 proxy/DS2 数据。 |
+| `visualizer/` | debug trace 输出与可视化接口，当前支持 JSON/CSV，预留 timeseries plot。 |
 
-### `teacher_simulator/modules/`
+闭环仿真手动入口见根目录 `SIMULATOR_USAGE.md`。
 
-Teacher simulator 的物理/工程子模块。
-
-| 文件 | 用途 |
-| --- | --- |
-| `aero.py` | 空气动力学相关项。 |
-| `drive_brake.py` | 驱动/制动输入和轮端作用建模。 |
-| `road.py` | 单一路况、split-μ、路面变化等 road profile。 |
-| `sensors.py` | 传感器噪声、观测字段和可见/不可见字段处理。 |
-| `steering.py` | 转向系统动态、延迟/滤波等 steering actuator 逻辑。 |
-| `suspension.py` | 悬架、载荷转移和法向载荷相关近似。 |
-| `tire.py` | 轮胎力、摩擦约束和 combined-slip 相关逻辑。 |
-
-`teacher_simulator/**/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
+`simulator/**/__pycache__/` 是 Python 自动生成的缓存目录，不属于源码。
 
 ## 文档目录
 
@@ -303,7 +298,7 @@ canonical 数据已经移动到 `data/` 下，不再通过 symlink 指向 `runs/
 
 | 文件 | 用途 |
 | --- | --- |
-| `test_teacher_simulator.py` | Teacher simulator 相关单元测试和回归测试。 |
+| `test_simulator.py` | Simulator 车辆模型、数据生成和闭环仿真相关单元测试和回归测试。 |
 | `test_canonical_data.py` | canonical dataset 入口和 student-visible array/context 读取测试。 |
 | `test_student_model.py` | PyTorch student model forward smoke；缺少 PyTorch 时自动 skip。 |
 | `test_torch_training.py` | PyTorch smoke runner/config 测试；缺少 PyTorch 时验证 blocked 路径。 |
@@ -337,7 +332,7 @@ conda run -n deep-sim python -m unittest
 1. `refine-logs/`：方案、规格、tracker、结果是否同步。
 2. `configs/runs/` 和 `configs/teacher/`：实验是否可复现。
 3. `experiments/`：实验 runner 和评估逻辑。
-4. `teacher_simulator/`：数据生成和 teacher 物理逻辑。
+4. `simulator/`：闭环仿真、数据生成和车辆物理逻辑。
 5. `reports/`：阶段性结果是否能支持当前 claim。
 6. `tests/`：修改 teacher 或实验逻辑后是否有基本回归测试。
 7. `EXPERIMENT_USAGE.md`：手动流程变化后同步更新操作命令。

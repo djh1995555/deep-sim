@@ -10,7 +10,7 @@ from experiments.torch_training import (
     _restore_model_from_checkpoint,
     run_torch_training_suite,
 )
-from teacher_simulator.config import load_yaml
+from simulator.vehicle_model.config import load_yaml
 
 
 class TorchTrainingRunnerTest(unittest.TestCase):

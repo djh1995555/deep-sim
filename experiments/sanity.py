@@ -3,8 +3,13 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 
-from teacher_simulator.export import load_dataset, make_model_input
-from teacher_simulator.validators import AUX_REQUIRED, CTX_REQUIRED, OBS_REQUIRED, PRIOR_REQUIRED
+from simulator.vehicle_model.export import load_dataset, make_model_input
+from simulator.vehicle_model.validators import (
+    AUX_REQUIRED,
+    CTX_REQUIRED,
+    OBS_REQUIRED,
+    PRIOR_REQUIRED,
+)
 
 
 STATE_KEYS = [

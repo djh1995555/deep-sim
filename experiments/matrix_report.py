@@ -3,7 +3,7 @@ import json
 import os
 from typing import Any, Dict, List
 
-from teacher_simulator.config import load_yaml
+from simulator.vehicle_model.config import load_yaml
 
 
 def _read_json(path: str) -> Dict[str, Any]:
