@@ -32,6 +32,6 @@ logging:
   output_dir: output/training/R004c_proxy_perturbation_profiles
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_proxy_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_v1.yaml
 artifact_dataset_subdir: ds1_proxy
 primary_metric: proxy_profiles_passed

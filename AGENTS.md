@@ -9,11 +9,13 @@
 - Experiment command template: `conda run -n deep-sim python -m experiments.run --config <config.yaml>`
 - Experiment queue template: `conda run -n deep-sim python -m experiments.experiment_queue --manifest configs/experiments/matrix/MANIFEST.json`
 - Code dir: `/home/mi/vibe/research/deep_sim/codex`
+- External simulator project: `/home/mi/vibe/research/simulator`
+- External simulator install command: `conda run -n deep-sim python -m pip install -e /home/mi/vibe/research/simulator --no-deps`
 - code_sync: local
 - wandb: false
 - Output root: `output/`
   - Training experiment outputs: `output/training/`
-  - Closed-loop simulation outputs: `output/simulation/`
+- Vehicle simulation/data generation is provided by external project: `/home/mi/vibe/research/simulator`
 
 ## GPU Status
 

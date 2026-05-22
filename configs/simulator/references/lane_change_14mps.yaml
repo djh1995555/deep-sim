@@ -1,7 +1,0 @@
-type: lane_change
-speed_mps: 14.0
-start_y_m: 0.0
-end_y_m: 0.5
-start_x_m: 5.0
-length_m: 25.0
-mode: spatial

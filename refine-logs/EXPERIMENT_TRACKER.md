@@ -6,22 +6,22 @@
 
 | Run ID | Milestone | Purpose                                     | System / Variant                                                           | Priority | Status |
 | ------ | --------- | ------------------------------------------- | -------------------------------------------------------------------------- | -------- | ------ |
-| R000   | M0        | B0.1 simulator minimal implementation       | high-fidelity teacher simulator v0                                         | MUST     | DONE   |
-| R000a  | M0        | B0.2 tire/load validation                   | teacher simulator tire + suspension                                        | MUST     | DONE   |
-| R000b  | M0        | B0.3 road scenario generation               | teacher simulator road μ map                                               | MUST     | DONE   |
+| R000   | M0        | B0.1 dataset generation minimal             | external simulator data generator                                          | MUST     | DONE   |
+| R000a  | M0        | B0.2 tire/load validation                   | generated tire + suspension fields                                        | MUST     | DONE   |
+| R000b  | M0        | B0.3 road scenario generation               | generated road μ map                                                   | MUST     | DONE   |
 | R000c  | M0        | B0.4 sensor/actuator realism                | actuator + sensor model                                                    | MUST     | DONE   |
 | R000d  | M0        | B0.5 dataset export split                   | dataset builder                                                            | MUST     | DONE   |
 | R000e  | M1        | B0.6 scenario matrix v1                     | dataset generator                                                          | MUST     | DONE   |
-| R000f  | M1        | B0.7 single vehicle parameter randomization | teacher simulator vehicle_A                                                | MUST     | DONE   |
+| R000f  | M1        | B0.7 single vehicle parameter randomization | generated vehicle/config variants                                        | MUST     | DONE   |
 | R000g  | M1        | B0.8 dataset split generation               | dataset builder                                                            | MUST     | DONE   |
 | R000h  | M1        | B0.9 dataset QA                             | generated dataset v1                                                       | MUST     | DONE   |
 | R001   | M2        | B1.1 schema / 字段角色检查                        | data loader                                                                | MUST     | DONE   |
-| R002   | M2        | B1.2 teacher simulator 物理一致性检查              | teacher outputs                                                            | MUST     | DONE   |
+| R002   | M2        | B1.2 生成数据物理一致性检查              | generator outputs                                                            | MUST     | DONE   |
 | R003   | M2        | B1.3 时间对齐 / dt 检查                           | sequence timestamps                                                        | MUST     | DONE   |
 | R004   | M2        | B1.4 派生物理量检查                                | slip / steering / wheel dynamics                                           | MUST     | DONE   |
 | R004a  | M2        | B1.5 最小可学习性检查                               | tiny black-box + tiny base hybrid                                          | MUST     | DONE   |
 | R004b  | M2        | B1.6 physics-only rollout smoke test        | physics-only                                                               | MUST     | DONE   |
-| R004c  | M3        | B2.1 proxy perturbation profiles            | teacher simulator perturbation generator                                   | MUST     | DONE   |
+| R004c  | M3        | B2.1 proxy perturbation profiles            | generated perturbation profiles                                   | MUST     | DONE   |
 | R004d  | M3        | B2.2 proxy target windows                   | held-out vehicle/config target windows                                     | MUST     | DONE   |
 | R004e  | M3        | B2.3 proxy distribution sanity              | perturbed DS1 target windows                                               | MUST     | DONE   |
 | R005   | M4        | B3.1 physics-only baseline                  | student physics backbone only                                              | MUST     | DONE   |

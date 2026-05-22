@@ -13,7 +13,7 @@ data:
   val_filter: validation
   test_filter: test
 model:
-  system_name: teacher_simulator_ds2_extreme
+  system_name: external_simulator_ds2_extreme
   student_config: none
   baseline_config: null
 training:
@@ -32,7 +32,7 @@ logging:
   output_dir: output/training/R046_ds2_extreme_dataset_smoke
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds2_extreme_v0.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds2_extreme_v0.yaml
 dataset_source: generate
 artifact_dataset_subdir: ds2
 primary_metric: schema_checks_passed

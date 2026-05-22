@@ -79,7 +79,7 @@ def _base_config(
             "save_checkpoints": True,
             "save_diagnostics": True,
         },
-        "dataset_config": "configs/datasets/ds1_v1.yaml",
+        "dataset_config": "/home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml",
         "dataset_source": "existing",
         "artifact_dataset_subdir": "ds1",
         "primary_metric": "torch_one_step_training_passed",
@@ -213,7 +213,7 @@ def _fine_tune_specs() -> List[Dict[str, Any]]:
             cfg["data"]["train_filter"] = "fine-tune"
             cfg["data"]["val_filter"] = "test-window"
             cfg["data"]["test_filter"] = "test-window"
-            cfg["dataset_config"] = "configs/datasets/ds1_proxy_ft_v1.yaml"
+            cfg["dataset_config"] = "/home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_ft_v1.yaml"
             cfg["artifact_dataset_subdir"] = "ds1_proxy_ft"
             cfg["torch_training"].update(
                 {

@@ -4,12 +4,14 @@
 **Scope**: `R000-R045` teacher/data generation, sanity, proxy, baseline, base hybrid, component ablation, cross-generalization, final freeze, and fine-tune scaffold implementation
 **Mode**: local-only fallback
 
+**Current boundary note**: simulator implementation files were later extracted to `/home/mi/vibe/research/simulator`. This review is kept as a historical experiment review; the current training repository only owns experiment code, configs, student model code, tests, and dataset contracts.
+
 ## Review Boundary
 
 Reviewed files:
 
 ```text
-simulator/
+/home/mi/vibe/research/simulator  (external simulator project; not owned by this repository)
 experiments/run.py
 experiments/sanity.py
 experiments/baselines.py
@@ -17,7 +19,7 @@ experiments/hybrid.py
 experiments/ablation_report.py
 experiments/cross_generalization_report.py
 experiments/fine_tune.py
-configs/datasets/ds0_minimal.yaml
+/home/mi/vibe/research/simulator/configs/datasets/ds0_minimal.yaml
 configs/experiments/b0_data_generation/*.yaml
 configs/experiments/b1_sanity/b1_1_schema_field_role_check.yaml
 configs/experiments/b1_sanity/b1_2_teacher_physical_consistency.yaml
@@ -72,10 +74,9 @@ configs/experiments/b6_finetune_scaffold/b6_5_finetune_ft4_tire_residual.yaml
 configs/experiments/b6_finetune_scaffold/b6_6_finetune_ft5_steering_residual.yaml
 configs/experiments/b6_finetune_scaffold/b6_7_finetune_ft6_full_model.yaml
 configs/experiments/b6_finetune_scaffold/b6_8_finetune_summary.yaml
-configs/datasets/ds1_proxy_v1.yaml
-configs/datasets/ds1_proxy_ft_v1.yaml
-tests/test_simulator.py
-output/training/reports/B0_teacher.md
+/home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_v1.yaml
+/home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_ft_v1.yaml
+output/training/reports/B0_data_generation.md
 output/training/reports/B3_baselines.md
 output/training/reports/B3_base_hybrid.md
 output/training/reports/B4_ablations.md
@@ -176,7 +177,7 @@ The implemented scope is intentionally minimal and covers DS0/DS1/proxy scaffold
 21. `R037` writes `final_single_model_scaffold.json` as a checkpoint descriptor only. It contains selected variant metadata and metrics, not trained neural weights.
 22. `R038-R045` implement fine-tune as ridge adapter corrections over the frozen scaffold-selected hybrid. This validates FT matrix wiring and target-window evaluation, not final adapter learning dynamics.
 23. `FT6` performs poorly in the scaffold, which is a useful overcorrection signal but not a final statement about full-model fine-tuning.
-24. The B6 proxy fine-tune dataset uses `configs/datasets/ds1_proxy_ft_v1.yaml` with FTD1-FTD5 coverage. This is separate from the earlier M3 proxy dataset, so M3 historical counts remain unchanged.
+24. The B6 proxy fine-tune dataset uses `/home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_ft_v1.yaml` with FTD1-FTD5 coverage. This is separate from the earlier M3 proxy dataset, so M3 historical counts remain unchanged.
 
 ## Checklist
 
@@ -392,14 +393,13 @@ The queue is intentionally local and sequential. It is adequate for the current 
 Reviewed files:
 
 ```text
-teacher_simulator/scenario.py
-teacher_simulator/generate.py
+/home/mi/vibe/research/simulator/simulator/vehicle_model/scenario.py
+/home/mi/vibe/research/simulator/simulator/data_generator/generate.py
 student_model/torch_model.py
-configs/datasets/ds2_extreme_v0.yaml
+/home/mi/vibe/research/simulator/configs/datasets/ds2_extreme_v0.yaml
 configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
 configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
 configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml
-tests/test_teacher_simulator.py
 tests/test_student_model.py
 output/training/reports/B7_extreme_moe.md
 ```
@@ -426,9 +426,9 @@ R046/R047 are development smokes only. They make DS2 and T3-MoE executable, but 
 ## Verification Commands
 
 ```bash
-conda run -n deep-sim python -m compileall teacher_simulator experiments tests
-conda run -n deep-sim python -m unittest tests.test_teacher_simulator
-for cfg in configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml configs/experiments/b0_data_generation/b0_2_tire_load_validation.yaml configs/experiments/b0_data_generation/b0_3_road_scenario_generation.yaml configs/experiments/b0_data_generation/b0_4_sensor_actuator_realism.yaml configs/experiments/b0_data_generation/b0_5_dataset_export_split.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+conda run -n deep-sim python -m compileall experiments student_model tests
+conda run -n deep-sim python -m unittest
+for cfg in configs/experiments/b0_data_generation/b0_1_dataset_generation_minimal.yaml configs/experiments/b0_data_generation/b0_2_tire_load_validation.yaml configs/experiments/b0_data_generation/b0_3_road_scenario_generation.yaml configs/experiments/b0_data_generation/b0_4_sensor_actuator_realism.yaml configs/experiments/b0_data_generation/b0_5_dataset_export_split.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
 for cfg in configs/experiments/b0_data_generation/b0_6_scenario_matrix_v1.yaml configs/experiments/b0_data_generation/b0_7_vehicle_parameter_randomization.yaml configs/experiments/b0_data_generation/b0_8_dataset_split_generation.yaml configs/experiments/b0_data_generation/b0_9_dataset_qa.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
 for cfg in configs/experiments/b1_sanity/b1_1_schema_field_role_check.yaml configs/experiments/b1_sanity/b1_2_teacher_physical_consistency.yaml configs/experiments/b1_sanity/b1_3_time_dt_alignment.yaml configs/experiments/b1_sanity/b1_4_derived_physical_quantities.yaml configs/experiments/b1_sanity/b1_5_tiny_learnability.yaml configs/experiments/b1_sanity/b1_6_physics_rollout_smoke.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
 for cfg in configs/experiments/b2_proxy/b2_1_proxy_perturbation_profiles.yaml configs/experiments/b2_proxy/b2_2_proxy_target_windows.yaml configs/experiments/b2_proxy/b2_3_proxy_distribution_sanity.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done

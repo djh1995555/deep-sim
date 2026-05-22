@@ -1,8 +1,0 @@
-type: sinusoidal
-speed_mps: 18.0
-center_y_m: 0.0
-amplitude_m: 4.0
-period_m: 35.0
-start_x_m: 0.0
-phase_rad: 0.0
-mode: spatial

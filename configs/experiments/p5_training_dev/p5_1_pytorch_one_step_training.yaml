@@ -32,7 +32,7 @@ logging:
   output_dir: output/training/R107_pytorch_one_step_training
   save_checkpoints: true
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml
 dataset_source: existing
 artifact_dataset_subdir: ds1
 primary_metric: torch_one_step_training_passed

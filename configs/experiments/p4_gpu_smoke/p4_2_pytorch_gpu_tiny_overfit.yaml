@@ -32,7 +32,7 @@ logging:
   output_dir: output/training/R106_pytorch_gpu_tiny_overfit
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml
 dataset_source: existing
 artifact_dataset_subdir: ds1
 primary_metric: torch_tiny_overfit_passed

@@ -14,8 +14,6 @@ conda run -n deep-sim <command>
 
 不要直接用系统 Python 运行实验。
 
-如果只是想手动运行一个指定工况的闭环车辆仿真 episode，而不是跑完整实验或数据集生成流程，见根目录 `SIMULATOR_USAGE.md`。
-
 ## 输出目录约定
 
 以后运行产生的文件统一写入 `output/`：
@@ -23,7 +21,6 @@ conda run -n deep-sim <command>
 | 路径 | 内容 |
 | --- | --- |
 | `output/training/` | `experiments.run`、批量队列、checkpoint、metrics、post-rollout eval 和训练汇总报告。 |
-| `output/simulation/` | `simulator.cli` 单次闭环仿真、debug trace、Plotly HTML 和仿真 episode。 |
 
 `data/` 只保存训练输入数据；不要把新实验产物写进 `data/`。
 
@@ -39,19 +36,38 @@ git status --short
 
 ```bash
 conda run -n deep-sim python -m unittest
-conda run -n deep-sim python - <<'PY'
-import torch
-print(torch.__version__)
-print(torch.version.cuda)
-print(torch.cuda.is_available())
-print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu")
-PY
+conda run -n deep-sim python -c "import torch; print(torch.__version__); print(torch.version.cuda); print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu')"
 ```
 
 确认 canonical dataset 存在并可读：
 
 ```bash
 conda run -n deep-sim python -m experiments.materialize_data
+```
+
+确认外部 simulator 包可用。当前训练工程不再包含 `simulator/` 源码，数据生成器来自独立工程：
+
+```text
+/home/mi/vibe/research/simulator
+```
+
+检查当前环境中的 simulator 包来源：
+
+```bash
+conda run -n deep-sim python -c "import os, simulator; print(os.path.abspath(simulator.__file__))"
+```
+
+期望路径应指向：
+
+```text
+/home/mi/vibe/research/simulator/simulator/__init__.py
+```
+
+如果没有安装或路径不对，先执行：
+
+```bash
+cd /home/mi/vibe/research/simulator
+conda run -n deep-sim python -m pip install -e . --no-deps
 ```
 
 当前 canonical 数据是 `data/` 下的真实目录，不再是指向历史运行输出目录的 symlink。需要把数据复制到其他位置时使用：
@@ -111,7 +127,38 @@ cat output/training/R111_pytorch_base_model_small_training/artifacts/validation_
 
 未重新运行时，使用 `output/training/reports/` 和 `refine-logs/EXPERIMENT_RESULTS.md` 查看已完成阶段的结果摘要；根目录 `reports/` 不再作为新产物目录维护。
 
-## 3. 运行完整 PyTorch 矩阵
+## 3. 重新生成训练数据
+
+当前工程只训练车辆动力学神经网络模型，不维护车辆物理 simulator 源码。需要重新生成多车型、多工况训练数据时，调用外部 simulator 工程：
+
+```bash
+cd /home/mi/vibe/research/simulator
+```
+
+使用外部 simulator 的数据集配置作为输入，输出到当前训练工程的 `data/`：
+
+```bash
+conda run -n deep-sim deep-sim-generate \
+  --config /home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml \
+  --out /home/mi/vibe/research/deep_sim/codex/data/ds1_v1
+```
+
+生成 fine-tune proxy 数据：
+
+```bash
+conda run -n deep-sim deep-sim-generate \
+  --config /home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_ft_v1.yaml \
+  --out /home/mi/vibe/research/deep_sim/codex/data/ds1_proxy_ft_v1
+```
+
+生成后回到当前训练工程检查数据：
+
+```bash
+cd /home/mi/vibe/research/deep_sim/codex
+conda run -n deep-sim python -m experiments.materialize_data --data-root data
+```
+
+## 4. 运行完整 PyTorch 矩阵
 
 先生成或刷新矩阵配置：
 
@@ -178,7 +225,7 @@ ls output/training/_queue_logs_ablation
 | `--state-path` | 队列状态 JSON 输出路径。 |
 | `--log-dir` | 每次尝试的 stdout/stderr 日志目录。 |
 
-## 4. 汇总结果
+## 5. 汇总结果
 
 刷新 PyTorch development report：
 
@@ -197,14 +244,14 @@ conda run -n deep-sim python -m experiments.matrix_report
 ```text
 output/training/reports/PYTORCH_DEV_REPORT.md
 output/training/reports/PYTORCH_MATRIX_REPORT.md
-output/training/reports/B0_teacher.md
+output/training/reports/B0_data_generation.md
 refine-logs/EXPERIMENT_RESULTS.md
 refine-logs/EXPERIMENT_TRACKER.md
 ```
 
 当前 `PYTORCH_MATRIX_REPORT` 在未运行 R200-R334 前会显示 52 个 pending，这是正常状态。
 
-## 5. 使用实车 CSV 数据
+## 6. 使用实车 CSV 数据
 
 先把单个 CSV episode 转成 canonical dataset：
 
@@ -240,15 +287,15 @@ dataset_source: existing
 
 然后按普通 run 方式执行。
 
-## 6. 修改配置时看哪里
+## 7. 修改配置时看哪里
 
 常见入口：
 
 | 目标 | 文件 |
 |---|---|
 | 改单个实验配置 | `configs/experiments/<实验块>/<语义化实验名>.yaml` |
-| 改 DS1 数据生成 | `configs/datasets/ds1_v1.yaml` |
-| 改 DS2 extreme 数据生成 | `configs/datasets/ds2_extreme_v0.yaml` |
+| 改 DS1 数据生成需求 | `/home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml`，由外部 `/home/mi/vibe/research/simulator` 执行生成 |
+| 改 DS2 extreme 数据生成需求 | `/home/mi/vibe/research/simulator/configs/datasets/ds2_extreme_v0.yaml`，由外部 `/home/mi/vibe/research/simulator` 执行生成 |
 | 改模型模块结构 | `student_model/torch_model.py` |
 | 改训练 loop / loss / eval | `experiments/torch_training.py` |
 | 改矩阵生成规则 | `experiments/torch_config_matrix.py` |
@@ -259,11 +306,11 @@ dataset_source: existing
 
 ```bash
 conda run -n deep-sim python -m unittest
-conda run -n deep-sim python -m compileall simulator experiments student_model tests
+conda run -n deep-sim python -m compileall experiments student_model tests
 git diff --check
 ```
 
-## 7. 解释结果时的边界
+## 8. 解释结果时的边界
 
 当前已完成的是工程可运行性和开发级 smoke。`R112` 显示当前小规模 hybrid 在 raw one-step MSE 和 rollout RMSE 上仍落后 best black-box；不要用 R100-R115 或 R046-R047 声称最终模型优于 black-box。
 

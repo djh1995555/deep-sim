@@ -20,8 +20,8 @@ experiment intent / success criteria:
 data schema:
   DATA_SCHEMA_SPEC.md
 
-teacher simulator API:
-  TEACHER_SIMULATOR_SPEC.md
+external simulator API:
+  /home/mi/vibe/research/simulator
 
 student model API:
   STUDENT_MODEL_SPEC.md
@@ -32,7 +32,7 @@ student model API:
 所有实验活动必须在 Miniforge / conda 虚拟环境中执行，包括：
 
 ```text
-teacher simulator 生成
+外部 simulator 数据生成
 dataset export / validation
 unit test / smoke test
 student model training / evaluation
@@ -63,7 +63,7 @@ python -m pip install -r requirements.txt
 后续所有命令必须在已激活的 `deep-sim` 环境中运行，或显式使用：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_dataset_generation_minimal.yaml
 ```
 
 禁止直接使用系统 Python 执行实验命令。自动化 runner / queue / remote backend 在启动前必须记录并检查：
@@ -181,7 +181,7 @@ Recommended commands:
 
 ```bash
 conda activate deep-sim
-python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
+python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_dataset_generation_minimal.yaml
 python -m experiments.evaluate --checkpoint output/training/R009_base/checkpoints/best.pt --config configs/eval/base.yaml
 python -m experiments.report --runs output/training/R009_base output/training/R010_seen output/training/R011_road --out output/training/reports/B3_base.md
 ```
@@ -189,7 +189,7 @@ python -m experiments.report --runs output/training/R009_base output/training/R0
 Non-interactive / queue commands should use:
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_dataset_generation_minimal.yaml
 ```
 
 All commands must write `command.txt` and `resolved_config.yaml`.
@@ -198,7 +198,7 @@ All commands must write `command.txt` and `resolved_config.yaml`.
 
 | Milestone | Runs | Purpose | Gate |
 |---|---|---|---|
-| `M0` | `R000-R000d` | teacher simulator v0 | minimal simulator, tire/load, road, sensor/actuator and export work |
+| `M0` | `R000-R000d` | 外部 simulator 数据生成接入 | minimal data generation, tire/load, road, sensor/actuator and export work |
 | `M1` | `R000e-R000h` | DS1 scenario/data generation | multi-vehicle, multi-scenario, splits, QA |
 | `M2` | `R001-R004b` | data/physics sanity | schema, timing, derived features, tiny learnability, physics smoke |
 | `M3` | `R004c-R004e` | sim-to-real proxy | perturbation profiles and target windows |
@@ -210,22 +210,22 @@ All commands must write `command.txt` and `resolved_config.yaml`.
 | `M9` | `R038-R045` | target fine-tune | FT0-FT6 × FTD0-FTD5 data efficiency |
 | `M10` | `R046-R047`, `R048+` | DS2 extreme + MoE | DS2/MoE development smoke done; full training/eval optional second phase |
 
-## 6. Stage A: Teacher And Data Runs
+## 6. Stage A: External Simulator Data Runs
 
-### R000-R000d: Teacher Simulator Minimal Implementation
+### R000-R000d: 外部 Simulator 最小数据生成接入
 
 Required inputs:
 
 ```text
-TEACHER_SIMULATOR_SPEC.md
+/home/mi/vibe/research/simulator
 DATA_SCHEMA_SPEC.md
-configs/datasets/ds0_minimal.yaml
+/home/mi/vibe/research/simulator/configs/datasets/ds0_minimal.yaml
 ```
 
 Required outputs:
 
 ```text
-teacher simulator package importable
+external simulator package importable
 DS0 smoke episodes generated
 schema validation report
 unit test report
@@ -271,7 +271,7 @@ Required checks:
 
 ```text
 schema / field role check
-teacher simulator physical consistency
+external simulator generated-data physical consistency
 timestamp / dt / alignment check
 student-derived slip / steering / wheel dynamics check
 tiny black-box + tiny base hybrid overfit
@@ -684,7 +684,7 @@ adapter_drift
 Each experiment block must produce a Markdown report:
 
 ```text
-output/training/reports/B0_teacher.md
+output/training/reports/B0_data_generation.md
 output/training/reports/B1_sanity.md
 output/training/reports/B3_base.md
 output/training/reports/B4_ablation.md
@@ -713,7 +713,7 @@ Use `blocked` when:
 ```text
 required dataset or teacher field unavailable
 schema validation fails before training
-teacher simulator cannot generate required scenario
+external simulator cannot generate required scenario
 config requests forbidden teacher label
 hardware budget insufficient for required run
 ```

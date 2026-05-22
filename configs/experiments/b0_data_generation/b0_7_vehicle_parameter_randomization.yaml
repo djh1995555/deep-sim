@@ -13,7 +13,7 @@ data:
   val_filter: null
   test_filter: null
 model:
-  system_name: teacher_simulator_vehicle_variants
+  system_name: external_simulator_vehicle_variants
   student_config: null
   baseline_config: null
 training:
@@ -32,6 +32,6 @@ logging:
   output_dir: output/training/R000f_vehicle_parameter_randomization
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml
 artifact_dataset_subdir: ds1
 primary_metric: vehicle_config_count

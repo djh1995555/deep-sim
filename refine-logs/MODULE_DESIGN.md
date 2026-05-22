@@ -17,8 +17,8 @@ EXPERIMENT_PLAN.md:
 DATA_DESIGN.md:
   数据字段、可观测字段、teacher-only 字段、工况组合、数据比例。
 
-TEACHER_SIMULATOR_DESIGN.md:
-  高自由度 teacher simulator 的物理建模细节。
+外部 simulator 项目文档:
+  高自由度车辆物理模型、闭环仿真和数据生成细节，位于 `/home/mi/vibe/research/simulator`。
 
 MODULE_DESIGN.md:
   student model 的组件结构和模块接口。
@@ -1068,6 +1068,6 @@ which x_dot channels VehicleResidualNN may modify
 exact friction ellipse projection differentiable form
 whether M1a or M1b is default after first MuHead ablation
 bound_scale fixed or weakly learnable
-teacher simulator dt and student integration method
+external simulator dt and student integration method
 whether TireResidualNN or steerResidualNN needs local dynamic structure after E1/E2/E3 comparison
 ```

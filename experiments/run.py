@@ -661,7 +661,7 @@ def _augment_report_metrics(dataset_dir: str, report: Dict[str, Any]) -> None:
 def _write_stage_a_report() -> None:
     os.makedirs("output/training/reports", exist_ok=True)
     run_dirs = [
-        "output/training/R000_teacher_simulator_minimal",
+        "output/training/R000_dataset_generation_minimal",
         "output/training/R000a_tire_load_validation",
         "output/training/R000b_road_scenario_generation",
         "output/training/R000c_sensor_actuator_realism",
@@ -747,7 +747,7 @@ def _write_stage_a_report() -> None:
                 **rendered
             )
         )
-    _write_text("output/training/reports/B0_teacher.md", "\n".join(lines) + "\n")
+    _write_text("output/training/reports/B0_data_generation.md", "\n".join(lines) + "\n")
 
 
 def main() -> int:

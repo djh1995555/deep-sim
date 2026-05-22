@@ -32,7 +32,7 @@ logging:
   output_dir: output/training/R004_derived_physical_quantities
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml
 artifact_dataset_subdir: ds1
 primary_metric: derived_quantities_passed
 sanity_check:

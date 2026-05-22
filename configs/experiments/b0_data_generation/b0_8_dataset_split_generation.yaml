@@ -32,6 +32,6 @@ logging:
   output_dir: output/training/R000g_dataset_split_generation
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_v1.yaml
 artifact_dataset_subdir: ds1
 primary_metric: split_roles_covered

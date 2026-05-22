@@ -6,11 +6,11 @@
 
 ## Results by Milestone
 
-### M0: Teacher Simulator Sanity
+### M0: External Simulator Data Sanity
 
 | Run | System | Primary Metric | Value | Status |
 |---|---|---:|---:|---|
-| R000 | high-fidelity teacher simulator v0 | episodes_generated | 8 | DONE |
+| R000 | external simulator data generator | episodes_generated | 8 | DONE |
 | R000a | teacher tire + suspension | sign_checks_passed | 1 | DONE |
 | R000b | teacher road μ map | road_coverage_score | 3 | DONE |
 | R000c | actuator + sensor model | sensor_actuator_checks_passed | 1 | DONE |
@@ -195,7 +195,7 @@ experiments/torch_training.py: best checkpoint, early stopping, LR scheduler, no
 Generated artifacts:
 
 ```text
-output/training/R000_teacher_simulator_minimal/
+output/training/R000_dataset_generation_minimal/
 output/training/R000a_tire_load_validation/
 output/training/R000b_road_scenario_generation/
 output/training/R000c_sensor_actuator_realism/
@@ -282,7 +282,7 @@ output/training/reports/PYTORCH_MATRIX_REPORT.md
 output/training/reports/PYTORCH_MATRIX_REPORT.json
 output/training/queue_state_smoke.json
 output/training/R111_pytorch_base_model_small_training/artifacts/post_rollout_eval/
-output/training/reports/B0_teacher.md
+output/training/reports/B0_data_generation.md
 output/training/reports/B3_baselines.md
 output/training/reports/B3_base_hybrid.md
 output/training/reports/B4_ablations.md

@@ -2,7 +2,7 @@
 
 **日期**：2026-05-21  
 **状态**：implementation spec v0  
-**作用**：定义 teacher simulator、dataset builder、dataloader、student model 共同使用的数据 schema。
+**作用**：定义外部 simulator 数据生成器、dataset builder、dataloader、student model 共同使用的数据 schema。
 
 ## 0. 文档边界
 
@@ -24,7 +24,7 @@ student_derived:
   dataloader 或 student graph 从可见字段在线计算得到，允许作为模块输入。
 
 teacher_aux_label:
-  teacher simulator 真值或内部诊断，只允许用于 auxiliary loss / diagnostics / plotting / oracle。
+  外部 simulator 真值或内部诊断，只允许用于 auxiliary loss / diagnostics / plotting / oracle。
 
 episode_metadata:
   用于 split、audit、tracking、reproducibility，不进入 student input。

@@ -32,5 +32,5 @@ logging:
   output_dir: output/training/R000d_dataset_export_split
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds0_minimal.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds0_minimal.yaml
 primary_metric: leakage_checks_passed

@@ -1,6 +1,6 @@
 run:
   id: R000
-  name: teacher_simulator_minimal
+  name: dataset_generation_minimal
   milestone: M0
   experiment_block: B0.1
   seed: 7
@@ -13,7 +13,7 @@ data:
   val_filter: null
   test_filter: null
 model:
-  system_name: high_fidelity_teacher_simulator_v0
+  system_name: external_simulator_dataset_generator_v0
   student_config: null
   baseline_config: null
 training:
@@ -29,8 +29,8 @@ evaluation:
   metrics: [episodes_generated, schema_checks_passed]
   report_splits: [train]
 logging:
-  output_dir: output/training/R000_teacher_simulator_minimal
+  output_dir: output/training/R000_dataset_generation_minimal
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds0_minimal.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds0_minimal.yaml
 primary_metric: episodes_generated

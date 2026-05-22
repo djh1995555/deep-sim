@@ -13,7 +13,7 @@ data:
   val_filter: null
   test_filter: null
 model:
-  system_name: teacher_simulator_road_mu_map
+  system_name: external_simulator_road_mu_map
   student_config: null
   baseline_config: null
 training:
@@ -32,5 +32,5 @@ logging:
   output_dir: output/training/R000b_road_scenario_generation
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds0_minimal.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds0_minimal.yaml
 primary_metric: road_coverage_score

@@ -1,4 +1,7 @@
 .agents
 __pycache__/
 *.py[cod]
+*.egg-info/
 output/
+data/*
+!data/README.md

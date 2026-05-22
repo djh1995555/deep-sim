@@ -13,7 +13,7 @@ data:
   val_filter: null
   test_filter: null
 model:
-  system_name: teacher_simulator_tire_suspension
+  system_name: external_simulator_tire_suspension
   student_config: null
   baseline_config: null
 training:
@@ -32,5 +32,5 @@ logging:
   output_dir: output/training/R000a_tire_load_validation
   save_checkpoints: false
   save_diagnostics: true
-dataset_config: configs/datasets/ds0_minimal.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds0_minimal.yaml
 primary_metric: sign_checks_passed

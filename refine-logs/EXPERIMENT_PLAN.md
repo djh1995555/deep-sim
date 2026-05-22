@@ -8,11 +8,11 @@
 
 本文档只承担实验设计职责：定义研究问题、阶段路线、实验系统命名、证据链、实验块、训练协议、指标、运行顺序和风险控制。
 
-具体设计细节放在对应 DESIGN 文档中：
+具体设计细节放在对应 DESIGN 文档或外部项目中：
 
 | 内容                                                                                                                                       | 权威文档                                      | EXPERIMENT_PLAN 中只保留      |
 | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------- |
-| Teacher simulator 动力学、自由度、内部真值、sanity gate                                                                                               | `refine-logs/TEACHER_SIMULATOR_DESIGN.md` | B0 / B1 / B2 的实验目标和验收标准   |
+| 外部 simulator 的动力学、自由度、内部真值、sanity gate                                                                                               | `/home/mi/vibe/research/simulator` | B0 / B1 / B2 的实验目标和验收标准   |
 | 数据集、工况、字段 schema、`fixed_vehicle_context`、`nominal_physics_prior`、teacher-only 字段、split                                                   | `refine-logs/DATA_DESIGN.md`              | DS0/DS1/DS2 的实验用途和必须支持的划分 |
 | Student model、physics backbone、Steering、VehicleParamAdapter、FzResidualNN、MuHead、TireResidualNN、VehicleResidualNN、Uncertainty、模块边界与模块启用顺序 | `refine-logs/MODULE_DESIGN.md`            | 实验中使用的系统编号和 ablation 关系   |
 | 具体 run id、状态、优先级                                                                                                                         | `refine-logs/EXPERIMENT_TRACKER.md`       | 里程碑和运行顺序摘要                |
@@ -37,7 +37,7 @@ EXPERIMENT_PLAN.md:
 覆盖范围包括：
 
 ```text
-teacher simulator 生成
+外部 simulator 数据生成
 dataset export / validation
 unit test / smoke test
 student model training / evaluation
@@ -56,7 +56,7 @@ python -m pip install -r requirements.txt
 自动化 runner、远程 backend 和 queue 必须显式激活该环境，或使用：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_dataset_generation_minimal.yaml
 ```
 
 如果 backend 无法激活指定虚拟环境，对应 run 应标记为 `blocked`，不能静默退回系统 Python。具体运行环境 contract 以 `refine-logs/EXPERIMENT_RUN_SPEC.md` 为准。
@@ -87,11 +87,11 @@ conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_
 
 整体分三阶段。
 
-### 4.1 Stage A：Teacher Simulator 阶段
+### 4.1 Stage A：外部 Simulator 数据生成阶段
 
-先构建高保真 teacher simulator，用于第一版方案验证。
+第一版方案验证依赖外部 simulator 生成多车型、多工况 canonical dataset。当前训练工程只维护数据契约、实验配置和训练代码，不维护 simulator 源码。
 
-teacher simulator 的职责：
+外部 simulator 的职责：
 
 - 生成多车、多工况数据；
 - 导出真实车可观测信号；
@@ -99,7 +99,7 @@ teacher simulator 的职责：
 - 提供可控的参数随机化和 held-out configuration；
 - 支持 sim-to-real proxy：train on config A，test/fine-tune on config B。
 
-teacher simulator 的保真度应高于 student model。
+外部 simulator 的保真度应高于 student model。
 
 ### 4.2 Stage B：通用 Base Model 阶段
 
@@ -317,7 +317,7 @@ held-out road 或 held-out vehicle/config 不明显退化
 
 | 编号 | 需要证明的结论 | 为什么重要 | 最小可信证据 | 对应实验 |
 |---|---|---|---|---|
-| C0 | teacher simulator 与数据 schema 可信 | 数据生成器不可信时后续训练无意义 | `DATA_DESIGN.md` 中 DS0 Debug Dataset 和 DS1 V1 Research Dataset 可稳定生成；observable 与 teacher-only 严格隔离；物理 sanity 通过 | B0, B1 |
+| C0 | 外部 simulator 生成的数据与 schema 可信 | 数据生成器不可信时后续训练无意义 | `DATA_DESIGN.md` 中 DS0 Debug Dataset 和 DS1 V1 Research Dataset 可稳定生成；observable 与 teacher-only 严格隔离；物理 sanity 通过 | B0, B1 |
 | C1 | Base hybrid model：`E1 + T1 + F1 + S1 + M1a + V1 + U0` 优于 physics-only 和 black-box | 证明 hybrid 路线值得做 | 在 DS1 多车/多配置/多工况数据上，base 在 1s/5s/10s rollout 上优于 physics-only；长 rollout/约束表现优于 black-box | B3 |
 | C2 | 关键组件设计选择有必要且可归因 | 防止无依据堆模块，并决定最终模型复杂度 | E1/E2/E3、T0/T1/T1-no-proj/T2、F0/F1/F2、S0/S1、M0-fixed/M1a/M1b/M2-oracle、V0/V1/V1-large/V2-small、U0/U1 均完成单项 ablation；收益、失败、uncertainty calibration 和 residual/constraint 变化可解释 | B4 |
 | C3 | 目标车/目标时间段可通过指定模块 fine-tune 适配 | 支撑真实车落地 | `FT1-FT5 × fine-tune data buckets FTD1-FTD5` 中至少有小模块 fine-tune 明显优于 `FT0@FTD0`，并在 held-out target windows 上接近或稳定优于 FT6 | B6 |
@@ -326,10 +326,10 @@ held-out road 或 held-out vehicle/config 不明显退化
 
 ## 8. 实验块
 
-### B0：Teacher Simulator 构建
+### B0：外部 Simulator 数据生成接入
 
-- **目的**：得到可信的高保真数据生成器。
-- **设计文档**：`refine-logs/TEACHER_SIMULATOR_DESIGN.md`。
+- **目的**：确认外部 simulator 能按当前训练工程的数据契约生成可信的 canonical dataset。
+- **外部项目**：`/home/mi/vibe/research/simulator`。
 - **必须完成**：
   - 车辆、轮胎、路面、执行器、传感器模块可运行；
   - observable 与 teacher-only 字段导出完整；
@@ -380,7 +380,7 @@ held-out road 或 held-out vehicle/config 不明显退化
 
 ### B2：Sim-to-Real Proxy Stress Test
 
-- **目的**：在没有实车数据前，先验证 teacher simulator 能生成可复现、可追踪的分布扰动 target windows，为 B6 fine-tune 和后续 sim-to-real 分析提供 proxy 数据。
+- **目的**：在没有实车数据前，先验证外部 simulator 能生成可复现、可追踪的分布扰动 target windows，为 B6 fine-tune 和后续 sim-to-real 分析提供 proxy 数据。
 - **数据**：
   - 基于 DS1 生成扰动版 target windows；
   - 对真实 mass/inertia/cg、suspension/tire 参数、sensor bias、actuator delay 加入 5%-15% 的系统偏移；
@@ -682,7 +682,7 @@ held-out road 或 held-out vehicle/config 不明显退化
 
 - **目的**：验证新车/目标时间段能否通过小 adapter 适配。
 - **数据**：
-  - 第一阶段无真实数据时，用 teacher simulator 构造 proxy；
+  - 第一阶段无真实数据时，用外部 simulator 构造 proxy；
   - 主实验使用 M8 冻结的 final single model checkpoint，即 B4 组件选择和 B5 泛化验证后的模型；
   - 可选补充实验使用原始 Stage B base checkpoint，用于判断 B4/B5 结构选择对 fine-tune 的传递影响；
   - test/fine-tune 使用 DS1 中 held-out vehicle/config/time-window；
@@ -748,7 +748,7 @@ held-out road 或 held-out vehicle/config 不明显退化
 ```text
 DS0 Debug Dataset:
   单车型 / 少量工况
-  用于 teacher simulator、schema、单位、符号和物理 sanity
+  用于外部 simulator 数据、schema、单位、符号和物理 sanity
 
 DS1 V1 Research Dataset:
   第一版正式研究数据
@@ -924,7 +924,7 @@ MoE vs single-expert tire residual gap
 
 ## 12. 运行顺序
 
-1. 执行 B0：构建 high-fidelity teacher simulator。
+1. 执行 B0：接入外部 high-fidelity simulator 数据生成。
 2. 生成第一版多车、多工况数据集。
 3. 做 B1：schema、teacher-only leakage、时间对齐、物理符号 sanity。
 4. 做 B2：sim-to-real proxy stress test。
@@ -942,7 +942,7 @@ MoE vs single-expert tire residual gap
 
 | Milestone | 目标 | 核心 Runs | 决策门槛 |
 |---|---|---|---|
-| M0 | teacher simulator v0 | R000-R000d | 所需场景和导出字段可用 |
+| M0 | 外部 simulator 数据生成接入 | R000-R000d | 所需场景和导出字段可用 |
 | M1 | 数据工况矩阵 | R000e-R000h | 多车、多工况数据集生成，metadata 干净 |
 | M2 | 数据/物理 sanity | R001-R004b | schema、时间、符号、physics-only smoke test 通过 |
 | M3 | Sim-to-real proxy | R004c-R004e | 分布扰动下 fine-tune 恢复能力可解释 |
@@ -957,7 +957,7 @@ MoE vs single-expert tire residual gap
 
 ## 14. 风险与缓解
 
-- **teacher simulator 不可信**
+- **外部 simulator 数据不可信**
   - 先验证 tire force、Fz、load transfer、road μ map、actuator lag、sensor noise。
 - **teacher-only 字段泄漏**
   - schema 级隔离，dataloader 单元测试显式断言。
@@ -982,7 +982,7 @@ MoE vs single-expert tire residual gap
 - [x] 目标是多车 base model + 目标车/目标时间段 fine-tune。
 - [x] `fixed_vehicle_context` 已在 `DATA_DESIGN.md` 中定义。
 - [x] `nominal_physics_prior` 已在 `DATA_DESIGN.md` 中限定为 `mass/I/cg/tau_steer`。
-- [x] teacher-only 字段已在 `DATA_DESIGN.md` / `TEACHER_SIMULATOR_DESIGN.md` 中定义，且禁止作为 student input。
+- [x] teacher-only 字段已在 `DATA_DESIGN.md` 和外部 simulator 项目中定义，且禁止作为 student input。
 - [x] `FT0-FT6` 已在 Stage C 中定义。
 - [x] `Base = E1 + T1 + F1 + S1 + M1a + V1 + U0` 已定义。
 - [x] 单项 ablation 规则已定义。
@@ -991,7 +991,7 @@ MoE vs single-expert tire residual gap
 - [x] Dataset stage `DS0-DS2` 与 fine-tune data bucket `FTD0-FTD5` 已分离命名。
 - [x] B2 sim-to-real proxy stress test 已定义。
 - [x] `VehicleParamAdapter` 与 `VehicleResidualNN` 分工已在 `MODULE_DESIGN.md` 中定义。
-- [ ] teacher simulator v0 已实现。
+- [ ] 外部 simulator 数据生成接入已验证。
 - [ ] 第一版数据集已生成。
 - [ ] B1 sanity 已通过。
 - [ ] physics-only baseline 已实现。

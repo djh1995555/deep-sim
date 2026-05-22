@@ -38,7 +38,7 @@ logging:
   output_dir: output/training/R316_pytorch_finetune_FT3_B1
   save_checkpoints: true
   save_diagnostics: true
-dataset_config: configs/datasets/ds1_proxy_ft_v1.yaml
+dataset_config: /home/mi/vibe/research/simulator/configs/datasets/ds1_proxy_ft_v1.yaml
 dataset_source: existing
 artifact_dataset_subdir: ds1_proxy_ft
 primary_metric: torch_one_step_training_passed

@@ -2,7 +2,7 @@
 
 **日期**：2026-05-19  
 **状态**：current v1  
-**作用**：定义 teacher simulator 数据集的车辆/配置策略、工况矩阵、字段 schema、metadata、划分规则、fine-tune 数据量对照和质量检查。`EXPERIMENT_PLAN.md` 只保留数据设计简介；本文档是当前有效的数据方案。
+**作用**：定义外部 simulator 生成训练数据时必须满足的车辆/配置策略、工况矩阵、字段 schema、metadata、划分规则、fine-tune 数据量对照和质量检查。`EXPERIMENT_PLAN.md` 只保留数据设计简介；本文档是当前有效的数据方案。
 
 ## 1. 设计原则
 
@@ -10,7 +10,7 @@
 
 ```text
 DS0 Debug Dataset:
-  目标是检查 teacher simulator、schema、单位、符号和物理 sanity
+  目标是检查外部 simulator 生成数据、schema、单位、符号和物理 sanity
 
 DS1 V1 Research Dataset:
   目标是训练通用 base model
@@ -29,7 +29,7 @@ observable:
   允许作为 student input
 
 teacher_only:
-  高自由度 teacher simulator 内部量
+  高自由度 simulator 内部量
   只能用于 loss / diagnostics
   禁止进入 student input
 ```
@@ -41,7 +41,7 @@ teacher_only:
 用途：
 
 ```text
-teacher simulator smoke test
+external simulator data-generation smoke test
 schema / metadata 检查
 坐标系、单位、符号检查
 physics-only rollout sanity
@@ -92,7 +92,7 @@ vehicle_B_geometry_variant
 vehicle_C_drive_layout_variant
 ```
 
-这里的“多车”可以先由 teacher simulator 参数化生成，不要求第一版就来自多台真实车。
+这里的“多车”可以先由外部 simulator 参数化生成，不要求第一版就来自多台真实车。
 
 建议规模：
 
@@ -216,11 +216,11 @@ nominal_physics_prior:
 road μ map
 ```
 
-这些量在 teacher simulator 内部随机化，或在真实车阶段表现为隐藏状态；student 只能通过可观测历史、nominal prior、adapter 和 residual modules 适配。
+这些量在外部 simulator 内部随机化，或在真实车阶段表现为隐藏状态；student 只能通过可观测历史、nominal prior、adapter 和 residual modules 适配。
 
 ### 3.2 Teacher 内部随机化参数
 
-teacher simulator 内部必须设置但不直接暴露给 student 的参数：
+外部 simulator 内部必须设置但不直接暴露给 student 的参数：
 
 ```text
 真实 mass

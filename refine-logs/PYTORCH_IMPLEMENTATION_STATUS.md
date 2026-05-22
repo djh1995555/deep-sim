@@ -103,7 +103,7 @@ Implemented files:
 | `configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml` | Model/component variant forward smoke for E/T/F/S/M/V and black-box variants. |
 | `configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml` | FT0-FT6 fine-tune adapter smoke over two data-size buckets. |
 | `configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml` | U1 K=3 deep ensemble smoke. |
-| `configs/datasets/ds2_extreme_v0.yaml` | DS2 extreme handling scaffold data config. |
+| `/home/mi/vibe/research/simulator/configs/datasets/ds2_extreme_v0.yaml` | DS2 extreme handling scaffold data config. |
 | `configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml` | DS2 emergency/fishhook/lane-change dataset smoke. |
 | `configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml` | DS2 T1/T2/T3-MoE tire residual forward smoke. |
 | `experiments/torch_config_matrix.py` | Generates full PyTorch ablation and fine-tune config matrix under `configs/experiments/`. |
@@ -258,7 +258,7 @@ conda run -n deep-sim python -m experiments.experiment_queue --configs configs/e
 conda run -n deep-sim python -m experiments.matrix_report
 conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_experiment_engineering tests.test_torch_training
-conda run -n deep-sim python -m unittest tests.test_teacher_simulator tests.test_student_model
+conda run -n deep-sim python -m unittest tests.test_student_model
 git diff --check
 ```
 
