@@ -15,7 +15,7 @@ from simulator.controller import (
     PIDLQRControllerConfig,
 )
 from simulator.reference import build_reference_provider
-from simulator.vehicle_model.config import load_teacher_config, load_yaml
+from simulator.vehicle_model.config import load_dataset_config, load_yaml
 from simulator.vehicle_model.export import export_dataset
 from simulator.vehicle_model.model import VehicleModel, VehicleStepResult
 from simulator.vehicle_model.scenario import (
@@ -34,7 +34,7 @@ from simulator.visualizer import DebugTrace
 
 @dataclass
 class ClosedLoopSimulationRequest:
-    teacher_config: str = "configs/teacher/ds0_minimal.yaml"
+    dataset_config: str = "configs/datasets/ds0_minimal.yaml"
     out_dir: Optional[str] = None
     scenario_id: Optional[str] = None
     dataset_id: Optional[str] = None
@@ -72,9 +72,12 @@ class ClosedLoopSimulationRequest:
     lqr_max_sw_angle_rad: float = 1.2
     debug_stride: int = 1
     write_debug_trace: bool = True
+    write_debug_html: bool = True
+    debug_html_signals: Optional[Dict[str, Sequence[str]]] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ClosedLoopSimulationRequest":
+        data = _normalize_request_dict(data)
         valid = {field.name for field in fields(cls)}
         unknown = sorted(set(data) - valid)
         if unknown:
@@ -103,7 +106,7 @@ class SimulatorApp:
         controller: Optional[Controller] = None,
     ) -> None:
         self.request = request
-        self.config = load_teacher_config(request.teacher_config)
+        self.config = load_dataset_config(request.dataset_config)
         if request.duration_s is not None:
             self.config.duration_s = float(request.duration_s)
         if request.dt_internal is not None:
@@ -213,16 +216,37 @@ class SimulatorApp:
             }
         )
         _write_json(os.path.join(out_dir, "simulation_request.json"), request_payload)
+        debug_trace_json_path = os.path.join(out_dir, "debug_trace.json")
+        debug_trace_csv_path = os.path.join(out_dir, "debug_trace.csv")
+        debug_report_path = os.path.join(out_dir, "debug_report.html")
         if self.request.write_debug_trace:
-            self.debug_trace.write_json(os.path.join(out_dir, "debug_trace.json"))
-            self.debug_trace.write_csv(os.path.join(out_dir, "debug_trace.csv"))
+            self.debug_trace.write_json(debug_trace_json_path)
+            self.debug_trace.write_csv(debug_trace_csv_path)
+            if self.request.write_debug_html:
+                self.debug_trace.write_html(
+                    debug_report_path,
+                    panels=self.request.debug_html_signals,
+                    title="Simulator Debug Report - %s" % self.scenario.scenario_id,
+                )
         summary = _simulation_summary(out_dir, dataset_id, manifest, episode)
+        if self.request.write_debug_trace:
+            summary["debug_trace_json_path"] = debug_trace_json_path
+            summary["debug_trace_csv_path"] = debug_trace_csv_path
+            if self.request.write_debug_html:
+                summary["debug_report_path"] = debug_report_path
         _write_json(os.path.join(out_dir, "simulation_summary.json"), summary)
         return summary
 
 
 def load_simulation_request(path: str) -> ClosedLoopSimulationRequest:
     return ClosedLoopSimulationRequest.from_dict(load_yaml(path))
+
+
+def _normalize_request_dict(data: Dict[str, Any]) -> Dict[str, Any]:
+    normalized = dict(data)
+    if "teacher_config" in normalized and "dataset_config" not in normalized:
+        normalized["dataset_config"] = normalized.pop("teacher_config")
+    return normalized
 
 
 def run_closed_loop_simulation(
@@ -356,7 +380,7 @@ def _default_scenario_id(request: ClosedLoopSimulationRequest, road: RoadProfile
 
 
 def _default_out_dir(scenario_id: str) -> str:
-    return os.path.join("runs", "SIM001_%s" % _safe_stem(scenario_id))
+    return os.path.join("output", "simulation", "SIM001_%s" % _safe_stem(scenario_id))
 
 
 def _safe_stem(value: str) -> str:

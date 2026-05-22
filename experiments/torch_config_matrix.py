@@ -7,6 +7,17 @@ from typing import Any, Dict, List
 from simulator.vehicle_model.config import write_yaml
 
 
+TRAINING_OUTPUT_ROOT = "output/training"
+CONFIG_ROOT = "configs/experiments"
+MATRIX_MANIFEST = os.path.join(CONFIG_ROOT, "matrix", "MANIFEST.json")
+BASE_MODEL_CHECKPOINT = os.path.join(
+    TRAINING_OUTPUT_ROOT,
+    "R111_pytorch_base_model_small_training",
+    "checkpoints",
+    "base_model_small.pt",
+)
+
+
 BASE_MODEL_CONFIG = {
     "hidden_dim": 64,
     "history_len": 8,
@@ -68,7 +79,7 @@ def _base_config(
             "save_checkpoints": True,
             "save_diagnostics": True,
         },
-        "teacher_config": "configs/teacher/ds1_v1.yaml",
+        "dataset_config": "configs/datasets/ds1_v1.yaml",
         "dataset_source": "existing",
         "artifact_dataset_subdir": "ds1",
         "primary_metric": "torch_one_step_training_passed",
@@ -127,11 +138,15 @@ def _ablation_specs() -> List[Dict[str, Any]]:
             {
                 "run_id": run_id,
                 "name": "pytorch_ablation_%s" % name,
-                "path": "configs/torch_matrix/%s.yaml" % run_id,
+                "path": os.path.join(
+                    CONFIG_ROOT,
+                    "ablation",
+                    "pytorch_ablation_%s.yaml" % name,
+                ),
                 "config": _base_config(
                     run_id,
                     "pytorch_ablation_%s" % name,
-                    "runs/%s_pytorch_ablation_%s" % (run_id, name),
+                    os.path.join(TRAINING_OUTPUT_ROOT, "%s_pytorch_ablation_%s" % (run_id, name)),
                     "one_step_train",
                     model_config,
                 ),
@@ -140,7 +155,7 @@ def _ablation_specs() -> List[Dict[str, Any]]:
     ensemble = _base_config(
         "R216",
         "pytorch_ablation_uncertainty_U1_ensemble",
-        "runs/R216_pytorch_ablation_uncertainty_U1_ensemble",
+        os.path.join(TRAINING_OUTPUT_ROOT, "R216_pytorch_ablation_uncertainty_U1_ensemble"),
         "ensemble_train",
         deepcopy(BASE_MODEL_CONFIG),
     )
@@ -158,7 +173,11 @@ def _ablation_specs() -> List[Dict[str, Any]]:
         {
             "run_id": "R216",
             "name": "pytorch_ablation_uncertainty_U1_ensemble",
-            "path": "configs/torch_matrix/R216.yaml",
+            "path": os.path.join(
+                CONFIG_ROOT,
+                "ablation",
+                "pytorch_ablation_uncertainty_U1_ensemble.yaml",
+            ),
             "config": ensemble,
         }
     )
@@ -182,7 +201,7 @@ def _fine_tune_specs() -> List[Dict[str, Any]]:
             cfg = _base_config(
                 run_id,
                 "pytorch_finetune_%s_B%d" % (mode, bucket_index),
-                "runs/%s_pytorch_finetune_%s_B%d" % (run_id, mode, bucket_index),
+                os.path.join(TRAINING_OUTPUT_ROOT, "%s_pytorch_finetune_%s_B%d" % (run_id, mode, bucket_index)),
                 "one_step_train",
                 deepcopy(BASE_MODEL_CONFIG),
             )
@@ -194,7 +213,7 @@ def _fine_tune_specs() -> List[Dict[str, Any]]:
             cfg["data"]["train_filter"] = "fine-tune"
             cfg["data"]["val_filter"] = "test-window"
             cfg["data"]["test_filter"] = "test-window"
-            cfg["teacher_config"] = "configs/teacher/ds1_proxy_ft_v1.yaml"
+            cfg["dataset_config"] = "configs/datasets/ds1_proxy_ft_v1.yaml"
             cfg["artifact_dataset_subdir"] = "ds1_proxy_ft"
             cfg["torch_training"].update(
                 {
@@ -204,7 +223,7 @@ def _fine_tune_specs() -> List[Dict[str, Any]]:
                     "val_target_window_role": "target_test",
                     "fine_tune_mode": mode,
                     "fine_tune_buckets": bucket_values,
-                    "resume_from": "runs/R111_pytorch_base_model_small_training/checkpoints/base_model_small.pt",
+                    "resume_from": BASE_MODEL_CHECKPOINT,
                     "max_steps": 0 if mode == "FT0" else 200,
                     "success_loss_ratio": 1.1,
                 }
@@ -213,7 +232,11 @@ def _fine_tune_specs() -> List[Dict[str, Any]]:
                 {
                     "run_id": run_id,
                     "name": cfg["run"]["name"],
-                    "path": "configs/torch_matrix/%s.yaml" % run_id,
+                    "path": os.path.join(
+                        CONFIG_ROOT,
+                        "finetune",
+                        "%s.yaml" % cfg["run"]["name"],
+                    ),
                     "config": cfg,
                 }
             )
@@ -238,13 +261,14 @@ def main() -> int:
     args = parser.parse_args()
     matrix = build_matrix()
     specs = matrix.pop("_specs")
-    os.makedirs("configs/torch_matrix", exist_ok=True)
     if args.write:
         for item in specs:
+            os.makedirs(os.path.dirname(item["path"]), exist_ok=True)
             write_yaml(item["path"], item["config"])
-    with open("configs/torch_matrix/MANIFEST.json", "w", encoding="utf-8") as handle:
+    os.makedirs(os.path.dirname(MATRIX_MANIFEST), exist_ok=True)
+    with open(MATRIX_MANIFEST, "w", encoding="utf-8") as handle:
         json.dump(matrix, handle, indent=2, sort_keys=True)
-    print("wrote configs/torch_matrix/MANIFEST.json")
+    print("wrote %s" % MATRIX_MANIFEST)
     return 0
 
 

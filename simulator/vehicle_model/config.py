@@ -143,3 +143,7 @@ def config_from_dict(data: Dict[str, Any]) -> TeacherSimConfig:
 
 def load_teacher_config(path: str) -> TeacherSimConfig:
     return config_from_dict(load_yaml(path))
+
+
+def load_dataset_config(path: str) -> TeacherSimConfig:
+    return load_teacher_config(path)

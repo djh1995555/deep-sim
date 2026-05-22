@@ -9,7 +9,7 @@
 Reviewed files:
 
 ```text
-teacher_simulator/
+simulator/
 experiments/run.py
 experiments/sanity.py
 experiments/baselines.py
@@ -17,112 +17,112 @@ experiments/hybrid.py
 experiments/ablation_report.py
 experiments/cross_generalization_report.py
 experiments/fine_tune.py
-configs/teacher/ds0_minimal.yaml
-configs/runs/R000*.yaml
-configs/runs/R001.yaml
-configs/runs/R002.yaml
-configs/runs/R003.yaml
-configs/runs/R004.yaml
-configs/runs/R004a.yaml
-configs/runs/R004b.yaml
-configs/runs/R004c.yaml
-configs/runs/R004d.yaml
-configs/runs/R004e.yaml
-configs/runs/R005.yaml
-configs/runs/R006.yaml
-configs/runs/R007.yaml
-configs/runs/R008.yaml
-configs/runs/R009.yaml
-configs/runs/R010.yaml
-configs/runs/R011.yaml
-configs/runs/R012.yaml
-configs/runs/R013.yaml
-configs/runs/R014.yaml
-configs/runs/R015.yaml
-configs/runs/R016.yaml
-configs/runs/R017.yaml
-configs/runs/R018.yaml
-configs/runs/R019.yaml
-configs/runs/R020.yaml
-configs/runs/R021.yaml
-configs/runs/R022.yaml
-configs/runs/R023.yaml
-configs/runs/R024.yaml
-configs/runs/R025.yaml
-configs/runs/R026.yaml
-configs/runs/R027.yaml
-configs/runs/R027a.yaml
-configs/runs/R027b.yaml
-configs/runs/R027c.yaml
-configs/runs/R028.yaml
-configs/runs/R029.yaml
-configs/runs/R030.yaml
-configs/runs/R031.yaml
-configs/runs/R032.yaml
-configs/runs/R033.yaml
-configs/runs/R034.yaml
-configs/runs/R035.yaml
-configs/runs/R036.yaml
-configs/runs/R037.yaml
-configs/runs/R038.yaml
-configs/runs/R039.yaml
-configs/runs/R040.yaml
-configs/runs/R041.yaml
-configs/runs/R042.yaml
-configs/runs/R043.yaml
-configs/runs/R044.yaml
-configs/runs/R045.yaml
-configs/teacher/ds1_proxy_v1.yaml
-configs/teacher/ds1_proxy_ft_v1.yaml
-tests/test_teacher_simulator.py
-reports/B0_teacher.md
-reports/B3_baselines.md
-reports/B3_base_hybrid.md
-reports/B4_ablations.md
-reports/B5_cross_generalization.md
-reports/B6_fine_tune.md
-runs/R000*/summary.json
-runs/R001*/summary.json
-runs/R002*/summary.json
-runs/R003*/summary.json
-runs/R004*/summary.json
-runs/R009*/summary.json
-runs/R010*/summary.json
-runs/R011*/summary.json
-runs/R012*/summary.json
-runs/R013*/summary.json
-runs/R014*/summary.json
-runs/R015*/summary.json
-runs/R016*/summary.json
-runs/R017*/summary.json
-runs/R018*/summary.json
-runs/R019*/summary.json
-runs/R020*/summary.json
-runs/R021*/summary.json
-runs/R022*/summary.json
-runs/R023*/summary.json
-runs/R024*/summary.json
-runs/R025*/summary.json
-runs/R026*/summary.json
-runs/R027*/summary.json
-runs/R028*/summary.json
-runs/R029*/summary.json
-runs/R030*/summary.json
-runs/R031*/summary.json
-runs/R032*/summary.json
-runs/R033*/summary.json
-runs/R034*/summary.json
-runs/R035*/summary.json
-runs/R036*/summary.json
-runs/R037*/summary.json
-runs/R038*/summary.json
-runs/R039*/summary.json
-runs/R040*/summary.json
-runs/R041*/summary.json
-runs/R042*/summary.json
-runs/R043*/summary.json
-runs/R044*/summary.json
-runs/R045*/summary.json
+configs/datasets/ds0_minimal.yaml
+configs/experiments/b0_data_generation/*.yaml
+configs/experiments/b1_sanity/b1_1_schema_field_role_check.yaml
+configs/experiments/b1_sanity/b1_2_teacher_physical_consistency.yaml
+configs/experiments/b1_sanity/b1_3_time_dt_alignment.yaml
+configs/experiments/b1_sanity/b1_4_derived_physical_quantities.yaml
+configs/experiments/b1_sanity/b1_5_tiny_learnability.yaml
+configs/experiments/b1_sanity/b1_6_physics_rollout_smoke.yaml
+configs/experiments/b2_proxy/b2_1_proxy_perturbation_profiles.yaml
+configs/experiments/b2_proxy/b2_2_proxy_target_windows.yaml
+configs/experiments/b2_proxy/b2_3_proxy_distribution_sanity.yaml
+configs/experiments/b3_baselines_base/b3_1_physics_only_baseline.yaml
+configs/experiments/b3_baselines_base/b3_2_black_box_baseline.yaml
+configs/experiments/b3_baselines_base/b3_3_baseline_fairness_audit.yaml
+configs/experiments/b3_baselines_base/b3_4_baseline_rollout_report.yaml
+configs/experiments/b3_baselines_base/b3_5_base_hybrid_training.yaml
+configs/experiments/b3_baselines_base/b3_6_base_seen_config_eval.yaml
+configs/experiments/b3_baselines_base/b3_7_base_held_out_road_eval.yaml
+configs/experiments/b3_baselines_base/b3_8_base_held_out_vehicle_eval.yaml
+configs/experiments/b3_baselines_base/b3_9_base_residual_constraint_audit.yaml
+configs/experiments/b3_baselines_base/b3_10_base_seed_replication.yaml
+configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t0.yaml
+configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t1.yaml
+configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t1_no_proj.yaml
+configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t2.yaml
+configs/experiments/b4_ablation_scaffold/b4_2_ablation_fz_f0.yaml
+configs/experiments/b4_ablation_scaffold/b4_2_ablation_fz_f1.yaml
+configs/experiments/b4_ablation_scaffold/b4_2_ablation_fz_f2.yaml
+configs/experiments/b4_ablation_scaffold/b4_3_ablation_steering_s0.yaml
+configs/experiments/b4_ablation_scaffold/b4_3_ablation_steering_s1.yaml
+configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m0_fixed.yaml
+configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m1a.yaml
+configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m1b.yaml
+configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m2_oracle.yaml
+configs/experiments/b4_ablation_scaffold/b4_5_ablation_encoder_e1.yaml
+configs/experiments/b4_ablation_scaffold/b4_5_ablation_encoder_e2.yaml
+configs/experiments/b4_ablation_scaffold/b4_5_ablation_encoder_e3.yaml
+configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v0.yaml
+configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v1.yaml
+configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v1_large.yaml
+configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v2_small.yaml
+configs/experiments/b4_ablation_scaffold/b4_6_ablation_uncertainty_u0.yaml
+configs/experiments/b4_ablation_scaffold/b4_6_ablation_uncertainty_u1.yaml
+configs/experiments/b5_generalization/b5_1_cross_generalization_base.yaml
+configs/experiments/b5_generalization/b5_2_cross_generalization_selected_single.yaml
+configs/experiments/b5_generalization/b5_3_cross_generalization_selected_ensemble.yaml
+configs/experiments/b5_generalization/b5_4_final_single_model_freeze.yaml
+configs/experiments/b6_finetune_scaffold/b6_1_finetune_ft0.yaml
+configs/experiments/b6_finetune_scaffold/b6_2_finetune_ft1_vehicle_param_adapter.yaml
+configs/experiments/b6_finetune_scaffold/b6_3_finetune_ft2_mu_head.yaml
+configs/experiments/b6_finetune_scaffold/b6_4_finetune_ft3_fz_residual.yaml
+configs/experiments/b6_finetune_scaffold/b6_5_finetune_ft4_tire_residual.yaml
+configs/experiments/b6_finetune_scaffold/b6_6_finetune_ft5_steering_residual.yaml
+configs/experiments/b6_finetune_scaffold/b6_7_finetune_ft6_full_model.yaml
+configs/experiments/b6_finetune_scaffold/b6_8_finetune_summary.yaml
+configs/datasets/ds1_proxy_v1.yaml
+configs/datasets/ds1_proxy_ft_v1.yaml
+tests/test_simulator.py
+output/training/reports/B0_teacher.md
+output/training/reports/B3_baselines.md
+output/training/reports/B3_base_hybrid.md
+output/training/reports/B4_ablations.md
+output/training/reports/B5_cross_generalization.md
+output/training/reports/B6_fine_tune.md
+output/training/R000*/summary.json
+output/training/R001*/summary.json
+output/training/R002*/summary.json
+output/training/R003*/summary.json
+output/training/R004*/summary.json
+output/training/R009*/summary.json
+output/training/R010*/summary.json
+output/training/R011*/summary.json
+output/training/R012*/summary.json
+output/training/R013*/summary.json
+output/training/R014*/summary.json
+output/training/R015*/summary.json
+output/training/R016*/summary.json
+output/training/R017*/summary.json
+output/training/R018*/summary.json
+output/training/R019*/summary.json
+output/training/R020*/summary.json
+output/training/R021*/summary.json
+output/training/R022*/summary.json
+output/training/R023*/summary.json
+output/training/R024*/summary.json
+output/training/R025*/summary.json
+output/training/R026*/summary.json
+output/training/R027*/summary.json
+output/training/R028*/summary.json
+output/training/R029*/summary.json
+output/training/R030*/summary.json
+output/training/R031*/summary.json
+output/training/R032*/summary.json
+output/training/R033*/summary.json
+output/training/R034*/summary.json
+output/training/R035*/summary.json
+output/training/R036*/summary.json
+output/training/R037*/summary.json
+output/training/R038*/summary.json
+output/training/R039*/summary.json
+output/training/R040*/summary.json
+output/training/R041*/summary.json
+output/training/R042*/summary.json
+output/training/R043*/summary.json
+output/training/R044*/summary.json
+output/training/R045*/summary.json
 ```
 
 The external review tool was invoked for the M5 and M6 updates, but it timed out before returning actionable findings both times. Per `experiment-bridge` fallback, this file records the local checklist review.
@@ -169,14 +169,14 @@ The implemented scope is intentionally minimal and covers DS0/DS1/proxy scaffold
 14. Strong ridge regularization (`ridge_lambda = 10000.0`) is required for the scaffold to avoid OOD residual overcorrection. This is a useful warning for the later PyTorch implementation: residual capacity and uncertainty/gating must be controlled before making generalization claims.
 15. `R014` seed replication uses bootstrap resampling around a deterministic ridge solver. This is enough for plumbing, but final seed replication should use independent neural training seeds.
 16. `R015-R033` ablations are proxy feature/bound/target-mode changes inside the numpy scaffold. They validate run organization, single-factor switching, metrics, and reports; they should not be cited as final evidence for selecting actual neural modules.
-17. `F2` and `M2-oracle` intentionally use teacher-only information for simulator-only auxiliary/oracle comparison. They are flagged in `reports/B4_ablations.md` and excluded from deployable family-winner interpretation.
+17. `F2` and `M2-oracle` intentionally use teacher-only information for simulator-only auxiliary/oracle comparison. They are flagged in `output/training/reports/B4_ablations.md` and excluded from deployable family-winner interpretation.
 18. `T1` and `T1-no-proj` have identical RMSE in the scaffold because projection is represented as a violation proxy rather than a full force projection layer. The final PyTorch force path must implement true friction ellipse projection before making the projection claim.
 19. `U1` currently reports bootstrap/seed uncertainty proxy metrics, not final NLL/coverage/sharpness calibration. Full uncertainty evidence still requires explicit predictive distribution evaluation.
 20. `R034-R036` separate scaffold completion from claim support. The selected final single scaffold beats physics-only on held-out vehicle/config, but does not beat the black-box held-out-vehicle baseline. The final PyTorch experiments must treat this as an open risk, not as a supported claim.
 21. `R037` writes `final_single_model_scaffold.json` as a checkpoint descriptor only. It contains selected variant metadata and metrics, not trained neural weights.
 22. `R038-R045` implement fine-tune as ridge adapter corrections over the frozen scaffold-selected hybrid. This validates FT matrix wiring and target-window evaluation, not final adapter learning dynamics.
 23. `FT6` performs poorly in the scaffold, which is a useful overcorrection signal but not a final statement about full-model fine-tuning.
-24. The B6 proxy fine-tune dataset uses `configs/teacher/ds1_proxy_ft_v1.yaml` with FTD1-FTD5 coverage. This is separate from the earlier M3 proxy dataset, so M3 historical counts remain unchanged.
+24. The B6 proxy fine-tune dataset uses `configs/datasets/ds1_proxy_ft_v1.yaml` with FTD1-FTD5 coverage. This is separate from the earlier M3 proxy dataset, so M3 historical counts remain unchanged.
 
 ## Checklist
 
@@ -246,18 +246,18 @@ Reviewed files:
 ```text
 experiments/torch_training.py
 experiments/run.py
-configs/runs/R100.yaml
-configs/runs/R101.yaml
-configs/runs/R102.yaml
-configs/runs/R103.yaml
-configs/runs/R104.yaml
-configs/runs/R105.yaml
-configs/runs/R106.yaml
-configs/runs/R107.yaml
-configs/runs/R108.yaml
-configs/runs/R109.yaml
-configs/runs/R110.yaml
-configs/runs/R111.yaml
+configs/experiments/p3_smoke/p3_1_pytorch_data_loader_smoke.yaml
+configs/experiments/p3_smoke/p3_2_pytorch_forward_loss_smoke.yaml
+configs/experiments/p3_smoke/p3_3_pytorch_tiny_overfit.yaml
+configs/experiments/p3_smoke/p3_4_pytorch_rollout_smoke.yaml
+configs/experiments/p3_smoke/p3_5_pytorch_checkpoint_smoke.yaml
+configs/experiments/p4_gpu_smoke/p4_1_pytorch_gpu_forward_smoke.yaml
+configs/experiments/p4_gpu_smoke/p4_2_pytorch_gpu_tiny_overfit.yaml
+configs/experiments/p5_training_dev/p5_1_pytorch_one_step_training.yaml
+configs/experiments/p5_training_dev/p5_2_pytorch_rollout_eval.yaml
+configs/experiments/p5_training_dev/p5_3_pytorch_resume_eval_smoke.yaml
+configs/experiments/p5_training_dev/p5_4_pytorch_black_box_tcn_baseline.yaml
+configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml
 tests/test_torch_training.py
 refine-logs/PYTORCH_IMPLEMENTATION_STATUS.md
 ```
@@ -310,14 +310,14 @@ experiments/torch_training.py
 experiments/torch_config_matrix.py
 experiments/torch_dev_report.py
 experiments/run.py
-configs/runs/R112.yaml
-configs/runs/R113.yaml
-configs/runs/R114.yaml
-configs/runs/R115.yaml
-configs/torch_matrix/MANIFEST.json
+configs/experiments/p6_model_dev/p6_2_pytorch_fair_small_comparison.yaml
+configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml
+configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml
+configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml
+configs/experiments/matrix/MANIFEST.json
 tests/test_student_model.py
 tests/test_torch_training.py
-reports/PYTORCH_DEV_REPORT.md
+output/training/reports/PYTORCH_DEV_REPORT.md
 ```
 
 Checklist:
@@ -332,7 +332,7 @@ Checklist:
 | R112 trains hybrid/direct TCN/direct GRU/direct N-BEATS with matched small budget and evaluates rollout for each | pass |
 | R114 verifies FT0 has zero trainable parameters and FT1-FT6 expose the intended trainable modules | pass |
 | R115 trains K=3 ensemble members and reports predictive variance | pass |
-| Generated `configs/torch_matrix` contains trainable ablation and fine-tune run configs | pass |
+| Generated `configs/experiments/ablation`, `configs/experiments/finetune`, and `configs/experiments/matrix/MANIFEST.json` contain trainable ablation and fine-tune run configs | pass |
 | Unknown generated run ids now use available torch pass metrics instead of falling back to schema-only success | pass |
 
 Residual risk:
@@ -355,9 +355,9 @@ experiments/experiment_queue.py
 experiments/matrix_report.py
 experiments/real_data_adapter.py
 tests/test_experiment_engineering.py
-reports/PYTORCH_MATRIX_REPORT.md
-runs/queue_state_smoke.json
-runs/R111_pytorch_base_model_small_training/artifacts/post_rollout_eval/summary.json
+output/training/reports/PYTORCH_MATRIX_REPORT.md
+output/training/queue_state_smoke.json
+output/training/R111_pytorch_base_model_small_training/artifacts/post_rollout_eval/summary.json
 ```
 
 Checklist:
@@ -395,13 +395,13 @@ Reviewed files:
 teacher_simulator/scenario.py
 teacher_simulator/generate.py
 student_model/torch_model.py
-configs/teacher/ds2_extreme_v0.yaml
-configs/runs/R046.yaml
-configs/runs/R047.yaml
-configs/runs/R113.yaml
+configs/datasets/ds2_extreme_v0.yaml
+configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
+configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
+configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml
 tests/test_teacher_simulator.py
 tests/test_student_model.py
-reports/B7_extreme_moe.md
+output/training/reports/B7_extreme_moe.md
 ```
 
 Checklist:
@@ -428,21 +428,21 @@ R046/R047 are development smokes only. They make DS2 and T3-MoE executable, but 
 ```bash
 conda run -n deep-sim python -m compileall teacher_simulator experiments tests
 conda run -n deep-sim python -m unittest tests.test_teacher_simulator
-for cfg in configs/runs/R000.yaml configs/runs/R000a.yaml configs/runs/R000b.yaml configs/runs/R000c.yaml configs/runs/R000d.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
-for cfg in configs/runs/R000e.yaml configs/runs/R000f.yaml configs/runs/R000g.yaml configs/runs/R000h.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
-for cfg in configs/runs/R001.yaml configs/runs/R002.yaml configs/runs/R003.yaml configs/runs/R004.yaml configs/runs/R004a.yaml configs/runs/R004b.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
-for cfg in configs/runs/R004c.yaml configs/runs/R004d.yaml configs/runs/R004e.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
-for cfg in configs/runs/R005.yaml configs/runs/R006.yaml configs/runs/R007.yaml configs/runs/R008.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
-for cfg in configs/runs/R009.yaml configs/runs/R010.yaml configs/runs/R011.yaml configs/runs/R012.yaml configs/runs/R013.yaml configs/runs/R014.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
-for cfg in configs/runs/R015.yaml configs/runs/R016.yaml configs/runs/R017.yaml configs/runs/R018.yaml configs/runs/R019.yaml configs/runs/R020.yaml configs/runs/R021.yaml configs/runs/R022.yaml configs/runs/R023.yaml configs/runs/R024.yaml configs/runs/R025.yaml configs/runs/R026.yaml configs/runs/R027.yaml configs/runs/R027a.yaml configs/runs/R027b.yaml configs/runs/R027c.yaml configs/runs/R028.yaml configs/runs/R029.yaml configs/runs/R030.yaml configs/runs/R031.yaml configs/runs/R032.yaml configs/runs/R033.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml configs/experiments/b0_data_generation/b0_2_tire_load_validation.yaml configs/experiments/b0_data_generation/b0_3_road_scenario_generation.yaml configs/experiments/b0_data_generation/b0_4_sensor_actuator_realism.yaml configs/experiments/b0_data_generation/b0_5_dataset_export_split.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b0_data_generation/b0_6_scenario_matrix_v1.yaml configs/experiments/b0_data_generation/b0_7_vehicle_parameter_randomization.yaml configs/experiments/b0_data_generation/b0_8_dataset_split_generation.yaml configs/experiments/b0_data_generation/b0_9_dataset_qa.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b1_sanity/b1_1_schema_field_role_check.yaml configs/experiments/b1_sanity/b1_2_teacher_physical_consistency.yaml configs/experiments/b1_sanity/b1_3_time_dt_alignment.yaml configs/experiments/b1_sanity/b1_4_derived_physical_quantities.yaml configs/experiments/b1_sanity/b1_5_tiny_learnability.yaml configs/experiments/b1_sanity/b1_6_physics_rollout_smoke.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b2_proxy/b2_1_proxy_perturbation_profiles.yaml configs/experiments/b2_proxy/b2_2_proxy_target_windows.yaml configs/experiments/b2_proxy/b2_3_proxy_distribution_sanity.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b3_baselines_base/b3_1_physics_only_baseline.yaml configs/experiments/b3_baselines_base/b3_2_black_box_baseline.yaml configs/experiments/b3_baselines_base/b3_3_baseline_fairness_audit.yaml configs/experiments/b3_baselines_base/b3_4_baseline_rollout_report.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b3_baselines_base/b3_5_base_hybrid_training.yaml configs/experiments/b3_baselines_base/b3_6_base_seen_config_eval.yaml configs/experiments/b3_baselines_base/b3_7_base_held_out_road_eval.yaml configs/experiments/b3_baselines_base/b3_8_base_held_out_vehicle_eval.yaml configs/experiments/b3_baselines_base/b3_9_base_residual_constraint_audit.yaml configs/experiments/b3_baselines_base/b3_10_base_seed_replication.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t0.yaml configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t1.yaml configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t1_no_proj.yaml configs/experiments/b4_ablation_scaffold/b4_1_ablation_tire_t2.yaml configs/experiments/b4_ablation_scaffold/b4_2_ablation_fz_f0.yaml configs/experiments/b4_ablation_scaffold/b4_2_ablation_fz_f1.yaml configs/experiments/b4_ablation_scaffold/b4_2_ablation_fz_f2.yaml configs/experiments/b4_ablation_scaffold/b4_3_ablation_steering_s0.yaml configs/experiments/b4_ablation_scaffold/b4_3_ablation_steering_s1.yaml configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m0_fixed.yaml configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m1a.yaml configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m1b.yaml configs/experiments/b4_ablation_scaffold/b4_4_ablation_mu_m2_oracle.yaml configs/experiments/b4_ablation_scaffold/b4_5_ablation_encoder_e1.yaml configs/experiments/b4_ablation_scaffold/b4_5_ablation_encoder_e2.yaml configs/experiments/b4_ablation_scaffold/b4_5_ablation_encoder_e3.yaml configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v0.yaml configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v1.yaml configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v1_large.yaml configs/experiments/b4_ablation_scaffold/b4_7_ablation_vehicle_v2_small.yaml configs/experiments/b4_ablation_scaffold/b4_6_ablation_uncertainty_u0.yaml configs/experiments/b4_ablation_scaffold/b4_6_ablation_uncertainty_u1.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
 conda run -n deep-sim python -m experiments.ablation_report
-for cfg in configs/runs/R034.yaml configs/runs/R035.yaml configs/runs/R036.yaml configs/runs/R037.yaml configs/runs/R038.yaml configs/runs/R039.yaml configs/runs/R040.yaml configs/runs/R041.yaml configs/runs/R042.yaml configs/runs/R043.yaml configs/runs/R044.yaml configs/runs/R045.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
+for cfg in configs/experiments/b5_generalization/b5_1_cross_generalization_base.yaml configs/experiments/b5_generalization/b5_2_cross_generalization_selected_single.yaml configs/experiments/b5_generalization/b5_3_cross_generalization_selected_ensemble.yaml configs/experiments/b5_generalization/b5_4_final_single_model_freeze.yaml configs/experiments/b6_finetune_scaffold/b6_1_finetune_ft0.yaml configs/experiments/b6_finetune_scaffold/b6_2_finetune_ft1_vehicle_param_adapter.yaml configs/experiments/b6_finetune_scaffold/b6_3_finetune_ft2_mu_head.yaml configs/experiments/b6_finetune_scaffold/b6_4_finetune_ft3_fz_residual.yaml configs/experiments/b6_finetune_scaffold/b6_5_finetune_ft4_tire_residual.yaml configs/experiments/b6_finetune_scaffold/b6_6_finetune_ft5_steering_residual.yaml configs/experiments/b6_finetune_scaffold/b6_7_finetune_ft6_full_model.yaml configs/experiments/b6_finetune_scaffold/b6_8_finetune_summary.yaml; do conda run -n deep-sim python -m experiments.run --config "$cfg" || exit 1; done
 conda run -n deep-sim python -m experiments.cross_generalization_report
 conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_experiment_engineering tests.test_torch_training
-conda run -n deep-sim python -m experiments.experiment_queue --configs configs/runs/R111.yaml --limit 1 --max-retries 0 --skip-success --rollout-eval --rollout-steps 8 --rollout-max-episodes 2 --state-path runs/queue_state_smoke.json --log-dir runs/_queue_logs_smoke
+conda run -n deep-sim python -m experiments.experiment_queue --configs configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml --limit 1 --max-retries 0 --skip-success --rollout-eval --rollout-steps 8 --rollout-max-episodes 2 --state-path output/training/queue_state_smoke.json --log-dir output/training/_queue_logs_smoke
 conda run -n deep-sim python -m experiments.matrix_report
-conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
 git diff --check
 ```

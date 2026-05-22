@@ -4,10 +4,10 @@ from typing import Any, Dict, List
 
 
 RUN_DIRS = {
-    "R112": "runs/R112_pytorch_fair_small_comparison",
-    "R113": "runs/R113_pytorch_model_variant_smoke",
-    "R114": "runs/R114_pytorch_fine_tune_adapter_smoke",
-    "R115": "runs/R115_pytorch_deep_ensemble_smoke",
+    "R112": "output/training/R112_pytorch_fair_small_comparison",
+    "R113": "output/training/R113_pytorch_model_variant_smoke",
+    "R114": "output/training/R114_pytorch_fine_tune_adapter_smoke",
+    "R115": "output/training/R115_pytorch_deep_ensemble_smoke",
 }
 
 
@@ -179,9 +179,9 @@ def render_markdown(report: Dict[str, Any]) -> str:
 
 def main() -> int:
     report = build_report()
-    _write_json("reports/PYTORCH_DEV_REPORT.json", report)
-    _write_text("reports/PYTORCH_DEV_REPORT.md", render_markdown(report))
-    print("wrote reports/PYTORCH_DEV_REPORT.md")
+    _write_json("output/training/reports/PYTORCH_DEV_REPORT.json", report)
+    _write_text("output/training/reports/PYTORCH_DEV_REPORT.md", render_markdown(report))
+    print("wrote output/training/reports/PYTORCH_DEV_REPORT.md")
     return 0
 
 

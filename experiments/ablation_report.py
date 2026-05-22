@@ -4,28 +4,28 @@ from typing import Any, Dict, List
 
 
 RUNS = [
-    ("R015", "Tire", "T0", "runs/R015_ablation_tire_T0"),
-    ("R016", "Tire", "T1", "runs/R016_ablation_tire_T1"),
-    ("R017", "Tire", "T1-no-proj", "runs/R017_ablation_tire_T1_no_proj"),
-    ("R018", "Tire", "T2", "runs/R018_ablation_tire_T2"),
-    ("R019", "Fz", "F0", "runs/R019_ablation_fz_F0"),
-    ("R020", "Fz", "F1", "runs/R020_ablation_fz_F1"),
-    ("R021", "Fz", "F2", "runs/R021_ablation_fz_F2"),
-    ("R022", "Steering", "S0", "runs/R022_ablation_steering_S0"),
-    ("R023", "Steering", "S1", "runs/R023_ablation_steering_S1"),
-    ("R024", "Mu", "M0-fixed", "runs/R024_ablation_mu_M0_fixed"),
-    ("R025", "Mu", "M1a", "runs/R025_ablation_mu_M1a"),
-    ("R026", "Mu", "M1b", "runs/R026_ablation_mu_M1b"),
-    ("R027", "Mu", "M2-oracle", "runs/R027_ablation_mu_M2_oracle"),
-    ("R027a", "Encoder", "E1", "runs/R027a_ablation_encoder_E1"),
-    ("R027b", "Encoder", "E2", "runs/R027b_ablation_encoder_E2"),
-    ("R027c", "Encoder", "E3", "runs/R027c_ablation_encoder_E3"),
-    ("R028", "Vehicle", "V0", "runs/R028_ablation_vehicle_V0"),
-    ("R029", "Vehicle", "V1", "runs/R029_ablation_vehicle_V1"),
-    ("R030", "Vehicle", "V1-large", "runs/R030_ablation_vehicle_V1_large"),
-    ("R031", "Vehicle", "V2-small", "runs/R031_ablation_vehicle_V2_small"),
-    ("R032", "Uncertainty", "U0", "runs/R032_ablation_uncertainty_U0"),
-    ("R033", "Uncertainty", "U1", "runs/R033_ablation_uncertainty_U1"),
+    ("R015", "Tire", "T0", "output/training/R015_ablation_tire_T0"),
+    ("R016", "Tire", "T1", "output/training/R016_ablation_tire_T1"),
+    ("R017", "Tire", "T1-no-proj", "output/training/R017_ablation_tire_T1_no_proj"),
+    ("R018", "Tire", "T2", "output/training/R018_ablation_tire_T2"),
+    ("R019", "Fz", "F0", "output/training/R019_ablation_fz_F0"),
+    ("R020", "Fz", "F1", "output/training/R020_ablation_fz_F1"),
+    ("R021", "Fz", "F2", "output/training/R021_ablation_fz_F2"),
+    ("R022", "Steering", "S0", "output/training/R022_ablation_steering_S0"),
+    ("R023", "Steering", "S1", "output/training/R023_ablation_steering_S1"),
+    ("R024", "Mu", "M0-fixed", "output/training/R024_ablation_mu_M0_fixed"),
+    ("R025", "Mu", "M1a", "output/training/R025_ablation_mu_M1a"),
+    ("R026", "Mu", "M1b", "output/training/R026_ablation_mu_M1b"),
+    ("R027", "Mu", "M2-oracle", "output/training/R027_ablation_mu_M2_oracle"),
+    ("R027a", "Encoder", "E1", "output/training/R027a_ablation_encoder_E1"),
+    ("R027b", "Encoder", "E2", "output/training/R027b_ablation_encoder_E2"),
+    ("R027c", "Encoder", "E3", "output/training/R027c_ablation_encoder_E3"),
+    ("R028", "Vehicle", "V0", "output/training/R028_ablation_vehicle_V0"),
+    ("R029", "Vehicle", "V1", "output/training/R029_ablation_vehicle_V1"),
+    ("R030", "Vehicle", "V1-large", "output/training/R030_ablation_vehicle_V1_large"),
+    ("R031", "Vehicle", "V2-small", "output/training/R031_ablation_vehicle_V2_small"),
+    ("R032", "Uncertainty", "U0", "output/training/R032_ablation_uncertainty_U0"),
+    ("R033", "Uncertainty", "U1", "output/training/R033_ablation_uncertainty_U1"),
 ]
 
 
@@ -64,10 +64,10 @@ def main() -> int:
                 "teacher_oracle": _teacher_oracle(report),
             }
         )
-    os.makedirs("reports", exist_ok=True)
-    _write_json("reports/B4_ablation_summary.json", {"rows": rows})
-    _write_markdown("reports/B4_ablations.md", rows)
-    print("wrote reports/B4_ablations.md")
+    os.makedirs("output/training/reports", exist_ok=True)
+    _write_json("output/training/reports/B4_ablation_summary.json", {"rows": rows})
+    _write_markdown("output/training/reports/B4_ablations.md", rows)
+    print("wrote output/training/reports/B4_ablations.md")
     return 0
 
 

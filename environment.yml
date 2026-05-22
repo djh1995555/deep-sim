@@ -6,6 +6,7 @@ channels:
 dependencies:
   - python=3.10
   - numpy
+  - plotly
   - pytorch::pytorch=2.5.1
   - pytorch::pytorch-cuda=12.1
   - pyyaml

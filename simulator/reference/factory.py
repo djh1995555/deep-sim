@@ -2,6 +2,10 @@ from typing import Any, Dict, Optional
 
 from simulator.controller.base import ControllerReference
 from simulator.reference.base import ReferenceProvider
+from simulator.reference.double_lane_change import (
+    DoubleLaneChangeReferenceConfig,
+    DoubleLaneChangeReferenceProvider,
+)
 from simulator.reference.fixed import FixedReferenceProvider
 from simulator.reference.lane_change import (
     LaneChangeReferenceConfig,
@@ -33,6 +37,21 @@ def build_reference_provider(
                 length_m=float(config.get("length_m", 35.0)),
                 start_time_s=float(config.get("start_time_s", 0.0)),
                 duration_s=float(config.get("duration_s", 3.0)),
+                mode=str(config.get("mode", "spatial")),
+            )
+        )
+    if ref_type == "double_lane_change":
+        return DoubleLaneChangeReferenceProvider(
+            DoubleLaneChangeReferenceConfig(
+                speed_mps=float(config.get("speed_mps", fallback.target_speed_mps)),
+                start_y_m=float(config.get("start_y_m", fallback.target_y_m)),
+                offset_y_m=float(config.get("offset_y_m", 3.5)),
+                end_y_m=float(config.get("end_y_m", fallback.target_y_m)),
+                start_x_m=float(config.get("start_x_m", 5.0)),
+                first_length_m=float(config.get("first_length_m", 18.0)),
+                hold_length_m=float(config.get("hold_length_m", 8.0)),
+                second_length_m=float(config.get("second_length_m", 18.0)),
+                start_time_s=float(config.get("start_time_s", 0.0)),
                 mode=str(config.get("mode", "spatial")),
             )
         )

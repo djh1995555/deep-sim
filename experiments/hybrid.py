@@ -85,7 +85,7 @@ def run_base_hybrid_suite(
     if hybrid_cfg.get("write_final_checkpoint", False):
         _write_final_checkpoint(report, out_dir, hybrid_cfg)
     if hybrid_cfg.get("write_markdown_report", False):
-        _write_hybrid_markdown(report, "reports/B3_base_hybrid.md")
+        _write_hybrid_markdown(report, "output/training/reports/B3_base_hybrid.md")
     return report
 
 

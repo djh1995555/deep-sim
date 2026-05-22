@@ -16,6 +16,17 @@ conda run -n deep-sim <command>
 
 如果只是想手动运行一个指定工况的闭环车辆仿真 episode，而不是跑完整实验或数据集生成流程，见根目录 `SIMULATOR_USAGE.md`。
 
+## 输出目录约定
+
+以后运行产生的文件统一写入 `output/`：
+
+| 路径 | 内容 |
+| --- | --- |
+| `output/training/` | `experiments.run`、批量队列、checkpoint、metrics、post-rollout eval 和训练汇总报告。 |
+| `output/simulation/` | `simulator.cli` 单次闭环仿真、debug trace、Plotly HTML 和仿真 episode。 |
+
+`data/` 只保存训练输入数据；不要把新实验产物写进 `data/`。
+
 ## 1. 运行前检查
 
 确认代码状态：
@@ -43,7 +54,7 @@ PY
 conda run -n deep-sim python -m experiments.materialize_data
 ```
 
-当前 canonical 数据是 `data/` 下的真实目录，不再是指向 `runs/` 的 symlink。需要把数据复制到其他位置时使用：
+当前 canonical 数据是 `data/` 下的真实目录，不再是指向历史运行输出目录的 symlink。需要把数据复制到其他位置时使用：
 
 ```bash
 conda run -n deep-sim python -m experiments.materialize_data --mode copy --data-root /path/to/target_data
@@ -54,31 +65,31 @@ conda run -n deep-sim python -m experiments.materialize_data --mode copy --data-
 统一入口：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml
 ```
 
 常用 smoke：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R100.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_1_pytorch_data_loader_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_1_pytorch_gpu_forward_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml
 ```
 
 DS2 / MoE 开发入口：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
 ```
 
 每个 run 会写到：
 
 ```text
-runs/{run_id}_{run_name}/
+output/training/{run_id}_{run_name}/
   summary.json
   metrics.jsonl
   artifacts/
@@ -89,16 +100,16 @@ runs/{run_id}_{run_name}/
   git_status.txt
 ```
 
-当前仓库已经清理过历史运行产物，`runs/` 目录默认不存在。canonical 数据已经移动到 `data/ds1_v1` 和 `data/ds1_proxy_ft_v1`；重新执行实验时，runner 会按配置重新创建对应的 `runs/` 输出目录。
+当前仓库已经清理过历史运行产物。canonical 数据已经移动到 `data/ds1_v1` 和 `data/ds1_proxy_ft_v1`；重新执行实验时，runner 会按配置重新创建对应的 `output/training/` 输出目录。
 
 重新运行某个实验后，优先看：
 
 ```bash
-cat runs/R111_pytorch_base_model_small_training/summary.json
-cat runs/R111_pytorch_base_model_small_training/artifacts/validation_report.json
+cat output/training/R111_pytorch_base_model_small_training/summary.json
+cat output/training/R111_pytorch_base_model_small_training/artifacts/validation_report.json
 ```
 
-未重新运行时，使用 `reports/` 和 `refine-logs/EXPERIMENT_RESULTS.md` 查看已完成阶段的结果摘要。
+未重新运行时，使用 `output/training/reports/` 和 `refine-logs/EXPERIMENT_RESULTS.md` 查看已完成阶段的结果摘要；根目录 `reports/` 不再作为新产物目录维护。
 
 ## 3. 运行完整 PyTorch 矩阵
 
@@ -112,51 +123,51 @@ conda run -n deep-sim python -m experiments.torch_config_matrix --write
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --manifest configs/torch_matrix/MANIFEST.json \
+  --manifest configs/experiments/matrix/MANIFEST.json \
   --run-ids R200 R201 \
   --dry-run \
   --reset-state \
-  --state-path runs/queue_state_dryrun.json
+  --state-path output/training/queue_state_dryrun.json
 ```
 
 运行 R200-R216 ablation：
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --manifest configs/torch_matrix/MANIFEST.json \
+  --manifest configs/experiments/matrix/MANIFEST.json \
   --run-ids R200 R201 R202 R203 R204 R205 R206 R207 R208 R209 R210 R211 R212 R213 R214 R215 R216 \
   --max-retries 1 \
   --skip-success \
   --rollout-eval \
-  --state-path runs/queue_state_ablation.json \
-  --log-dir runs/_queue_logs_ablation
+  --state-path output/training/queue_state_ablation.json \
+  --log-dir output/training/_queue_logs_ablation
 ```
 
 运行 R300-R334 fine-tune matrix：
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --manifest configs/torch_matrix/MANIFEST.json \
+  --manifest configs/experiments/matrix/MANIFEST.json \
   --run-ids R300 R301 R302 R303 R304 R305 R306 R307 R308 R309 R310 R311 R312 R313 R314 R315 R316 R317 R318 R319 R320 R321 R322 R323 R324 R325 R326 R327 R328 R329 R330 R331 R332 R333 R334 \
   --max-retries 1 \
   --skip-success \
   --rollout-eval \
-  --state-path runs/queue_state_finetune.json \
-  --log-dir runs/_queue_logs_finetune
+  --state-path output/training/queue_state_finetune.json \
+  --log-dir output/training/_queue_logs_finetune
 ```
 
 查看队列状态：
 
 ```bash
-cat runs/queue_state_ablation.json
-ls runs/_queue_logs_ablation
+cat output/training/queue_state_ablation.json
+ls output/training/_queue_logs_ablation
 ```
 
 队列参数说明：
 
 | 参数 | 用途 |
 |---|---|
-| `--manifest` | 从 `configs/torch_matrix/MANIFEST.json` 读取 run 列表。 |
+| `--manifest` | 从 `configs/experiments/matrix/MANIFEST.json` 读取 run 列表。 |
 | `--configs` | 直接指定一个或多个 config 文件。 |
 | `--run-ids` | 只运行指定 run id。 |
 | `--dry-run` | 只写计划和状态，不实际训练。 |
@@ -184,9 +195,9 @@ conda run -n deep-sim python -m experiments.matrix_report
 主要报告位置：
 
 ```text
-reports/PYTORCH_DEV_REPORT.md
-reports/PYTORCH_MATRIX_REPORT.md
-reports/B7_extreme_moe.md
+output/training/reports/PYTORCH_DEV_REPORT.md
+output/training/reports/PYTORCH_MATRIX_REPORT.md
+output/training/reports/B0_teacher.md
 refine-logs/EXPERIMENT_RESULTS.md
 refine-logs/EXPERIMENT_TRACKER.md
 ```
@@ -235,9 +246,9 @@ dataset_source: existing
 
 | 目标 | 文件 |
 |---|---|
-| 改单个 run 参数 | `configs/runs/Rxxx.yaml` |
-| 改 DS1 数据生成 | `configs/teacher/ds1_v1.yaml` |
-| 改 DS2 extreme 数据生成 | `configs/teacher/ds2_extreme_v0.yaml` |
+| 改单个实验配置 | `configs/experiments/<实验块>/<语义化实验名>.yaml` |
+| 改 DS1 数据生成 | `configs/datasets/ds1_v1.yaml` |
+| 改 DS2 extreme 数据生成 | `configs/datasets/ds2_extreme_v0.yaml` |
 | 改模型模块结构 | `student_model/torch_model.py` |
 | 改训练 loop / loss / eval | `experiments/torch_training.py` |
 | 改矩阵生成规则 | `experiments/torch_config_matrix.py` |

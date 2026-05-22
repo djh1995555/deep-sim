@@ -1,5 +1,5 @@
-teacher_config: configs/teacher/ds0_minimal.yaml
-out_dir: runs/SIM001_demo_closed_loop
+dataset_config: configs/datasets/ds0_minimal.yaml
+out_dir: output/simulation/SIM001_demo_closed_loop
 scenario_id: demo_closed_loop_dry
 dataset_id: SIM_DEMO_CLOSED_LOOP
 road: single:dry
@@ -22,3 +22,4 @@ reference:
   mode: spatial
 debug_stride: 2
 write_debug_trace: true
+write_debug_html: true

@@ -4,18 +4,18 @@ from typing import Any, Dict, List
 
 
 RUNS = [
-    ("R034", "Base", "E1+T1+F1+S1+M1a+V1+U0", "runs/R034_cross_generalization_base"),
+    ("R034", "Base", "E1+T1+F1+S1+M1a+V1+U0", "output/training/R034_cross_generalization_base"),
     (
         "R035",
         "Final single",
         "E2+T1+F1+S1+M0-fixed+V2-small+U0",
-        "runs/R035_cross_generalization_selected_single",
+        "output/training/R035_cross_generalization_selected_single",
     ),
     (
         "R036",
         "Final + U1",
         "E2+T1+F1+S1+M0-fixed+V2-small+U1",
-        "runs/R036_cross_generalization_selected_ensemble",
+        "output/training/R036_cross_generalization_selected_ensemble",
     ),
 ]
 
@@ -65,9 +65,9 @@ def main() -> int:
             }
         )
     payload = {"rows": rows, "best_deployable": _best_deployable(rows)}
-    _write_json("reports/B5_cross_generalization_summary.json", payload)
-    _write_markdown("reports/B5_cross_generalization.md", payload)
-    print("wrote reports/B5_cross_generalization.md")
+    _write_json("output/training/reports/B5_cross_generalization_summary.json", payload)
+    _write_markdown("output/training/reports/B5_cross_generalization.md", payload)
+    print("wrote output/training/reports/B5_cross_generalization.md")
     return 0
 
 

@@ -1,0 +1,30 @@
+dataset_config: configs/datasets/ds0_minimal.yaml
+out_dir: output/simulation/double_lane_change_5mps
+scenario_id: double_lane_change_5mps
+dataset_id: SIM_DOUBLE_LANE_CHANGE_5MPS
+road: single:dry
+vehicle_index: 0
+seed: 21
+initial_speed_mps: 5.0
+duration_s: 32.0
+dt_export: 0.02
+split_role: simulation
+target_speed_mps: 5.0
+target_y_m: 0.0
+target_yaw_rad: 0.0
+reference:
+  type: double_lane_change
+  speed_mps: 5.0
+  start_y_m: 0.0
+  offset_y_m: 3.5
+  end_y_m: 0.0
+  start_x_m: 5.0
+  first_length_m: 50.0
+  hold_length_m: 15.0
+  second_length_m: 50.0
+  mode: spatial
+lqr_gains: [0.20, 1.60, 0.35, 1.80]
+lqr_max_sw_angle_rad: 1.2
+debug_stride: 4
+write_debug_trace: true
+write_debug_html: true

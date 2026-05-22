@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import os
+from pathlib import Path
 import tempfile
 import unittest
 
@@ -11,6 +12,14 @@ from experiments.torch_training import (
     run_torch_training_suite,
 )
 from simulator.vehicle_model.config import load_yaml
+
+
+def _config_path_for_run_id(run_id):
+    for path in Path("configs/experiments").glob("**/*.yaml"):
+        cfg = load_yaml(str(path))
+        if cfg.get("run", {}).get("id") == run_id:
+            return str(path)
+    raise AssertionError("missing config for %s" % run_id)
 
 
 class TorchTrainingRunnerTest(unittest.TestCase):
@@ -61,12 +70,13 @@ class TorchTrainingRunnerTest(unittest.TestCase):
         }
         for run_id, mode in expected_modes.items():
             with self.subTest(run_id=run_id):
-                cfg = load_yaml("configs/runs/%s.yaml" % run_id)
+                cfg = load_yaml(_config_path_for_run_id(run_id))
                 self.assertEqual(cfg["dataset_source"], "existing")
                 expected_dataset = "data/ds1_proxy_ft_v1" if run_id == "R114" else "data/ds1_v1"
                 self.assertEqual(cfg["data"]["dataset_path"], expected_dataset)
                 self.assertEqual(cfg["torch_training"]["mode"], mode)
-                self.assertEqual(cfg["logging"]["output_dir"].split("/")[1][:4], run_id)
+                self.assertTrue(cfg["logging"]["output_dir"].startswith("output/training/"))
+                self.assertEqual(os.path.basename(cfg["logging"]["output_dir"])[:4], run_id)
                 if run_id in {
                     "R105",
                     "R106",
@@ -125,7 +135,7 @@ class TorchTrainingRunnerTest(unittest.TestCase):
         self.assertTrue(hasattr(restored, "backcast"))
 
     def test_generated_torch_matrix_manifest(self):
-        with open("configs/torch_matrix/MANIFEST.json", "r", encoding="utf-8") as handle:
+        with open("configs/experiments/matrix/MANIFEST.json", "r", encoding="utf-8") as handle:
             manifest = json.load(handle)
         self.assertEqual(manifest["ablation_count"], 17)
         self.assertEqual(manifest["fine_tune_count"], 35)

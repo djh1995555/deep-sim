@@ -63,7 +63,7 @@ python -m pip install -r requirements.txt
 后续所有命令必须在已激活的 `deep-sim` 环境中运行，或显式使用：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R000.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
 ```
 
 禁止直接使用系统 Python 执行实验命令。自动化 runner / queue / remote backend 在启动前必须记录并检查：
@@ -82,7 +82,7 @@ package versions are captured in env.txt or equivalent environment snapshot
 每个 run 必须创建独立目录：
 
 ```text
-runs/{run_id}_{short_name}/
+output/training/{run_id}_{short_name}/
   config.yaml
   resolved_config.yaml
   command.txt
@@ -181,15 +181,15 @@ Recommended commands:
 
 ```bash
 conda activate deep-sim
-python -m experiments.run --config configs/runs/R000.yaml
-python -m experiments.evaluate --checkpoint runs/R009_base/checkpoints/best.pt --config configs/eval/base.yaml
-python -m experiments.report --runs runs/R009_base runs/R010_seen runs/R011_road --out reports/B3_base.md
+python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
+python -m experiments.evaluate --checkpoint output/training/R009_base/checkpoints/best.pt --config configs/eval/base.yaml
+python -m experiments.report --runs output/training/R009_base output/training/R010_seen output/training/R011_road --out output/training/reports/B3_base.md
 ```
 
 Non-interactive / queue commands should use:
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R000.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
 ```
 
 All commands must write `command.txt` and `resolved_config.yaml`.
@@ -219,7 +219,7 @@ Required inputs:
 ```text
 TEACHER_SIMULATOR_SPEC.md
 DATA_SCHEMA_SPEC.md
-configs/teacher/ds0_minimal.yaml
+configs/datasets/ds0_minimal.yaml
 ```
 
 Required outputs:
@@ -684,13 +684,13 @@ adapter_drift
 Each experiment block must produce a Markdown report:
 
 ```text
-reports/B0_teacher.md
-reports/B1_sanity.md
-reports/B3_base.md
-reports/B4_ablation.md
-reports/B5_generalization.md
-reports/B6_finetune.md
-reports/B7_moe.md
+output/training/reports/B0_teacher.md
+output/training/reports/B1_sanity.md
+output/training/reports/B3_base.md
+output/training/reports/B4_ablation.md
+output/training/reports/B5_generalization.md
+output/training/reports/B6_finetune.md
+output/training/reports/B7_moe.md
 ```
 
 Report sections:

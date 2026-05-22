@@ -3,10 +3,26 @@ import json
 import os
 from typing import Any, Dict, Iterable, List, Optional
 
+from simulator.visualizer.plotly_report import write_plotly_debug_report
+
 
 class DebugTrace:
     def __init__(self) -> None:
         self.rows: List[Dict[str, Any]] = []
+
+    @classmethod
+    def from_rows(cls, rows: Iterable[Dict[str, Any]]) -> "DebugTrace":
+        trace = cls()
+        trace.rows = [dict(row) for row in rows]
+        return trace
+
+    @classmethod
+    def read_json(cls, path: str) -> "DebugTrace":
+        with open(path, "r", encoding="utf-8") as handle:
+            rows = json.load(handle)
+        if not isinstance(rows, list):
+            raise ValueError("debug trace JSON must contain a list of rows")
+        return cls.from_rows(rows)
 
     def append(
         self,
@@ -26,12 +42,12 @@ class DebugTrace:
         return list(self.rows)
 
     def write_json(self, path: str) -> None:
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        _ensure_parent_dir(path)
         with open(path, "w", encoding="utf-8") as handle:
             json.dump(self.rows, handle, indent=2, sort_keys=True)
 
     def write_csv(self, path: str) -> None:
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        _ensure_parent_dir(path)
         fieldnames = _ordered_fieldnames(self.rows)
         with open(path, "w", encoding="utf-8", newline="") as handle:
             writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -39,12 +55,30 @@ class DebugTrace:
             for row in self.rows:
                 writer.writerow({key: _csv_value(row.get(key)) for key in fieldnames})
 
+    def write_html(
+        self,
+        path: str,
+        panels: Optional[Dict[str, Iterable[str]]] = None,
+        title: str = "Simulator Debug Report",
+    ) -> None:
+        clean_panels = (
+            {name: list(signals) for name, signals in panels.items()}
+            if panels is not None
+            else None
+        )
+        write_plotly_debug_report(
+            rows=self.rows,
+            path=path,
+            panels=clean_panels,
+            title=title,
+        )
+
     def plot_timeseries(self, path: str, signals: Iterable[str]) -> None:
         try:
             import matplotlib.pyplot as plt
         except ImportError as exc:
             raise RuntimeError("matplotlib is required for plot_timeseries") from exc
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        _ensure_parent_dir(path)
         signal_list = list(signals)
         t = [float(row.get("t", 0.0)) for row in self.rows]
         fig, axes = plt.subplots(
@@ -78,6 +112,12 @@ def _flatten(prefix: str, value: Any) -> Dict[str, Any]:
     if _is_scalar(value):
         return {prefix: value}
     return {prefix: str(value)}
+
+
+def _ensure_parent_dir(path: str) -> None:
+    parent = os.path.dirname(path)
+    if parent:
+        os.makedirs(parent, exist_ok=True)
 
 
 def _is_scalar(value: Any) -> bool:

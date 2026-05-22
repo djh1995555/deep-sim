@@ -30,20 +30,20 @@ data/ds1_v1
 data/ds1_proxy_ft_v1
 ```
 
-They are symlinks to the already generated scaffold artifacts:
+They are real directories, not symlinks into historical run artifacts:
 
 ```text
-data/ds1_v1 -> runs/R000g_dataset_split_generation/artifacts/ds1
-data/ds1_proxy_ft_v1 -> runs/R038_finetune_FT0/artifacts/ds1_proxy
+data/ds1_v1
+data/ds1_proxy_ft_v1
 ```
 
 Materialization command:
 
 ```bash
-conda run -n deep-sim python -m experiments.materialize_data --mode symlink
+conda run -n deep-sim python -m experiments.materialize_data
 ```
 
-Use `--mode copy` only when a remote backend cannot follow symlinks.
+Use `--mode copy --data-root <target>` when a remote backend needs an explicit copied data directory.
 
 ## P2 Student Model v0 Skeleton
 
@@ -87,29 +87,29 @@ Implemented files:
 | File | Purpose |
 | --- | --- |
 | `experiments/torch_training.py` | Import-safe PyTorch smoke runner for data loader, forward/loss, tiny overfit, rollout, and checkpoint save/load checks. |
-| `configs/runs/R100.yaml` | Data loader smoke on canonical DS1. |
-| `configs/runs/R101.yaml` | One-step forward/loss smoke. |
-| `configs/runs/R102.yaml` | Tiny overfit on a small train subset. |
-| `configs/runs/R103.yaml` | Short rollout smoke. |
-| `configs/runs/R104.yaml` | Checkpoint save/load smoke. |
-| `configs/runs/R105.yaml` | CUDA-required one-step forward/loss smoke. |
-| `configs/runs/R106.yaml` | CUDA-required tiny-overfit smoke with backward and optimizer steps. |
-| `configs/runs/R107.yaml` | CUDA one-step train/validation/checkpoint run. |
-| `configs/runs/R108.yaml` | Rollout evaluation from the R107 checkpoint. |
-| `configs/runs/R109.yaml` | Checkpoint resume + eval-only smoke. |
-| `configs/runs/R110.yaml` | PyTorch direct TCN black-box baseline small training. |
-| `configs/runs/R111.yaml` | Small base hybrid training run with more samples/steps. |
-| `configs/runs/R112.yaml` | Matched-budget fair small comparison: hybrid vs direct TCN/GRU/N-BEATS. |
-| `configs/runs/R113.yaml` | Model/component variant forward smoke for E/T/F/S/M/V and black-box variants. |
-| `configs/runs/R114.yaml` | FT0-FT6 fine-tune adapter smoke over two data-size buckets. |
-| `configs/runs/R115.yaml` | U1 K=3 deep ensemble smoke. |
-| `configs/teacher/ds2_extreme_v0.yaml` | DS2 extreme handling scaffold data config. |
-| `configs/runs/R046.yaml` | DS2 emergency/fishhook/lane-change dataset smoke. |
-| `configs/runs/R047.yaml` | DS2 T1/T2/T3-MoE tire residual forward smoke. |
-| `experiments/torch_config_matrix.py` | Generates full PyTorch ablation and fine-tune config matrix under `configs/torch_matrix/`. |
-| `experiments/torch_dev_report.py` | Aggregates R112-R115 results into `reports/PYTORCH_DEV_REPORT.md/json`. |
-| `experiments/experiment_queue.py` | Local queue runner for direct config lists or `configs/torch_matrix/MANIFEST.json`, with dry-run, retry, skip-success, queue state, logs, and optional post-rollout eval. |
-| `experiments/matrix_report.py` | Aggregates matrix status, validation metrics, and post-rollout metrics into `reports/PYTORCH_MATRIX_REPORT.md/json`. |
+| `configs/experiments/p3_smoke/p3_1_pytorch_data_loader_smoke.yaml` | Data loader smoke on canonical DS1. |
+| `configs/experiments/p3_smoke/p3_2_pytorch_forward_loss_smoke.yaml` | One-step forward/loss smoke. |
+| `configs/experiments/p3_smoke/p3_3_pytorch_tiny_overfit.yaml` | Tiny overfit on a small train subset. |
+| `configs/experiments/p3_smoke/p3_4_pytorch_rollout_smoke.yaml` | Short rollout smoke. |
+| `configs/experiments/p3_smoke/p3_5_pytorch_checkpoint_smoke.yaml` | Checkpoint save/load smoke. |
+| `configs/experiments/p4_gpu_smoke/p4_1_pytorch_gpu_forward_smoke.yaml` | CUDA-required one-step forward/loss smoke. |
+| `configs/experiments/p4_gpu_smoke/p4_2_pytorch_gpu_tiny_overfit.yaml` | CUDA-required tiny-overfit smoke with backward and optimizer steps. |
+| `configs/experiments/p5_training_dev/p5_1_pytorch_one_step_training.yaml` | CUDA one-step train/validation/checkpoint run. |
+| `configs/experiments/p5_training_dev/p5_2_pytorch_rollout_eval.yaml` | Rollout evaluation from the R107 checkpoint. |
+| `configs/experiments/p5_training_dev/p5_3_pytorch_resume_eval_smoke.yaml` | Checkpoint resume + eval-only smoke. |
+| `configs/experiments/p5_training_dev/p5_4_pytorch_black_box_tcn_baseline.yaml` | PyTorch direct TCN black-box baseline small training. |
+| `configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml` | Small base hybrid training run with more samples/steps. |
+| `configs/experiments/p6_model_dev/p6_2_pytorch_fair_small_comparison.yaml` | Matched-budget fair small comparison: hybrid vs direct TCN/GRU/N-BEATS. |
+| `configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml` | Model/component variant forward smoke for E/T/F/S/M/V and black-box variants. |
+| `configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml` | FT0-FT6 fine-tune adapter smoke over two data-size buckets. |
+| `configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml` | U1 K=3 deep ensemble smoke. |
+| `configs/datasets/ds2_extreme_v0.yaml` | DS2 extreme handling scaffold data config. |
+| `configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml` | DS2 emergency/fishhook/lane-change dataset smoke. |
+| `configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml` | DS2 T1/T2/T3-MoE tire residual forward smoke. |
+| `experiments/torch_config_matrix.py` | Generates full PyTorch ablation and fine-tune config matrix under `configs/experiments/`. |
+| `experiments/torch_dev_report.py` | Aggregates R112-R115 results into `output/training/reports/PYTORCH_DEV_REPORT.md/json`. |
+| `experiments/experiment_queue.py` | Local queue runner for direct config lists or `configs/experiments/matrix/MANIFEST.json`, with dry-run, retry, skip-success, queue state, logs, and optional post-rollout eval. |
+| `experiments/matrix_report.py` | Aggregates matrix status, validation metrics, and post-rollout metrics into `output/training/reports/PYTORCH_MATRIX_REPORT.md/json`. |
 | `experiments/real_data_adapter.py` | Converts CSV real-vehicle episodes into canonical datasets with manifest, episode arrays, sidecars, and validator summary. |
 | `tests/test_torch_training.py` | Runner/config regression tests with a blocked path when PyTorch is absent. |
 | `tests/test_experiment_engineering.py` | Regression tests for queue state writing, skip-success rollout path, matrix manifest aggregation, and CSV adapter output. |
@@ -141,15 +141,15 @@ Queue smoke command:
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --configs configs/runs/R111.yaml \
+  --configs configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml \
   --limit 1 \
   --max-retries 0 \
   --skip-success \
   --rollout-eval \
   --rollout-steps 8 \
   --rollout-max-episodes 2 \
-  --state-path runs/queue_state_smoke.json \
-  --log-dir runs/_queue_logs_smoke
+  --state-path output/training/queue_state_smoke.json \
+  --log-dir output/training/_queue_logs_smoke
 ```
 
 Queue smoke result:
@@ -171,8 +171,8 @@ conda run -n deep-sim python -m experiments.matrix_report
 Current matrix report:
 
 ```text
-reports/PYTORCH_MATRIX_REPORT.md
-reports/PYTORCH_MATRIX_REPORT.json
+output/training/reports/PYTORCH_MATRIX_REPORT.md
+output/training/reports/PYTORCH_MATRIX_REPORT.json
 status_counts.pending = 52
 R200-R216: pending
 R300-R334: pending
@@ -206,8 +206,8 @@ FT4 trainability coverage includes the MoE tire residual heads
 R046/R047 commands:
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
 ```
 
 R046/R047 results:
@@ -234,27 +234,27 @@ conda run -n deep-sim python -m experiments.materialize_data --mode symlink
 conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_canonical_data tests.test_student_model
 conda run -n deep-sim python -m unittest
-conda run -n deep-sim python -m experiments.run --config configs/runs/R100.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R101.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R102.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R107.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_1_pytorch_data_loader_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_2_pytorch_forward_loss_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_3_pytorch_tiny_overfit.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_4_pytorch_rollout_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_5_pytorch_checkpoint_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_1_pytorch_gpu_forward_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_2_pytorch_gpu_tiny_overfit.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_1_pytorch_one_step_training.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_2_pytorch_rollout_eval.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_3_pytorch_resume_eval_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_4_pytorch_black_box_tcn_baseline.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_2_pytorch_fair_small_comparison.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
 conda run -n deep-sim python -m experiments.torch_config_matrix --write
 conda run -n deep-sim python -m experiments.torch_dev_report
-conda run -n deep-sim python -m experiments.experiment_queue --configs configs/runs/R111.yaml --limit 1 --max-retries 0 --skip-success --rollout-eval --rollout-steps 8 --rollout-max-episodes 2 --state-path runs/queue_state_smoke.json --log-dir runs/_queue_logs_smoke
+conda run -n deep-sim python -m experiments.experiment_queue --configs configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml --limit 1 --max-retries 0 --skip-success --rollout-eval --rollout-steps 8 --rollout-max-episodes 2 --state-path output/training/queue_state_smoke.json --log-dir output/training/_queue_logs_smoke
 conda run -n deep-sim python -m experiments.matrix_report
 conda run -n deep-sim python -m compileall experiments student_model tests
 conda run -n deep-sim python -m unittest tests.test_experiment_engineering tests.test_torch_training
@@ -364,7 +364,7 @@ conda run -n deep-sim python -m experiments.torch_config_matrix --write
 Current generated matrix:
 
 ```text
-configs/torch_matrix/MANIFEST.json
+configs/experiments/matrix/MANIFEST.json
 17 PyTorch ablation configs: R200-R216
 35 PyTorch fine-tune configs: R300-R334
 ```
@@ -373,12 +373,12 @@ Recommended next execution block:
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --manifest configs/torch_matrix/MANIFEST.json \
+  --manifest configs/experiments/matrix/MANIFEST.json \
   --run-ids R200 R201 R202 R203 R204 R205 R206 R207 R208 R209 R210 R211 R212 R213 R214 R215 R216 \
   --max-retries 1 \
   --skip-success \
   --rollout-eval \
-  --state-path runs/queue_state_ablation.json
+  --state-path output/training/queue_state_ablation.json
 ```
 
-After R200-R216 finishes, regenerate `reports/PYTORCH_MATRIX_REPORT.md/json`, then run R300-R334 fine-tune matrix.
+After R200-R216 finishes, regenerate `output/training/reports/PYTORCH_MATRIX_REPORT.md/json`, then run R300-R334 fine-tune matrix.

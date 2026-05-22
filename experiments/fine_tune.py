@@ -27,13 +27,13 @@ from simulator.vehicle_model.export import load_dataset
 
 BUCKETS = ["FTD1", "FTD2", "FTD3", "FTD4", "FTD5"]
 FT_RUN_DIRS = {
-    "FT0": "runs/R038_finetune_FT0",
-    "FT1": "runs/R039_finetune_FT1_vehicle_param_adapter",
-    "FT2": "runs/R040_finetune_FT2_mu_head",
-    "FT3": "runs/R041_finetune_FT3_fz_residual",
-    "FT4": "runs/R042_finetune_FT4_tire_residual",
-    "FT5": "runs/R043_finetune_FT5_steering_residual",
-    "FT6": "runs/R044_finetune_FT6_full_model",
+    "FT0": "output/training/R038_finetune_FT0",
+    "FT1": "output/training/R039_finetune_FT1_vehicle_param_adapter",
+    "FT2": "output/training/R040_finetune_FT2_mu_head",
+    "FT3": "output/training/R041_finetune_FT3_fz_residual",
+    "FT4": "output/training/R042_finetune_FT4_tire_residual",
+    "FT5": "output/training/R043_finetune_FT5_steering_residual",
+    "FT6": "output/training/R044_finetune_FT6_full_model",
 }
 
 
@@ -183,7 +183,9 @@ def fine_tune_metrics_for_runner(report: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _load_source_episodes(out_dir: str, fine_tune_cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
-    source_cfg = fine_tune_cfg.get("source_teacher_config")
+    source_cfg = fine_tune_cfg.get("source_dataset_config") or fine_tune_cfg.get(
+        "source_teacher_config"
+    )
     if not source_cfg:
         return []
     source_dir = _source_dataset_dir(out_dir)
@@ -615,8 +617,8 @@ def _aggregate_existing_runs(
         ],
     }
     _write_json(os.path.join(out_dir, "artifacts", "fine_tune_report.json"), report)
-    _write_json("reports/B6_fine_tune_summary.json", report)
-    _write_fine_tune_markdown("reports/B6_fine_tune.md", report)
+    _write_json("output/training/reports/B6_fine_tune_summary.json", report)
+    _write_fine_tune_markdown("output/training/reports/B6_fine_tune.md", report)
     return report
 
 

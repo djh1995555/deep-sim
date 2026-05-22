@@ -170,9 +170,9 @@ def render_markdown(report: Dict[str, Any]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--manifest", default="configs/torch_matrix/MANIFEST.json")
-    parser.add_argument("--json-out", default="reports/PYTORCH_MATRIX_REPORT.json")
-    parser.add_argument("--md-out", default="reports/PYTORCH_MATRIX_REPORT.md")
+    parser.add_argument("--manifest", default="configs/experiments/matrix/MANIFEST.json")
+    parser.add_argument("--json-out", default="output/training/reports/PYTORCH_MATRIX_REPORT.json")
+    parser.add_argument("--md-out", default="output/training/reports/PYTORCH_MATRIX_REPORT.md")
     args = parser.parse_args()
     report = build_matrix_report(args.manifest)
     _write_json(args.json_out, report)

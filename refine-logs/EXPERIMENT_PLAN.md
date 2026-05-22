@@ -56,7 +56,7 @@ python -m pip install -r requirements.txt
 自动化 runner、远程 backend 和 queue 必须显式激活该环境，或使用：
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R000.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b0_data_generation/b0_1_teacher_simulator_minimal.yaml
 ```
 
 如果 backend 无法激活指定虚拟环境，对应 run 应标记为 `blocked`，不能静默退回系统 Python。具体运行环境 contract 以 `refine-logs/EXPERIMENT_RUN_SPEC.md` 为准。

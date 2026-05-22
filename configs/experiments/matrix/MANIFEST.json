@@ -1,0 +1,267 @@
+{
+  "ablation_count": 17,
+  "config_count": 52,
+  "configs": [
+    {
+      "name": "pytorch_ablation_encoder_E1",
+      "path": "configs/experiments/ablation/pytorch_ablation_encoder_E1.yaml",
+      "run_id": "R200"
+    },
+    {
+      "name": "pytorch_ablation_encoder_E2",
+      "path": "configs/experiments/ablation/pytorch_ablation_encoder_E2.yaml",
+      "run_id": "R201"
+    },
+    {
+      "name": "pytorch_ablation_encoder_E3",
+      "path": "configs/experiments/ablation/pytorch_ablation_encoder_E3.yaml",
+      "run_id": "R202"
+    },
+    {
+      "name": "pytorch_ablation_tire_T0",
+      "path": "configs/experiments/ablation/pytorch_ablation_tire_T0.yaml",
+      "run_id": "R203"
+    },
+    {
+      "name": "pytorch_ablation_tire_T1",
+      "path": "configs/experiments/ablation/pytorch_ablation_tire_T1.yaml",
+      "run_id": "R204"
+    },
+    {
+      "name": "pytorch_ablation_tire_T1_no_proj",
+      "path": "configs/experiments/ablation/pytorch_ablation_tire_T1_no_proj.yaml",
+      "run_id": "R205"
+    },
+    {
+      "name": "pytorch_ablation_tire_T2",
+      "path": "configs/experiments/ablation/pytorch_ablation_tire_T2.yaml",
+      "run_id": "R206"
+    },
+    {
+      "name": "pytorch_ablation_fz_F0",
+      "path": "configs/experiments/ablation/pytorch_ablation_fz_F0.yaml",
+      "run_id": "R207"
+    },
+    {
+      "name": "pytorch_ablation_fz_F1",
+      "path": "configs/experiments/ablation/pytorch_ablation_fz_F1.yaml",
+      "run_id": "R208"
+    },
+    {
+      "name": "pytorch_ablation_steer_S0",
+      "path": "configs/experiments/ablation/pytorch_ablation_steer_S0.yaml",
+      "run_id": "R209"
+    },
+    {
+      "name": "pytorch_ablation_steer_S1",
+      "path": "configs/experiments/ablation/pytorch_ablation_steer_S1.yaml",
+      "run_id": "R210"
+    },
+    {
+      "name": "pytorch_ablation_mu_M0",
+      "path": "configs/experiments/ablation/pytorch_ablation_mu_M0.yaml",
+      "run_id": "R211"
+    },
+    {
+      "name": "pytorch_ablation_mu_M1a",
+      "path": "configs/experiments/ablation/pytorch_ablation_mu_M1a.yaml",
+      "run_id": "R212"
+    },
+    {
+      "name": "pytorch_ablation_vehicle_V0",
+      "path": "configs/experiments/ablation/pytorch_ablation_vehicle_V0.yaml",
+      "run_id": "R213"
+    },
+    {
+      "name": "pytorch_ablation_vehicle_V1",
+      "path": "configs/experiments/ablation/pytorch_ablation_vehicle_V1.yaml",
+      "run_id": "R214"
+    },
+    {
+      "name": "pytorch_ablation_vehicle_V1_large",
+      "path": "configs/experiments/ablation/pytorch_ablation_vehicle_V1_large.yaml",
+      "run_id": "R215"
+    },
+    {
+      "name": "pytorch_ablation_uncertainty_U1_ensemble",
+      "path": "configs/experiments/ablation/pytorch_ablation_uncertainty_U1_ensemble.yaml",
+      "run_id": "R216"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT0_B0.yaml",
+      "run_id": "R300"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT0_B1.yaml",
+      "run_id": "R301"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT0_B2.yaml",
+      "run_id": "R302"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT0_B3.yaml",
+      "run_id": "R303"
+    },
+    {
+      "name": "pytorch_finetune_FT0_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT0_B4.yaml",
+      "run_id": "R304"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT1_B0.yaml",
+      "run_id": "R305"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT1_B1.yaml",
+      "run_id": "R306"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT1_B2.yaml",
+      "run_id": "R307"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT1_B3.yaml",
+      "run_id": "R308"
+    },
+    {
+      "name": "pytorch_finetune_FT1_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT1_B4.yaml",
+      "run_id": "R309"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT2_B0.yaml",
+      "run_id": "R310"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT2_B1.yaml",
+      "run_id": "R311"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT2_B2.yaml",
+      "run_id": "R312"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT2_B3.yaml",
+      "run_id": "R313"
+    },
+    {
+      "name": "pytorch_finetune_FT2_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT2_B4.yaml",
+      "run_id": "R314"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT3_B0.yaml",
+      "run_id": "R315"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT3_B1.yaml",
+      "run_id": "R316"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT3_B2.yaml",
+      "run_id": "R317"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT3_B3.yaml",
+      "run_id": "R318"
+    },
+    {
+      "name": "pytorch_finetune_FT3_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT3_B4.yaml",
+      "run_id": "R319"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT4_B0.yaml",
+      "run_id": "R320"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT4_B1.yaml",
+      "run_id": "R321"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT4_B2.yaml",
+      "run_id": "R322"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT4_B3.yaml",
+      "run_id": "R323"
+    },
+    {
+      "name": "pytorch_finetune_FT4_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT4_B4.yaml",
+      "run_id": "R324"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT5_B0.yaml",
+      "run_id": "R325"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT5_B1.yaml",
+      "run_id": "R326"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT5_B2.yaml",
+      "run_id": "R327"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT5_B3.yaml",
+      "run_id": "R328"
+    },
+    {
+      "name": "pytorch_finetune_FT5_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT5_B4.yaml",
+      "run_id": "R329"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B0",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT6_B0.yaml",
+      "run_id": "R330"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B1",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT6_B1.yaml",
+      "run_id": "R331"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B2",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT6_B2.yaml",
+      "run_id": "R332"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B3",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT6_B3.yaml",
+      "run_id": "R333"
+    },
+    {
+      "name": "pytorch_finetune_FT6_B4",
+      "path": "configs/experiments/finetune/pytorch_finetune_FT6_B4.yaml",
+      "run_id": "R334"
+    }
+  ],
+  "fine_tune_count": 35
+}

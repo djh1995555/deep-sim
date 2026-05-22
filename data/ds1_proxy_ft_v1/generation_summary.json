@@ -1,5 +1,5 @@
 {
-  "config": "configs/teacher/ds1_proxy_ft_v1.yaml",
+  "config": "configs/datasets/ds1_proxy_ft_v1.yaml",
   "episode_count": 135,
   "full_matrix_count": 700,
   "out_dir": "runs/R038_finetune_FT0/artifacts/ds1_proxy",

@@ -1,0 +1,47 @@
+run:
+  id: R103
+  name: pytorch_rollout_smoke
+  milestone: P3
+  experiment_block: P3.4
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: test
+model:
+  system_name: final_single_pytorch_smoke
+  student_config: E2_T1_F1_S1_M0_V2_U0_pytorch_v0
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 1
+  rollout_horizon: 8
+  max_steps: 0
+  early_stopping_metric: torch_rollout_smoke_passed
+  early_stopping_patience: 0
+evaluation:
+  horizons: [8-step]
+  metrics: [torch_rollout_smoke_passed, torch_rollout_rmse]
+  report_splits: [train]
+logging:
+  output_dir: output/training/R103_pytorch_rollout_smoke
+  save_checkpoints: false
+  save_diagnostics: true
+dataset_config: configs/datasets/ds1_v1.yaml
+dataset_source: existing
+artifact_dataset_subdir: ds1
+primary_metric: torch_rollout_smoke_passed
+torch_training:
+  name: pytorch_rollout_smoke
+  mode: rollout_smoke
+  seed: 23
+  history_len: 8
+  rollout_steps: 8
+  episode_index: 0
+  device: cpu
+  model_config: {hidden_dim: 32, history_len: 8}

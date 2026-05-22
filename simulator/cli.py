@@ -36,7 +36,12 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Run a closed-loop vehicle simulation episode."
     )
     parser.add_argument("--request", help="optional YAML request file")
-    parser.add_argument("--teacher-config")
+    parser.add_argument("--dataset-config")
+    parser.add_argument(
+        "--teacher-config",
+        dest="legacy_teacher_config",
+        help=argparse.SUPPRESS,
+    )
     parser.add_argument("--out-dir")
     parser.add_argument("--scenario-id")
     parser.add_argument("--dataset-id")
@@ -63,6 +68,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lqr-max-sw-angle-rad", type=float)
     parser.add_argument("--debug-stride", type=int)
     parser.add_argument("--write-debug-trace", action=argparse.BooleanOptionalAction)
+    parser.add_argument("--write-debug-html", action=argparse.BooleanOptionalAction)
     return parser
 
 
@@ -71,6 +77,9 @@ def _cli_overrides(args: argparse.Namespace) -> Dict[str, Any]:
     overrides: Dict[str, Any] = {}
     for key, value in vars(args).items():
         if key == "request" or value is None:
+            continue
+        if key == "legacy_teacher_config":
+            overrides["dataset_config"] = value
             continue
         if key == "reference_json":
             overrides["reference"] = json.loads(value)

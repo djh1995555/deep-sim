@@ -142,7 +142,7 @@ python -m pip install -r requirements.txt
 自动化执行时必须使用已激活环境，或显式使用：
 
 ```bash
-conda run -n deep-sim python -m teacher_simulator.generate --config configs/teacher/ds0.yaml --out data/ds0
+conda run -n deep-sim python -m teacher_simulator.generate --config configs/datasets/ds0.yaml --out data/ds0
 ```
 
 如果环境不存在或无法激活，teacher generation / validation run 必须失败或标记为 `blocked`，不能退回系统 Python。
@@ -584,8 +584,8 @@ Implementation should expose:
 
 ```bash
 conda activate deep-sim
-python -m teacher_simulator.generate --config configs/teacher/ds0.yaml --out data/ds0
-python -m teacher_simulator.generate --config configs/teacher/ds1.yaml --out data/ds1
+python -m teacher_simulator.generate --config configs/datasets/ds0.yaml --out data/ds0
+python -m teacher_simulator.generate --config configs/datasets/ds1.yaml --out data/ds1
 python -m teacher_simulator.validate --dataset data/ds0 --schema configs/schema_v0.yaml
 python -m teacher_simulator.validate --dataset data/ds1 --schema configs/schema_v0.yaml
 ```
@@ -593,7 +593,7 @@ python -m teacher_simulator.validate --dataset data/ds1 --schema configs/schema_
 Non-interactive execution:
 
 ```bash
-conda run -n deep-sim python -m teacher_simulator.generate --config configs/teacher/ds0.yaml --out data/ds0
+conda run -n deep-sim python -m teacher_simulator.generate --config configs/datasets/ds0.yaml --out data/ds0
 ```
 
 Exit codes:

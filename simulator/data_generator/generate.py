@@ -5,7 +5,7 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from simulator.vehicle_model.config import load_teacher_config, load_yaml
+from simulator.vehicle_model.config import load_dataset_config, load_yaml
 from simulator.vehicle_model.export import export_dataset
 from simulator.vehicle_model.scenario import (
     make_ds0_scenarios,
@@ -21,7 +21,7 @@ from simulator.vehicle_model.model import TeacherSimulator
 
 def generate_dataset(config_path: str, out_dir: str) -> Dict[str, Any]:
     raw = load_yaml(config_path)
-    cfg = load_teacher_config(config_path)
+    cfg = load_dataset_config(config_path)
     sim = TeacherSimulator(cfg)
     scenario_set = raw.get("scenario_set", "ds0")
     ds1_cfg = raw.get("ds1", {})

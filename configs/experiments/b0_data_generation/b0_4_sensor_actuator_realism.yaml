@@ -1,0 +1,36 @@
+run:
+  id: R000c
+  name: sensor_actuator_realism
+  milestone: M0
+  experiment_block: B0.4
+  seed: 7
+data:
+  dataset_id: DS0_DEBUG
+  dataset_path: data/ds0_debug
+  schema_version: v0
+  split_id: ds0_smoke
+  train_filter: null
+  val_filter: null
+  test_filter: null
+model:
+  system_name: teacher_simulator_actuator_sensor_model
+  student_config: null
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 0
+  max_steps: 0
+  early_stopping_metric: null
+  early_stopping_patience: 0
+evaluation:
+  horizons: []
+  metrics: [timestamp_monotonic, torque_observability_mode_valid]
+  report_splits: [train]
+logging:
+  output_dir: output/training/R000c_sensor_actuator_realism
+  save_checkpoints: false
+  save_diagnostics: true
+dataset_config: configs/datasets/ds0_minimal.yaml
+primary_metric: sensor_actuator_checks_passed

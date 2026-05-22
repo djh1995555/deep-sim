@@ -1,0 +1,49 @@
+run:
+  id: R105
+  name: pytorch_gpu_forward_smoke
+  milestone: P4
+  experiment_block: P4.1
+  seed: 23
+data:
+  dataset_id: DS1_V1
+  dataset_path: data/ds1_v1
+  schema_version: v0
+  split_id: ds1_v1_scaffold
+  train_filter: train
+  val_filter: validation
+  test_filter: test
+model:
+  system_name: final_single_pytorch_gpu_smoke
+  student_config: E2_T1_F1_S1_M0_V2_U0_pytorch_cuda_v0
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 4
+  rollout_horizon: 1
+  max_steps: 0
+  early_stopping_metric: torch_forward_loss_smoke_passed
+  early_stopping_patience: 0
+evaluation:
+  horizons: [1-step]
+  metrics: [torch_forward_loss_smoke_passed, one_step_mse, one_step_nll]
+  report_splits: [train]
+logging:
+  output_dir: output/training/R105_pytorch_gpu_forward_smoke
+  save_checkpoints: false
+  save_diagnostics: true
+dataset_config: configs/datasets/ds1_v1.yaml
+dataset_source: existing
+artifact_dataset_subdir: ds1
+primary_metric: torch_forward_loss_smoke_passed
+torch_training:
+  name: pytorch_gpu_forward_smoke
+  mode: forward_loss_smoke
+  seed: 23
+  split_role: train
+  history_len: 8
+  batch_size: 4
+  max_episodes: 8
+  device: cuda
+  require_cuda: true
+  model_config: {hidden_dim: 32, history_len: 8}

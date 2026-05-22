@@ -10,6 +10,9 @@ from experiments.torch_training import run_torch_training_suite
 from simulator.vehicle_model.config import load_yaml
 
 
+TRAINING_OUTPUT_ROOT = "output/training"
+
+
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -211,8 +214,8 @@ def main() -> int:
     parser.add_argument("--rollout-eval", action="store_true")
     parser.add_argument("--rollout-steps", type=int, default=16)
     parser.add_argument("--rollout-max-episodes", type=int, default=4)
-    parser.add_argument("--state-path", default="runs/queue_state.json")
-    parser.add_argument("--log-dir", default="runs/_queue_logs")
+    parser.add_argument("--state-path", default=os.path.join(TRAINING_OUTPUT_ROOT, "queue_state.json"))
+    parser.add_argument("--log-dir", default=os.path.join(TRAINING_OUTPUT_ROOT, "_queue_logs"))
     args = parser.parse_args()
     state = run_queue(args)
     counts: Dict[str, int] = {}

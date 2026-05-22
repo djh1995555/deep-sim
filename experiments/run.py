@@ -161,7 +161,7 @@ def run_config(config_path: str) -> int:
                 },
             )
         else:
-            generate_dataset(cfg["teacher_config"], dataset_dir)
+            generate_dataset(_dataset_config_path(cfg), dataset_dir)
         validator = TeacherEpisodeValidator()
         report = validator.validate_dataset(dataset_dir)
         report_dict = report.to_dict()
@@ -415,6 +415,13 @@ def _primary_metric(run_id: str, report: Dict[str, Any]) -> Any:
     return "schema_checks_passed", metrics.get("schema_checks_passed", 0)
 
 
+def _dataset_config_path(cfg: Dict[str, Any]) -> str:
+    path = cfg.get("dataset_config") or cfg.get("teacher_config")
+    if not path:
+        raise KeyError("run config must define dataset_config")
+    return path
+
+
 def _primary_success(run_id: str, report: Dict[str, Any]) -> bool:
     metrics = report["metrics"]
     if run_id == "R000":
@@ -646,70 +653,70 @@ def _augment_report_metrics(dataset_dir: str, report: Dict[str, Any]) -> None:
 
 
 def _write_stage_a_report() -> None:
-    os.makedirs("reports", exist_ok=True)
+    os.makedirs("output/training/reports", exist_ok=True)
     run_dirs = [
-        "runs/R000_teacher_simulator_minimal",
-        "runs/R000a_tire_load_validation",
-        "runs/R000b_road_scenario_generation",
-        "runs/R000c_sensor_actuator_realism",
-        "runs/R000d_dataset_export_split",
-        "runs/R000e_scenario_matrix_v1",
-        "runs/R000f_vehicle_parameter_randomization",
-        "runs/R000g_dataset_split_generation",
-        "runs/R000h_dataset_qa",
-        "runs/R001_schema_field_role_check",
-        "runs/R002_teacher_physical_consistency",
-        "runs/R003_time_dt_alignment",
-        "runs/R004_derived_physical_quantities",
-        "runs/R004a_tiny_learnability",
-        "runs/R004b_physics_rollout_smoke",
-        "runs/R004c_proxy_perturbation_profiles",
-        "runs/R004d_proxy_target_windows",
-        "runs/R004e_proxy_distribution_sanity",
-        "runs/R005_physics_only_baseline",
-        "runs/R006_black_box_baseline",
-        "runs/R007_baseline_fairness_audit",
-        "runs/R008_baseline_rollout_report",
-        "runs/R009_base_hybrid_training",
-        "runs/R010_base_seen_config_eval",
-        "runs/R011_base_held_out_road_eval",
-        "runs/R012_base_held_out_vehicle_eval",
-        "runs/R013_base_residual_constraint_audit",
-        "runs/R014_base_seed_replication",
-        "runs/R015_ablation_tire_T0",
-        "runs/R016_ablation_tire_T1",
-        "runs/R017_ablation_tire_T1_no_proj",
-        "runs/R018_ablation_tire_T2",
-        "runs/R019_ablation_fz_F0",
-        "runs/R020_ablation_fz_F1",
-        "runs/R021_ablation_fz_F2",
-        "runs/R022_ablation_steering_S0",
-        "runs/R023_ablation_steering_S1",
-        "runs/R024_ablation_mu_M0_fixed",
-        "runs/R025_ablation_mu_M1a",
-        "runs/R026_ablation_mu_M1b",
-        "runs/R027_ablation_mu_M2_oracle",
-        "runs/R027a_ablation_encoder_E1",
-        "runs/R027b_ablation_encoder_E2",
-        "runs/R027c_ablation_encoder_E3",
-        "runs/R028_ablation_vehicle_V0",
-        "runs/R029_ablation_vehicle_V1",
-        "runs/R030_ablation_vehicle_V1_large",
-        "runs/R031_ablation_vehicle_V2_small",
-        "runs/R032_ablation_uncertainty_U0",
-        "runs/R033_ablation_uncertainty_U1",
-        "runs/R034_cross_generalization_base",
-        "runs/R035_cross_generalization_selected_single",
-        "runs/R036_cross_generalization_selected_ensemble",
-        "runs/R037_final_single_model_freeze",
-        "runs/R038_finetune_FT0",
-        "runs/R039_finetune_FT1_vehicle_param_adapter",
-        "runs/R040_finetune_FT2_mu_head",
-        "runs/R041_finetune_FT3_fz_residual",
-        "runs/R042_finetune_FT4_tire_residual",
-        "runs/R043_finetune_FT5_steering_residual",
-        "runs/R044_finetune_FT6_full_model",
-        "runs/R045_finetune_summary",
+        "output/training/R000_teacher_simulator_minimal",
+        "output/training/R000a_tire_load_validation",
+        "output/training/R000b_road_scenario_generation",
+        "output/training/R000c_sensor_actuator_realism",
+        "output/training/R000d_dataset_export_split",
+        "output/training/R000e_scenario_matrix_v1",
+        "output/training/R000f_vehicle_parameter_randomization",
+        "output/training/R000g_dataset_split_generation",
+        "output/training/R000h_dataset_qa",
+        "output/training/R001_schema_field_role_check",
+        "output/training/R002_teacher_physical_consistency",
+        "output/training/R003_time_dt_alignment",
+        "output/training/R004_derived_physical_quantities",
+        "output/training/R004a_tiny_learnability",
+        "output/training/R004b_physics_rollout_smoke",
+        "output/training/R004c_proxy_perturbation_profiles",
+        "output/training/R004d_proxy_target_windows",
+        "output/training/R004e_proxy_distribution_sanity",
+        "output/training/R005_physics_only_baseline",
+        "output/training/R006_black_box_baseline",
+        "output/training/R007_baseline_fairness_audit",
+        "output/training/R008_baseline_rollout_report",
+        "output/training/R009_base_hybrid_training",
+        "output/training/R010_base_seen_config_eval",
+        "output/training/R011_base_held_out_road_eval",
+        "output/training/R012_base_held_out_vehicle_eval",
+        "output/training/R013_base_residual_constraint_audit",
+        "output/training/R014_base_seed_replication",
+        "output/training/R015_ablation_tire_T0",
+        "output/training/R016_ablation_tire_T1",
+        "output/training/R017_ablation_tire_T1_no_proj",
+        "output/training/R018_ablation_tire_T2",
+        "output/training/R019_ablation_fz_F0",
+        "output/training/R020_ablation_fz_F1",
+        "output/training/R021_ablation_fz_F2",
+        "output/training/R022_ablation_steering_S0",
+        "output/training/R023_ablation_steering_S1",
+        "output/training/R024_ablation_mu_M0_fixed",
+        "output/training/R025_ablation_mu_M1a",
+        "output/training/R026_ablation_mu_M1b",
+        "output/training/R027_ablation_mu_M2_oracle",
+        "output/training/R027a_ablation_encoder_E1",
+        "output/training/R027b_ablation_encoder_E2",
+        "output/training/R027c_ablation_encoder_E3",
+        "output/training/R028_ablation_vehicle_V0",
+        "output/training/R029_ablation_vehicle_V1",
+        "output/training/R030_ablation_vehicle_V1_large",
+        "output/training/R031_ablation_vehicle_V2_small",
+        "output/training/R032_ablation_uncertainty_U0",
+        "output/training/R033_ablation_uncertainty_U1",
+        "output/training/R034_cross_generalization_base",
+        "output/training/R035_cross_generalization_selected_single",
+        "output/training/R036_cross_generalization_selected_ensemble",
+        "output/training/R037_final_single_model_freeze",
+        "output/training/R038_finetune_FT0",
+        "output/training/R039_finetune_FT1_vehicle_param_adapter",
+        "output/training/R040_finetune_FT2_mu_head",
+        "output/training/R041_finetune_FT3_fz_residual",
+        "output/training/R042_finetune_FT4_tire_residual",
+        "output/training/R043_finetune_FT5_steering_residual",
+        "output/training/R044_finetune_FT6_full_model",
+        "output/training/R045_finetune_summary",
     ]
     rows = []
     for run_dir in run_dirs:
@@ -734,7 +741,7 @@ def _write_stage_a_report() -> None:
                 **rendered
             )
         )
-    _write_text("reports/B0_teacher.md", "\n".join(lines) + "\n")
+    _write_text("output/training/reports/B0_teacher.md", "\n".join(lines) + "\n")
 
 
 def main() -> int:

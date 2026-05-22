@@ -9,7 +9,7 @@ from simulator.simulator_app import (
 )
 from simulator.reference import build_reference_provider
 from simulator.vehicle_model.modules.road import RoadModel
-from simulator.vehicle_model.config import load_teacher_config
+from simulator.vehicle_model.config import load_dataset_config
 from simulator.vehicle_model.export import export_dataset, load_dataset
 from simulator.vehicle_model.scenario import (
     RoadProfile,
@@ -25,11 +25,12 @@ from simulator.vehicle_model.state import TeacherState
 from simulator.vehicle_model.model import VehicleModel
 from simulator.vehicle_model.vehicle_params import default_vehicle_config
 from simulator.vehicle_model.validators import TeacherEpisodeValidator
+from simulator.visualizer import DebugTrace
 
 
 class TeacherSimulatorSmokeTest(unittest.TestCase):
     def test_ds0_generation_and_validation(self):
-        cfg = load_teacher_config("configs/teacher/ds0_minimal.yaml")
+        cfg = load_dataset_config("configs/datasets/ds0_minimal.yaml")
         sim = VehicleModel(cfg)
         episodes = [sim.run_episode(scenario) for scenario in make_ds0_scenarios(cfg.seed)]
         self.assertGreaterEqual(len(episodes), 5)
@@ -149,6 +150,19 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(tmp, "manifest.json")))
             self.assertTrue(os.path.exists(os.path.join(tmp, "simulation_summary.json")))
             self.assertTrue(os.path.exists(os.path.join(tmp, "debug_trace.csv")))
+            self.assertTrue(os.path.exists(os.path.join(tmp, "debug_report.html")))
+            with open(os.path.join(tmp, "debug_report.html"), "r", encoding="utf-8") as handle:
+                report_html = handle.read()
+            self.assertIn("Simulator Debug Report", report_html)
+            self.assertIn("Speed Tracking", report_html)
+            trace = DebugTrace.read_json(os.path.join(tmp, "debug_trace.json"))
+            regenerated = os.path.join(tmp, "debug_report_regenerated.html")
+            trace.write_html(
+                regenerated,
+                panels={"Smoke": ["input.vx", "input.target_speed_mps"]},
+                title="Regenerated Debug Report",
+            )
+            self.assertTrue(os.path.exists(regenerated))
             report = TeacherEpisodeValidator().validate_dataset(tmp)
             self.assertTrue(report.passed, report.errors)
             episodes = load_dataset(tmp)
@@ -221,6 +235,34 @@ class TeacherSimulatorSmokeTest(unittest.TestCase):
         ref = waypoints.query(0.0, TeacherState(x_world=8.0, y_world=0.0))
         self.assertGreater(ref.target_x_m, 8.0)
         self.assertGreaterEqual(ref.target_speed_mps, 10.0)
+
+        double_lane_change = build_reference_provider(
+            {
+                "type": "double_lane_change",
+                "speed_mps": 5.0,
+                "offset_y_m": 3.5,
+                "start_x_m": 0.0,
+                "first_length_m": 10.0,
+                "hold_length_m": 2.0,
+                "second_length_m": 10.0,
+            },
+            fallback=ClosedLoopSimulationRequest().to_reference(),
+        )
+        first_mid = double_lane_change.query(
+            0.0,
+            TeacherState(x_world=5.0, y_world=0.0),
+        )
+        hold = double_lane_change.query(0.0, TeacherState(x_world=11.0, y_world=0.0))
+        second_mid = double_lane_change.query(
+            0.0,
+            TeacherState(x_world=17.0, y_world=0.0),
+        )
+        self.assertAlmostEqual(first_mid.target_y_m, 1.75, places=2)
+        self.assertAlmostEqual(hold.target_y_m, 3.5, places=2)
+        self.assertAlmostEqual(second_mid.target_y_m, 1.75, places=2)
+        self.assertEqual(first_mid.target_speed_mps, 5.0)
+        self.assertGreater(first_mid.target_yaw_rad, 0.0)
+        self.assertLess(second_mid.target_yaw_rad, 0.0)
 
     def test_simulation_app_uses_dynamic_reference_config(self):
         with tempfile.TemporaryDirectory() as tmp:

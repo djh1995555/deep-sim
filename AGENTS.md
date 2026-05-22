@@ -7,10 +7,13 @@
 - Activation command: `conda run -n deep-sim <command>`
 - Python smoke command: `conda run -n deep-sim python -m unittest`
 - Experiment command template: `conda run -n deep-sim python -m experiments.run --config <config.yaml>`
-- Experiment queue template: `conda run -n deep-sim python -m experiments.experiment_queue --manifest configs/torch_matrix/MANIFEST.json`
+- Experiment queue template: `conda run -n deep-sim python -m experiments.experiment_queue --manifest configs/experiments/matrix/MANIFEST.json`
 - Code dir: `/home/mi/vibe/research/deep_sim/codex`
 - code_sync: local
 - wandb: false
+- Output root: `output/`
+  - Training experiment outputs: `output/training/`
+  - Closed-loop simulation outputs: `output/simulation/`
 
 ## GPU Status
 
@@ -28,44 +31,44 @@
   - `display-manager`, Xorg, GNOME, Chrome, VS Code, and other desktop processes held `/dev/nvidia*`
   - `/var/run/reboot-required` was present
 - GPU smoke run:
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_1_pytorch_gpu_forward_smoke.yaml`
 - GPU backward/optimizer smoke run:
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_2_pytorch_gpu_tiny_overfit.yaml`
 - Small training dev runs:
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R107.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_1_pytorch_one_step_training.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_2_pytorch_rollout_eval.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_3_pytorch_resume_eval_smoke.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_4_pytorch_black_box_tcn_baseline.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_2_pytorch_fair_small_comparison.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml`
 - DS2 / MoE development smoke runs:
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml`
-  - `conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml`
+  - `conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml`
 
 ## Ready Smoke Runs
 
 ```bash
-conda run -n deep-sim python -m experiments.run --config configs/runs/R100.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R101.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R102.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R103.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R104.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R105.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R106.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R107.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R108.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R109.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R110.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R111.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R112.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R113.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R114.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R115.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R046.yaml
-conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_1_pytorch_data_loader_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_2_pytorch_forward_loss_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_3_pytorch_tiny_overfit.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_4_pytorch_rollout_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p3_smoke/p3_5_pytorch_checkpoint_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_1_pytorch_gpu_forward_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p4_gpu_smoke/p4_2_pytorch_gpu_tiny_overfit.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_1_pytorch_one_step_training.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_2_pytorch_rollout_eval.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_3_pytorch_resume_eval_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p5_training_dev/p5_4_pytorch_black_box_tcn_baseline.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_1_pytorch_base_model_small_training.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_2_pytorch_fair_small_comparison.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_1_pytorch_fine_tune_adapter_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/p7_adapter_ensemble/p7_2_pytorch_deep_ensemble_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_1_ds2_extreme_dataset_smoke.yaml
+conda run -n deep-sim python -m experiments.run --config configs/experiments/b7_extreme_moe/b7_2_pytorch_ds2_moe_tire_smoke.yaml
 ```
 
 ## Generated Training Matrix
@@ -74,7 +77,7 @@ conda run -n deep-sim python -m experiments.run --config configs/runs/R047.yaml
 conda run -n deep-sim python -m experiments.torch_config_matrix --write
 ```
 
-This writes `configs/torch_matrix/R200-R216.yaml` for trainable PyTorch ablations and `configs/torch_matrix/R300-R334.yaml` for FT0-FT6 data-efficiency runs.
+This writes trainable PyTorch ablation configs under `configs/experiments/ablation/`, fine-tune data-efficiency configs under `configs/experiments/finetune/`, and the queue manifest at `configs/experiments/matrix/MANIFEST.json`.
 
 ## Local Experiment Queue
 
@@ -82,25 +85,25 @@ Use the local queue for matrix runs or any run batch that should keep crash-safe
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --manifest configs/torch_matrix/MANIFEST.json \
+  --manifest configs/experiments/matrix/MANIFEST.json \
   --run-ids R200 R201 R202 \
   --max-retries 1 \
   --skip-success \
   --rollout-eval \
-  --state-path runs/queue_state_ablation.json
+  --state-path output/training/queue_state_ablation.json
 ```
 
 Useful dry run:
 
 ```bash
 conda run -n deep-sim python -m experiments.experiment_queue \
-  --manifest configs/torch_matrix/MANIFEST.json \
+  --manifest configs/experiments/matrix/MANIFEST.json \
   --run-ids R200 R201 \
   --dry-run \
-  --state-path runs/queue_state_dryrun.json
+  --state-path output/training/queue_state_dryrun.json
 ```
 
-The queue reads direct configs or `configs/torch_matrix/MANIFEST.json`, supports `--skip-success`, retries, `--stop-on-failure`, and optional post-training rollout evaluation.
+The queue reads direct configs or `configs/experiments/matrix/MANIFEST.json`, supports `--skip-success`, retries, `--stop-on-failure`, and optional post-training rollout evaluation.
 
 ## Matrix Report
 
@@ -113,8 +116,8 @@ conda run -n deep-sim python -m experiments.matrix_report
 Outputs:
 
 ```text
-reports/PYTORCH_MATRIX_REPORT.json
-reports/PYTORCH_MATRIX_REPORT.md
+output/training/reports/PYTORCH_MATRIX_REPORT.json
+output/training/reports/PYTORCH_MATRIX_REPORT.md
 ```
 
 Current generated report status: all `R200-R216` and `R300-R334` matrix configs are pending until full training is launched.

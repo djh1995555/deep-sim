@@ -1,4 +1,5 @@
 numpy
+plotly
 PyYAML
 # PyTorch CUDA is managed by environment.yml through conda:
 # pytorch::pytorch=2.5.1 + pytorch::pytorch-cuda=12.1

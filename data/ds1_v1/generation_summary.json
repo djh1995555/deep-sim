@@ -1,5 +1,5 @@
 {
-  "config": "configs/teacher/ds1_v1.yaml",
+  "config": "configs/datasets/ds1_v1.yaml",
   "episode_count": 120,
   "full_matrix_count": 700,
   "out_dir": "runs/R000g_dataset_split_generation/artifacts/ds1",

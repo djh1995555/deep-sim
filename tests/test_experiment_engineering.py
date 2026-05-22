@@ -17,7 +17,7 @@ class ExperimentEngineeringTest(unittest.TestCase):
             state_path = os.path.join(tmp, "queue_state.json")
             args = argparse.Namespace(
                 manifest="",
-                configs=["configs/runs/R113.yaml"],
+                configs=["configs/experiments/p6_model_dev/p6_3_pytorch_model_variant_smoke.yaml"],
                 run_ids=[],
                 limit=1,
                 max_retries=0,
@@ -75,7 +75,7 @@ class ExperimentEngineeringTest(unittest.TestCase):
             self.assertEqual(state["jobs"]["RTEST"]["status"], "success_needs_rollout")
 
     def test_matrix_report_reads_generated_manifest(self):
-        report = build_matrix_report("configs/torch_matrix/MANIFEST.json")
+        report = build_matrix_report("configs/experiments/matrix/MANIFEST.json")
         self.assertEqual(len(report["ablation_rows"]), 17)
         self.assertEqual(len(report["fine_tune_rows"]), 35)
         self.assertIn("status_counts", report)

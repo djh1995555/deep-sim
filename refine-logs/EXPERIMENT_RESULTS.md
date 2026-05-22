@@ -168,17 +168,17 @@ R112 confirms the current small direct black-box family is still stronger than t
 PyTorch development report:
 
 ```text
-reports/PYTORCH_DEV_REPORT.md
-reports/PYTORCH_DEV_REPORT.json
-reports/PYTORCH_MATRIX_REPORT.md
-reports/PYTORCH_MATRIX_REPORT.json
-reports/B7_extreme_moe.md
+output/training/reports/PYTORCH_DEV_REPORT.md
+output/training/reports/PYTORCH_DEV_REPORT.json
+output/training/reports/PYTORCH_MATRIX_REPORT.md
+output/training/reports/PYTORCH_MATRIX_REPORT.json
+output/training/reports/B7_extreme_moe.md
 ```
 
 Generated full training matrix:
 
 ```text
-configs/torch_matrix/MANIFEST.json
+configs/experiments/matrix/MANIFEST.json
 R200-R216: trainable PyTorch single-factor ablation configs
 R300-R334: FT0-FT6 × five fine-tune data bucket configs
 ```
@@ -195,103 +195,103 @@ experiments/torch_training.py: best checkpoint, early stopping, LR scheduler, no
 Generated artifacts:
 
 ```text
-runs/R000_teacher_simulator_minimal/
-runs/R000a_tire_load_validation/
-runs/R000b_road_scenario_generation/
-runs/R000c_sensor_actuator_realism/
-runs/R000d_dataset_export_split/
-runs/R000e_scenario_matrix_v1/
-runs/R000f_vehicle_parameter_randomization/
-runs/R000g_dataset_split_generation/
-runs/R000h_dataset_qa/
-runs/R001_schema_field_role_check/
-runs/R002_teacher_physical_consistency/
-runs/R003_time_dt_alignment/
-runs/R004_derived_physical_quantities/
-runs/R004a_tiny_learnability/
-runs/R004b_physics_rollout_smoke/
-runs/R004c_proxy_perturbation_profiles/
-runs/R004d_proxy_target_windows/
-runs/R004e_proxy_distribution_sanity/
-runs/R005_physics_only_baseline/
-runs/R006_black_box_baseline/
-runs/R007_baseline_fairness_audit/
-runs/R008_baseline_rollout_report/
-runs/R009_base_hybrid_training/
-runs/R010_base_seen_config_eval/
-runs/R011_base_held_out_road_eval/
-runs/R012_base_held_out_vehicle_eval/
-runs/R013_base_residual_constraint_audit/
-runs/R014_base_seed_replication/
-runs/R015_ablation_tire_T0/
-runs/R016_ablation_tire_T1/
-runs/R017_ablation_tire_T1_no_proj/
-runs/R018_ablation_tire_T2/
-runs/R019_ablation_fz_F0/
-runs/R020_ablation_fz_F1/
-runs/R021_ablation_fz_F2/
-runs/R022_ablation_steering_S0/
-runs/R023_ablation_steering_S1/
-runs/R024_ablation_mu_M0_fixed/
-runs/R025_ablation_mu_M1a/
-runs/R026_ablation_mu_M1b/
-runs/R027_ablation_mu_M2_oracle/
-runs/R027a_ablation_encoder_E1/
-runs/R027b_ablation_encoder_E2/
-runs/R027c_ablation_encoder_E3/
-runs/R028_ablation_vehicle_V0/
-runs/R029_ablation_vehicle_V1/
-runs/R030_ablation_vehicle_V1_large/
-runs/R031_ablation_vehicle_V2_small/
-runs/R032_ablation_uncertainty_U0/
-runs/R033_ablation_uncertainty_U1/
-runs/R034_cross_generalization_base/
-runs/R035_cross_generalization_selected_single/
-runs/R036_cross_generalization_selected_ensemble/
-runs/R037_final_single_model_freeze/
-runs/R038_finetune_FT0/
-runs/R039_finetune_FT1_vehicle_param_adapter/
-runs/R040_finetune_FT2_mu_head/
-runs/R041_finetune_FT3_fz_residual/
-runs/R042_finetune_FT4_tire_residual/
-runs/R043_finetune_FT5_steering_residual/
-runs/R044_finetune_FT6_full_model/
-runs/R045_finetune_summary/
-runs/R100_pytorch_data_loader_smoke/
-runs/R101_pytorch_forward_loss_smoke/
-runs/R102_pytorch_tiny_overfit/
-runs/R103_pytorch_rollout_smoke/
-runs/R104_pytorch_checkpoint_smoke/
-runs/R105_pytorch_gpu_forward_smoke/
-runs/R106_pytorch_gpu_tiny_overfit/
-runs/R107_pytorch_one_step_training/
-runs/R108_pytorch_rollout_eval/
-runs/R109_pytorch_resume_eval_smoke/
-runs/R110_pytorch_black_box_tcn_baseline/
-runs/R111_pytorch_base_model_small_training/
-runs/R112_pytorch_fair_small_comparison/
-runs/R113_pytorch_model_variant_smoke/
-runs/R114_pytorch_fine_tune_adapter_smoke/
-runs/R115_pytorch_deep_ensemble_smoke/
-runs/R046_ds2_extreme_dataset_smoke/
-runs/R047_pytorch_ds2_moe_tire_smoke/
-configs/torch_matrix/
-reports/PYTORCH_DEV_REPORT.md
-reports/PYTORCH_DEV_REPORT.json
-reports/PYTORCH_MATRIX_REPORT.md
-reports/PYTORCH_MATRIX_REPORT.json
-runs/queue_state_smoke.json
-runs/R111_pytorch_base_model_small_training/artifacts/post_rollout_eval/
-reports/B0_teacher.md
-reports/B3_baselines.md
-reports/B3_base_hybrid.md
-reports/B4_ablations.md
-reports/B4_ablation_summary.json
-reports/B5_cross_generalization.md
-reports/B5_cross_generalization_summary.json
-reports/B6_fine_tune.md
-reports/B6_fine_tune_summary.json
-reports/B7_extreme_moe.md
+output/training/R000_teacher_simulator_minimal/
+output/training/R000a_tire_load_validation/
+output/training/R000b_road_scenario_generation/
+output/training/R000c_sensor_actuator_realism/
+output/training/R000d_dataset_export_split/
+output/training/R000e_scenario_matrix_v1/
+output/training/R000f_vehicle_parameter_randomization/
+output/training/R000g_dataset_split_generation/
+output/training/R000h_dataset_qa/
+output/training/R001_schema_field_role_check/
+output/training/R002_teacher_physical_consistency/
+output/training/R003_time_dt_alignment/
+output/training/R004_derived_physical_quantities/
+output/training/R004a_tiny_learnability/
+output/training/R004b_physics_rollout_smoke/
+output/training/R004c_proxy_perturbation_profiles/
+output/training/R004d_proxy_target_windows/
+output/training/R004e_proxy_distribution_sanity/
+output/training/R005_physics_only_baseline/
+output/training/R006_black_box_baseline/
+output/training/R007_baseline_fairness_audit/
+output/training/R008_baseline_rollout_report/
+output/training/R009_base_hybrid_training/
+output/training/R010_base_seen_config_eval/
+output/training/R011_base_held_out_road_eval/
+output/training/R012_base_held_out_vehicle_eval/
+output/training/R013_base_residual_constraint_audit/
+output/training/R014_base_seed_replication/
+output/training/R015_ablation_tire_T0/
+output/training/R016_ablation_tire_T1/
+output/training/R017_ablation_tire_T1_no_proj/
+output/training/R018_ablation_tire_T2/
+output/training/R019_ablation_fz_F0/
+output/training/R020_ablation_fz_F1/
+output/training/R021_ablation_fz_F2/
+output/training/R022_ablation_steering_S0/
+output/training/R023_ablation_steering_S1/
+output/training/R024_ablation_mu_M0_fixed/
+output/training/R025_ablation_mu_M1a/
+output/training/R026_ablation_mu_M1b/
+output/training/R027_ablation_mu_M2_oracle/
+output/training/R027a_ablation_encoder_E1/
+output/training/R027b_ablation_encoder_E2/
+output/training/R027c_ablation_encoder_E3/
+output/training/R028_ablation_vehicle_V0/
+output/training/R029_ablation_vehicle_V1/
+output/training/R030_ablation_vehicle_V1_large/
+output/training/R031_ablation_vehicle_V2_small/
+output/training/R032_ablation_uncertainty_U0/
+output/training/R033_ablation_uncertainty_U1/
+output/training/R034_cross_generalization_base/
+output/training/R035_cross_generalization_selected_single/
+output/training/R036_cross_generalization_selected_ensemble/
+output/training/R037_final_single_model_freeze/
+output/training/R038_finetune_FT0/
+output/training/R039_finetune_FT1_vehicle_param_adapter/
+output/training/R040_finetune_FT2_mu_head/
+output/training/R041_finetune_FT3_fz_residual/
+output/training/R042_finetune_FT4_tire_residual/
+output/training/R043_finetune_FT5_steering_residual/
+output/training/R044_finetune_FT6_full_model/
+output/training/R045_finetune_summary/
+output/training/R100_pytorch_data_loader_smoke/
+output/training/R101_pytorch_forward_loss_smoke/
+output/training/R102_pytorch_tiny_overfit/
+output/training/R103_pytorch_rollout_smoke/
+output/training/R104_pytorch_checkpoint_smoke/
+output/training/R105_pytorch_gpu_forward_smoke/
+output/training/R106_pytorch_gpu_tiny_overfit/
+output/training/R107_pytorch_one_step_training/
+output/training/R108_pytorch_rollout_eval/
+output/training/R109_pytorch_resume_eval_smoke/
+output/training/R110_pytorch_black_box_tcn_baseline/
+output/training/R111_pytorch_base_model_small_training/
+output/training/R112_pytorch_fair_small_comparison/
+output/training/R113_pytorch_model_variant_smoke/
+output/training/R114_pytorch_fine_tune_adapter_smoke/
+output/training/R115_pytorch_deep_ensemble_smoke/
+output/training/R046_ds2_extreme_dataset_smoke/
+output/training/R047_pytorch_ds2_moe_tire_smoke/
+configs/experiments/
+output/training/reports/PYTORCH_DEV_REPORT.md
+output/training/reports/PYTORCH_DEV_REPORT.json
+output/training/reports/PYTORCH_MATRIX_REPORT.md
+output/training/reports/PYTORCH_MATRIX_REPORT.json
+output/training/queue_state_smoke.json
+output/training/R111_pytorch_base_model_small_training/artifacts/post_rollout_eval/
+output/training/reports/B0_teacher.md
+output/training/reports/B3_baselines.md
+output/training/reports/B3_base_hybrid.md
+output/training/reports/B4_ablations.md
+output/training/reports/B4_ablation_summary.json
+output/training/reports/B5_cross_generalization.md
+output/training/reports/B5_cross_generalization_summary.json
+output/training/reports/B6_fine_tune.md
+output/training/reports/B6_fine_tune_summary.json
+output/training/reports/B7_extreme_moe.md
 ```
 
 ## Validation Summary
@@ -417,8 +417,8 @@ M6 component ablation scaffold results:
 
 ```text
 R015-R033 all completed with ablation_run_passed = 1
-report = reports/B4_ablations.md
-summary_json = reports/B4_ablation_summary.json
+report = output/training/reports/B4_ablations.md
+summary_json = output/training/reports/B4_ablation_summary.json
 ```
 
 Deployable scaffold variants with lowest validation base/physics ratio by family:
@@ -471,7 +471,7 @@ That stronger claim must be re-tested with the real PyTorch implementation and t
 M8 final single scaffold freeze:
 
 ```text
-checkpoint_descriptor = runs/R037_final_single_model_freeze/checkpoints/final_single_model_scaffold.json
+checkpoint_descriptor = output/training/R037_final_single_model_freeze/checkpoints/final_single_model_scaffold.json
 selected_single_model = E2 + T1 + F1 + S1 + M0-fixed + V2-small + U0
 optional_uncertainty_wrapper = U1
 final_single_model_freeze_passed = 1
@@ -510,6 +510,6 @@ R001 found duplicate DS1 episode IDs in the first M1 scaffold. The DS1 balanced 
 
 `R100-R115` are complete PyTorch development gates. They validate canonical data loading, model forward/loss, tiny overfit, rollout, checkpoint save/load, CUDA forward/backward, one-step training, resume/eval-only, direct black-box baseline, fair small comparison, component variants, fine-tune adapter trainability, and K=3 ensemble plumbing.
 
-The remaining development scaffolding is now also complete: local queue, matrix report, real-data CSV adapter, training governance, queue-triggered post-rollout evaluation, DS2 extreme data scaffold, and T3-MoE tire residual forward path are implemented and tested. `R200-R216` and `R300-R334` are ready to run from `configs/torch_matrix/MANIFEST.json`; they are pending full training and should be treated as the next execution step, not as completed model-quality evidence.
+The remaining development scaffolding is now also complete: local queue, matrix report, real-data CSV adapter, training governance, queue-triggered post-rollout evaluation, DS2 extreme data scaffold, and T3-MoE tire residual forward path are implemented and tested. `R200-R216` and `R300-R334` are ready to run from `configs/experiments/matrix/MANIFEST.json`; they are pending full training and should be treated as the next execution step, not as completed model-quality evidence.
 
 `R048+` DS2 MoE full training/eval is ready as a NICE second-phase execution item. It should run only after the main DS1 ablation/fine-tune matrices clarify the stable first-version model.

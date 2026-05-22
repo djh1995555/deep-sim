@@ -1,0 +1,37 @@
+run:
+  id: R004d
+  name: proxy_target_windows
+  milestone: M3
+  experiment_block: B2.2
+  seed: 31
+data:
+  dataset_id: DS1_PROXY_V1
+  dataset_path: data/ds1_proxy_v1
+  schema_version: v0
+  split_id: ds1_proxy_scaffold
+  train_filter: fine-tune
+  val_filter: validation
+  test_filter: test-window
+model:
+  system_name: proxy_target_window_builder
+  student_config: null
+  baseline_config: null
+training:
+  optimizer: none
+  learning_rate: 0.0
+  batch_size: 0
+  rollout_horizon: 0
+  max_steps: 0
+  early_stopping_metric: null
+  early_stopping_patience: 0
+evaluation:
+  horizons: []
+  metrics: [proxy_target_windows_passed, proxy_target_window_overlap_count]
+  report_splits: [fine-tune, validation, test-window]
+logging:
+  output_dir: output/training/R004d_proxy_target_windows
+  save_checkpoints: false
+  save_diagnostics: true
+dataset_config: configs/datasets/ds1_proxy_v1.yaml
+artifact_dataset_subdir: ds1_proxy
+primary_metric: proxy_target_windows_passed

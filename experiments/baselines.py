@@ -109,7 +109,7 @@ def run_baseline_suite(
     report["summary_metrics"] = _summary_metrics(report)
     _write_json(os.path.join(out_dir, "artifacts", "baseline_report.json"), report)
     if baseline_cfg.get("write_markdown_report", False):
-        _write_baseline_markdown(report, "reports/B3_baselines.md")
+        _write_baseline_markdown(report, "output/training/reports/B3_baselines.md")
     return report
 
 
